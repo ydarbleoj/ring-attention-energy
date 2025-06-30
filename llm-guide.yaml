@@ -1,0 +1,213 @@
+project:
+  name: "Ring Attention Energy Optimization"
+  description: "Implementation of Ring Attention for processing long energy time series with RL-based grid optimization"
+  goals:
+    - "Build production-ready Ring Attention implementation in MLX for Apple Silicon"
+    - "Create scalable energy data pipeline processing years of grid data"
+    - "Develop RL agent for real-time energy flow optimization"
+    - "Demonstrate research-quality ML systems engineering for Anthropic-style roles"
+
+architecture:
+  core_components:
+    ring_attention:
+      description: "Memory-efficient attention mechanism for long sequences"
+      key_files: ["src/models/ring_attention.py", "src/models/transformer.py"]
+      patterns:
+        - "Segment-based processing for sequences > 1M timesteps"
+        - "Ring communication pattern between attention segments"
+        - "Causal masking across segment boundaries"
+        - "MLX-optimized tensor operations for Apple Silicon"
+
+    energy_pipeline:
+      description: "ETL pipeline for multi-source energy data"
+      key_files: ["src/data/", "src/energy_clients/"]
+      patterns:
+        - "Async data collection from EIA, CAISO, ENTSO-E APIs"
+        - "Time series alignment and resampling"
+        - "Missing data imputation and anomaly detection"
+        - "Distributed processing with fault tolerance"
+
+    rl_optimization:
+      description: "Reinforcement learning for energy flow decisions"
+      key_files: ["src/rl/", "src/environments/"]
+      patterns:
+        - "Grid environment with realistic constraints"
+        - "Multi-objective optimization (cost, reliability, emissions)"
+        - "Real-time decision making with uncertainty"
+        - "Integration with ring attention for long-term planning"
+
+technical_standards:
+  performance:
+    ring_attention:
+      - "Memory usage O(sqrt(N)) instead of O(N²) for sequence length N"
+      - "Process 8760+ hour sequences (yearly data) on single M2 Ultra"
+      - "Maintain <500ms inference time for real-time decisions"
+      - "Scale to multiple cities/grids without memory overflow"
+
+    data_pipeline:
+      - "Handle 100M+ data points with <1% data loss"
+      - "Real-time ingestion with <5 second latency"
+      - "Graceful degradation when APIs are unavailable"
+      - "Exactly-once processing guarantees"
+
+  reliability:
+    - "Fault-tolerant ring communication (handle device failures)"
+    - "Checkpointing for long training runs"
+    - "API rate limiting and retry logic with exponential backoff"
+    - "Data validation and schema enforcement"
+
+  code_quality:
+    - "Type hints for all public APIs using Pydantic models"
+    - "Comprehensive unit tests with >90% coverage"
+    - "Performance benchmarks tracking regression"
+    - "MLX-specific optimizations documented"
+
+domain_knowledge:
+  energy_systems:
+    concepts:
+      - "Load balancing and grid stability constraints"
+      - "Renewable intermittency and storage optimization"
+      - "Peak demand management and load shifting"
+      - "Transmission losses and grid topology"
+
+    data_sources:
+      primary:
+        - name: "EIA (Energy Information Administration)"
+          url: "https://api.eia.gov/v2"
+          coverage: "US grid data, generation mix, demand"
+          rate_limits: "5,000 requests/hour"
+
+        - name: "CAISO (California ISO)"
+          url: "http://oasis.caiso.com/oasisapi"
+          coverage: "Real-time California grid operations"
+          rate_limits: "No explicit limits"
+
+        - name: "ENTSO-E (European Grid)"
+          url: "https://web-api.tp.entsoe.eu"
+          coverage: "35+ European countries"
+          rate_limits: "400 requests/minute"
+
+      supplementary:
+        - "Weather APIs for renewable generation forecasting"
+        - "Economic APIs for energy pricing data"
+        - "Demographics for demand pattern analysis"
+
+  ml_research:
+    attention_mechanisms:
+      - "Ring Attention: O(N) memory complexity for long sequences"
+      - "Sliding window attention for temporal locality"
+      - "Sparse attention patterns for grid topology"
+      - "Multi-scale attention for different time horizons"
+
+    rl_approaches:
+      - "Model-free vs model-based for grid optimization"
+      - "Multi-agent RL for distributed grid management"
+      - "Safe RL with constraint satisfaction"
+      - "Hierarchical RL for different time scales"
+
+development_workflow:
+  phases:
+    week_1_2:
+      focus: "Ring Attention Foundation"
+      deliverables:
+        - "Basic ring attention implementation in MLX"
+        - "Unit tests and benchmarks vs standard attention"
+        - "Memory usage profiling on M2 Ultra"
+
+    week_3_4:
+      focus: "Energy Data Pipeline"
+      deliverables:
+        - "Multi-source data collection (EIA, CAISO)"
+        - "Time series preprocessing and validation"
+        - "Sample dataset: 1+ years of hourly data"
+
+    week_5_6:
+      focus: "Integration and Scaling"
+      deliverables:
+        - "Ring attention processing real energy sequences"
+        - "Performance optimization for long sequences"
+        - "Visualization of learned attention patterns"
+
+    week_7_8:
+      focus: "RL Environment and Agent"
+      deliverables:
+        - "Grid simulation environment"
+        - "Basic RL agent for energy flow optimization"
+        - "Integration with ring attention for planning"
+
+testing_strategy:
+  unit_tests:
+    - "Ring attention mathematical correctness"
+    - "Causal masking across segments"
+    - "Memory usage within bounds"
+    - "API client error handling"
+
+  integration_tests:
+    - "End-to-end data pipeline processing"
+    - "Long sequence attention with real data"
+    - "RL environment stability"
+
+  performance_tests:
+    - "Attention scaling with sequence length"
+    - "Memory usage profiling"
+    - "API throughput under load"
+    - "Training convergence benchmarks"
+
+research_contributions:
+  potential_papers:
+    - "Ring Attention for Energy Time Series: Scaling Transformers to Grid-Scale Data"
+    - "Multi-Horizon Energy Optimization with Transformer-based Reinforcement Learning"
+    - "Distributed Attention Patterns in Smart Grid Management"
+
+  open_source_impact:
+    - "MLX-optimized ring attention implementation"
+    - "Comprehensive energy data benchmarks"
+    - "RL environments for grid optimization research"
+
+success_metrics:
+  technical:
+    - "Process 8760+ hour sequences efficiently"
+    - "Achieve better energy optimization than baselines"
+    - "Demonstrate ring attention memory savings"
+
+  career:
+    - "Showcase systems + ML research engineering"
+    - "Build portfolio relevant to Anthropic's mission"
+    - "Contribute to open source ML infrastructure"
+
+  research:
+    - "Novel application of ring attention to time series"
+    - "Real-world validation of transformer-based control"
+    - "Advance state-of-art in energy system optimization"
+
+anti_patterns:
+  avoid:
+    - "Implementing ring attention without understanding the theory"
+    - "Using toy datasets that don't stress the architecture"
+    - "Optimizing for benchmarks instead of real-world constraints"
+    - "Ignoring energy domain knowledge and constraints"
+    - "Building monolithic systems instead of modular components"
+
+  watch_for:
+    - "Memory leaks in long sequence processing"
+    - "Numerical instability in attention computations"
+    - "API rate limiting causing data gaps"
+    - "RL training instability with long sequences"
+
+tools_and_frameworks:
+  core:
+    - "MLX: Apple Silicon optimized ML framework"
+    - "Pydantic: Data validation and settings management"
+    - "FastAPI: API development for real-time serving"
+    - "Pandas: Time series data manipulation"
+
+  ml_specific:
+    - "MLX-LM: Reference transformer implementations"
+    - "Gymnasium: RL environment framework"
+    - "Weights & Biases: Experiment tracking"
+    - "Ray: Distributed training if needed"
+
+  energy_domain:
+    - "PyPSA: Power system analysis"
+    - "ENTSOE-PY: European grid data client"
+    - "PVLib: Solar generation modeling"
