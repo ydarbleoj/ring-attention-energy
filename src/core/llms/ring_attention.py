@@ -2,6 +2,7 @@ import mlx.core as mx
 import mlx.nn as nn
 import math
 from typing import Optional, Tuple, List
+import logging
 
 class RingAttention(nn.Module):
     """
@@ -37,7 +38,13 @@ class RingAttention(nn.Module):
 
     def _split_sequence(self, x: mx.array) -> List[mx.array]:
         """Split sequence into ring segments"""
-        batch_size, seq_len, d_model = x.shape
+        logging.info(f"Splitting sequence of shape {x.shape} into {self.ring_size} segments")
+        if len(x.shape) == 3:
+            batch_size, seq_len, d_model = x.shape
+        elif len(x.shape) == 4:
+            batch_size, seq_len, n_heads, d_k = x.shape
+        else:
+            raise ValueError(f"Expected 3D or 4D tensor, got {len(x.shape)}D tensor with shape {x.shape}")
 
         if self.segment_size:
             segment_len = self.segment_size
@@ -48,7 +55,7 @@ class RingAttention(nn.Module):
         for i in range(self.ring_size):
             start_idx = i * segment_len
             end_idx = min((i + 1) * segment_len, seq_len)
-            segments.append(x[:, start_idx:end_idx, :])
+            segments.append(x[:, start_idx:end_idx])
 
         return segments
 
@@ -67,19 +74,55 @@ class RingAttention(nn.Module):
         batch_size, q_len, n_heads, d_k = q_local.shape
         _, kv_len, _, _ = k_remote.shape
 
+        # Debug: print shapes to understand the issue
+        logging.info(f"Ring attention step - q_local: {q_local.shape}, k_remote: {k_remote.shape}, v_remote: {v_remote.shape}")
+
         # Compute attention scores
-        scores = mx.matmul(q_local, k_remote.transpose(0, 1, 3, 2))
+        # q_local: (batch, q_len, n_heads, d_k)
+        # k_remote: (batch, kv_len, n_heads, d_k)
+        # We want: (batch, n_heads, q_len, kv_len)
+
+        # Rearrange for efficient computation
+        q_reshaped = q_local.transpose(0, 2, 1, 3)  # (batch, n_heads, q_len, d_k)
+        k_reshaped = k_remote.transpose(0, 2, 1, 3)  # (batch, n_heads, kv_len, d_k)
+        v_reshaped = v_remote.transpose(0, 2, 1, 3)  # (batch, n_heads, kv_len, d_k)
+
+        # Compute attention scores: (batch, n_heads, q_len, d_k) @ (batch, n_heads, d_k, kv_len)
+        scores = mx.matmul(q_reshaped, k_reshaped.transpose(0, 1, 3, 2))  # (batch, n_heads, q_len, kv_len)
         scores = scores / math.sqrt(d_k)
 
-        # Apply causal mask if needed
+        logging.info(f"Scores shape: {scores.shape}")        # Apply causal mask if needed
         if self.causal and segment_idx <= remote_idx:
             # Create causal mask for this segment pair
             mask = self._create_segment_mask(q_len, kv_len, segment_idx, remote_idx)
+            logging.info(f"Base mask shape: {mask.shape}")
+
+            # Expand mask to match scores dimensions
+            # scores shape: (batch, n_heads, q_len, kv_len)
+            # mask shape: (q_len, kv_len) -> (1, 1, q_len, kv_len)
+            mask = mask[None, None, :, :]  # Add batch and head dimensions
+            logging.info(f"Expanded mask shape: {mask.shape}")
+            logging.info(f"Target scores shape: {scores.shape}")
+
+            mask = mx.broadcast_to(mask, scores.shape)  # Broadcast to full shape
+
+            # Check if mask is all False (would cause all -inf and NaN in softmax)
+            if not mx.any(mask):
+                # If no positions are visible, skip this attention step
+                # Return zeros with the right shape
+                output_shape = (batch_size, q_len, n_heads, d_k)
+                output = mx.zeros(output_shape)
+                attn_weights = mx.zeros(scores.shape)
+                return output, attn_weights
+
             scores = mx.where(mask, scores, -mx.inf)
 
         # Softmax and apply to values
-        attn_weights = mx.softmax(scores, axis=-1)
-        output = mx.matmul(attn_weights, v_remote)
+        attn_weights = mx.softmax(scores, axis=-1)  # (batch, n_heads, q_len, kv_len)
+        output = mx.matmul(attn_weights, v_reshaped)  # (batch, n_heads, q_len, d_k)
+
+        # Transpose back to (batch, q_len, n_heads, d_k) to match expected output format
+        output = output.transpose(0, 2, 1, 3)
 
         return output, attn_weights
 
