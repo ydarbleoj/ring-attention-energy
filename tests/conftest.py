@@ -51,8 +51,15 @@ def sample_energy_sequence():
 
         # Create MLX array with additional features
         sequence_data = mx.random.normal((batch_size, seq_len, d_model))
-        # Set the first feature to be our realistic energy pattern
-        sequence_data = sequence_data.at[:, :, 0].set(mx.array(base_consumption.reshape(1, -1)))
+        # Set the first feature to be our realistic energy pattern - MLX compatible way
+        energy_feature = mx.array(base_consumption.reshape(1, -1))
+        if batch_size == 1:
+            # Create a new array with the energy pattern in the first feature
+            new_sequence = mx.concatenate([
+                energy_feature[:, :, None],  # Energy pattern as first feature
+                sequence_data[:, :, 1:]  # Rest of the features
+            ], axis=2)
+            sequence_data = new_sequence
 
         return sequence_data
     return _generate

@@ -91,11 +91,9 @@ class RingAttention(nn.Module):
         scores = mx.matmul(q_reshaped, k_reshaped.transpose(0, 1, 3, 2))  # (batch, n_heads, q_len, kv_len)
         scores = scores / math.sqrt(d_k)
 
-        logging.info(f"Scores shape: {scores.shape}")        # Apply causal mask if needed
         if self.causal and segment_idx <= remote_idx:
             # Create causal mask for this segment pair
             mask = self._create_segment_mask(q_len, kv_len, segment_idx, remote_idx)
-            logging.info(f"Base mask shape: {mask.shape}")
 
             # Expand mask to match scores dimensions
             # scores shape: (batch, n_heads, q_len, kv_len)
