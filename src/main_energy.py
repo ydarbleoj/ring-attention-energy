@@ -159,7 +159,9 @@ class RingAttentionEnergyDemo:
         logger.info(f"✅ Energy Transformer processed sequence in {transformer_time:.3f}s")
         logger.info(f"📊 Output shape: {transformer_output.shape}")
 
-        return transformer_output, transformer_time    def memory_efficiency_analysis(self, input_data):
+        return transformer_output, transformer_time
+
+    def memory_efficiency_analysis(self, input_data):
         """Analyze memory efficiency compared to standard attention"""
         logger.info("💾 Running memory efficiency analysis...")
 

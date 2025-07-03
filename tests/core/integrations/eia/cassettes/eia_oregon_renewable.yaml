@@ -1,0 +1,52 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.31.0
+    method: GET
+    uri: https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?data%5B0%5D=value&end=2023-01-08&facets%5Brespondent%5D%5B%5D=PACW&frequency=hourly&length=5000&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=asc&start=2023-01-01
+  response:
+    body:
+      string: "{\n  \"error\": {\n    \"code\": \"API_KEY_INVALID\",\n    \"message\":
+        \"An invalid api_key was supplied. Get one at https://api.eia.gov:443\"\n
+        \ }\n}"
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 03 Jul 2025 00:52:57 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; preload
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Api-Umbrella-Request-Id:
+      - cnpn2rp6uamh1ee97v5g
+      X-Cache:
+      - MISS
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Vcap-Request-Id:
+      - f37e5be3-9999-4318-4db1-d918c5361064
+      X-Xss-Protection:
+      - 1; mode=block
+      content-length:
+      - '136'
+    status:
+      code: 403
+      message: Forbidden
+version: 1

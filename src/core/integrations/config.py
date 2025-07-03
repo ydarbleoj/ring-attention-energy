@@ -7,40 +7,44 @@ Follows the 12-factor app methodology for configuration management.
 import os
 from pathlib import Path
 from typing import Optional
-from pydantic import Field, validator
+from pydantic import Field, field_validator, ConfigDict
 from pydantic_settings import BaseSettings
 
 
 class APIConfig(BaseSettings):
     """API configuration and rate limiting settings"""
 
+    model_config = ConfigDict(env_file='.env', env_file_encoding='utf-8')
+
     # EIA Configuration
-    eia_api_key: Optional[str] = Field(None, env="EIA_API_KEY")
-    eia_base_url: str = Field("https://api.eia.gov/v2", env="EIA_BASE_URL")
-    eia_rate_limit_delay: float = Field(0.72, env="EIA_RATE_LIMIT_DELAY")
+    eia_api_key: Optional[str] = Field(None, validation_alias='EIA_API_KEY')
+    eia_base_url: str = Field("https://api.eia.gov/v2", validation_alias='EIA_BASE_URL')
+    eia_rate_limit_delay: float = Field(0.72, validation_alias='EIA_RATE_LIMIT_DELAY')
 
     # CAISO Configuration
     caiso_base_url: str = Field(
         "http://oasis.caiso.com/oasisapi/SingleZip",
-        env="CAISO_BASE_URL"
+        validation_alias='CAISO_BASE_URL'
     )
-    caiso_rate_limit_delay: float = Field(1.0, env="CAISO_RATE_LIMIT_DELAY")
+    caiso_rate_limit_delay: float = Field(1.0, validation_alias='CAISO_RATE_LIMIT_DELAY')
 
     # ENTSO-E Configuration (optional for European data)
-    entso_e_api_key: Optional[str] = Field(None, env="ENTSO_E_API_KEY")
+    entso_e_api_key: Optional[str] = Field(None, validation_alias='ENTSO_E_API_KEY')
     entso_e_base_url: str = Field(
         "https://web-api.tp.entsoe.eu",
-        env="ENTSO_E_BASE_URL"
+        validation_alias='ENTSO_E_BASE_URL'
     )
-    entso_e_rate_limit_delay: float = Field(0.15, env="ENTSO_E_RATE_LIMIT_DELAY")
+    entso_e_rate_limit_delay: float = Field(0.15, validation_alias='ENTSO_E_RATE_LIMIT_DELAY')
 
-    @validator("eia_api_key")
+    @field_validator("eia_api_key")
+    @classmethod
     def validate_eia_key(cls, v):
         if v and len(v) < 20:
             raise ValueError("EIA API key appears to be invalid (too short)")
         return v
 
-    @validator("entso_e_api_key")
+    @field_validator("entso_e_api_key")
+    @classmethod
     def validate_entso_key(cls, v):
         if v and len(v) < 30:
             raise ValueError("ENTSO-E API key appears to be invalid (too short)")
@@ -50,19 +54,25 @@ class APIConfig(BaseSettings):
 class DataConfig(BaseSettings):
     """Data storage and caching configuration"""
 
-    data_cache_dir: Path = Field(Path("data/cache"), env="DATA_CACHE_DIR")
-    max_cache_size_gb: int = Field(10, env="MAX_CACHE_SIZE_GB")
+    model_config = ConfigDict(env_file='.env', env_file_encoding='utf-8')
+
+    data_cache_dir: Path = Field(Path("data/cache"), validation_alias='DATA_CACHE_DIR')
+    max_cache_size_gb: int = Field(10, validation_alias='MAX_CACHE_SIZE_GB')
 
     # Data processing settings
-    default_frequency: str = Field("1h", env="DEFAULT_FREQUENCY")
-    missing_data_threshold: float = Field(0.1, env="MISSING_DATA_THRESHOLD")
+    default_frequency: str = Field("1h", validation_alias='DEFAULT_FREQUENCY')
+    missing_data_threshold: float = Field(0.1, validation_alias='MISSING_DATA_THRESHOLD')
 
-    @validator("data_cache_dir")
+    @field_validator("data_cache_dir")
+    @classmethod
     def create_cache_dir(cls, v):
+        if isinstance(v, str):
+            v = Path(v)
         v.mkdir(parents=True, exist_ok=True)
         return v
 
-    @validator("max_cache_size_gb")
+    @field_validator("max_cache_size_gb")
+    @classmethod
     def validate_cache_size(cls, v):
         if v < 1:
             raise ValueError("Cache size must be at least 1 GB")
@@ -72,42 +82,49 @@ class DataConfig(BaseSettings):
 class LoggingConfig(BaseSettings):
     """Logging configuration"""
 
-    log_level: str = Field("INFO", env="LOG_LEVEL")
-    log_file: Optional[Path] = Field(None, env="LOG_FILE")
+    model_config = ConfigDict(env_file='.env', env_file_encoding='utf-8')
+
+    log_level: str = Field("INFO", validation_alias='LOG_LEVEL')
+    log_file: Optional[Path] = Field(None, validation_alias='LOG_FILE')
     log_format: str = Field(
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        env="LOG_FORMAT"
+        validation_alias='LOG_FORMAT'
     )
 
-    @validator("log_level")
+    @field_validator("log_level")
+    @classmethod
     def validate_log_level(cls, v):
         valid_levels = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
         if v.upper() not in valid_levels:
             raise ValueError(f"Log level must be one of: {valid_levels}")
         return v.upper()
 
-    @validator("log_file")
+    @field_validator("log_file")
+    @classmethod
     def create_log_dir(cls, v):
         if v:
+            if isinstance(v, str):
+                v = Path(v)
             v.parent.mkdir(parents=True, exist_ok=True)
         return v
 
 
-class AppConfig(BaseSettings):
-    """Main application configuration"""
+class AppConfig:
+    """Main application configuration - composition instead of inheritance"""
 
-    debug: bool = Field(False, env="DEBUG")
-    testing: bool = Field(False, env="TESTING")
+    def __init__(self,
+                 debug: bool = False,
+                 testing: bool = False,
+                 api: APIConfig = None,
+                 data: DataConfig = None,
+                 logging: LoggingConfig = None):
+        self.debug = debug or os.getenv('DEBUG', 'False').lower() == 'true'
+        self.testing = testing or os.getenv('TESTING', 'False').lower() == 'true'
 
-    # Component configurations
-    api: APIConfig = APIConfig()
-    data: DataConfig = DataConfig()
-    logging: LoggingConfig = LoggingConfig()
-
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
+        # Component configurations - allow overrides for testing
+        self.api = api or APIConfig()
+        self.data = data or DataConfig()
+        self.logging = logging or LoggingConfig()
 
     def setup_logging(self):
         """Configure logging based on settings"""
@@ -148,16 +165,41 @@ def get_config() -> AppConfig:
 # For testing - create a test configuration
 def get_test_config() -> AppConfig:
     """Get a test configuration with appropriate overrides"""
+
+    class TestAPIConfig:
+        """Simple test config that doesn't inherit from BaseSettings"""
+        def __init__(self):
+            self.eia_api_key = "TEST_API_KEY_FOR_VCR"
+            self.eia_base_url = "https://api.eia.gov/v2"
+            self.eia_rate_limit_delay = 0.1
+            self.caiso_base_url = "http://oasis.caiso.com/oasisapi/SingleZip"
+            self.caiso_rate_limit_delay = 0.1
+            self.entso_e_api_key = None
+            self.entso_e_base_url = "https://web-api.tp.entsoe.eu"
+            self.entso_e_rate_limit_delay = 0.1
+
+    class TestDataConfig:
+        """Simple test config for data settings"""
+        def __init__(self):
+            self.data_cache_dir = Path("tests/data/cache")
+            self.data_cache_dir.mkdir(parents=True, exist_ok=True)
+            self.max_cache_size_gb = 1
+            self.default_frequency = "1h"
+            self.missing_data_threshold = 0.1
+
+    class TestLoggingConfig:
+        """Simple test config for logging"""
+        def __init__(self):
+            self.log_level = "DEBUG"
+            self.log_file = None
+            self.log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
     return AppConfig(
         testing=True,
         debug=True,
-        data=DataConfig(
-            data_cache_dir=Path("tests/data/cache"),
-            max_cache_size_gb=1
-        ),
-        logging=LoggingConfig(
-            log_level="DEBUG"
-        )
+        api=TestAPIConfig(),
+        data=TestDataConfig(),
+        logging=TestLoggingConfig()
     )
 
 

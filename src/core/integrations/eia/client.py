@@ -10,9 +10,15 @@ from pathlib import Path
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-# Add parent directory to path for config import
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from config import get_config
+# Config import
+try:
+    from ..config import get_config
+except ImportError:
+    # Fallback for different import contexts
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from config import get_config
 
 logger = logging.getLogger(__name__)
 
