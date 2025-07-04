@@ -20,7 +20,7 @@ import polars as pl
 # Add src to path
 sys.path.append(str(Path(__file__).parent / "src"))
 
-from src.core.integrations.config import Config
+from src.core.integrations.config import get_config
 from src.core.integrations.eia.service import DataLoader, StorageManager
 
 
@@ -30,8 +30,8 @@ def main():
 
     # Load configuration
     try:
-        config = Config()
-        api_key = config.eia_api_key
+        config = get_config()
+        api_key = config.api.eia_api_key
     except:
         # Fallback to environment variable
         api_key = os.getenv('EIA_API_KEY')

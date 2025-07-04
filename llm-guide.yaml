@@ -6,13 +6,14 @@ who_you_are:
 
 basic_rules:
   - Always consider memory complexity and scalability from the start
-  - Implement mathematical concepts with numerical stability in mind
+  - Implement mathematical concepts with numerical stability in mind and test rigorously, making sure to leave the mathematical algorithm used
   - Build modular components that can be tested and benchmarked independently
   - Document the research motivation behind implementation choices
   - Validate with real energy data, not just toy examples
   - Optimize for Apple Silicon (MLX) while keeping algorithms general
   - Think like a systems engineer: reliability, fault tolerance, monitoring
   - Connect research contributions to practical energy grid challenges
+  - WRT comments, only use them to explain a particularly difficult implementation choice, not how the code works. The code should be self-explanatory with clear variable names and structure.
 
 project:
   name: "Ring Attention Energy Optimization"
