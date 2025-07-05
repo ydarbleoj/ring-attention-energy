@@ -4,8 +4,8 @@ Run this first to test your data connections
 """
 
 import os
-from src.energy_data.eia_client import EIAClient
-from src.energy_data.caiso_client import CAISOClient
+from src.core.integrations.eia.client import EIAClient
+from src.core.integrations.caiso.client import CAISOClient
 
 def setup_eia():
     """Setup EIA client with your API key"""

@@ -1,0 +1,57 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.2
+    method: GET
+    uri: http://oasis.caiso.com/oasisapi/SingleZip?enddatetime=20230102T23%3A59-0000&market_run_id=RTM&queryname=SLD_RTO&resultformat=6&startdatetime=20230101T00%3A00-0000&version=1
+  response:
+    body:
+      string: ''
+    headers:
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '0'
+      Location:
+      - https://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_RTO&startdatetime=20230101T00%3A00-0000&enddatetime=20230102T23%3A59-0000&version=1&market_run_id=RTM&resultformat=6
+      Server:
+      - BigIP
+    status:
+      code: 302
+      message: Moved Temporarily
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.2
+    method: GET
+    uri: https://oasis.caiso.com/oasisapi/SingleZip?enddatetime=20230102T23%3A59-0000&market_run_id=RTM&queryname=SLD_RTO&resultformat=6&startdatetime=20230101T00%3A00-0000&version=1
+  response:
+    body:
+      string: <html><body><p>CAISO Acceptable Use Policy Violation. Please retry your
+        request after 5 seconds.</p></body></html>
+    headers:
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '114'
+      Server:
+      - BigIP
+    status:
+      code: 429
+      message: Too Many Requests
+version: 1

@@ -8,6 +8,15 @@ from typing import Dict, List, Optional, Union
 import logging
 import time
 
+from .schema import (
+    CAISODemandResponse,
+    CAISOGenerationResponse,
+    CAISOSystemDemand,
+    CAISOGeneration,
+    CAISOAPIError,
+    RegionalEnergyMetrics
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -23,19 +32,36 @@ class CAISOClient:
     def __init__(self):
         self.base_url = "http://oasis.caiso.com/oasisapi/SingleZip"
         self.session = requests.Session()
-        self.rate_limit_delay = 1.0  # Be respectful with requests
+        self.rate_limit_delay = 3.0  # Increased delay to be more respectful with requests
 
     def _make_request(self, params: Dict) -> str:
         """Make API request and return response text"""
-        try:
-            time.sleep(self.rate_limit_delay)
-            response = self.session.get(self.base_url, params=params, timeout=60)
-            response.raise_for_status()
-            return response.text
+        max_retries = 3
+        retry_delay = 5.0
 
-        except requests.exceptions.RequestException as e:
-            logger.error(f"CAISO API request failed: {e}")
-            raise
+        for attempt in range(max_retries):
+            try:
+                time.sleep(self.rate_limit_delay)
+                response = self.session.get(self.base_url, params=params, timeout=60)
+                response.raise_for_status()
+                return response.text
+
+            except requests.exceptions.HTTPError as e:
+                if e.response.status_code == 429:  # Rate limited
+                    if attempt < max_retries - 1:
+                        logger.warning(f"Rate limited, retrying in {retry_delay} seconds (attempt {attempt + 1}/{max_retries})")
+                        time.sleep(retry_delay)
+                        retry_delay *= 2  # Exponential backoff
+                        continue
+                    else:
+                        logger.error(f"Rate limited after {max_retries} attempts")
+                        raise
+                else:
+                    logger.error(f"CAISO API request failed: {e}")
+                    raise
+            except requests.exceptions.RequestException as e:
+                logger.error(f"CAISO API request failed: {e}")
+                raise
 
     def _parse_csv_response(self, response_text: str) -> pd.DataFrame:
         """Parse CSV response from CAISO API"""
@@ -65,17 +91,19 @@ class CAISOClient:
     def get_real_time_demand(
         self,
         start_date: str = None,
-        end_date: str = None
-    ) -> pd.DataFrame:
+        end_date: str = None,
+        validate: bool = True
+    ) -> Union[CAISODemandResponse, pd.DataFrame]:
         """
-        Get real-time system demand
+        Get real-time system demand with optional schema validation
 
         Args:
             start_date: Date in YYYYMMDD format (default: yesterday)
             end_date: Date in YYYYMMDD format (default: today)
+            validate: Return validated Pydantic model if True, raw DataFrame if False
 
         Returns:
-            DataFrame with timestamp and demand columns
+            CAISODemandResponse if validate=True, DataFrame if validate=False
         """
         if not start_date:
             start_date = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
@@ -98,6 +126,24 @@ class CAISOClient:
             df = self._parse_csv_response(response_text)
 
             if df.empty:
+                logger.warning("No data returned from CAISO API")
+                return CAISODemandResponse(data=[]) if validate else df
+
+            logger.info(f"Retrieved {len(df)} demand records")
+
+            if validate:
+                # Return validated Pydantic model
+                return CAISODemandResponse.from_dataframe(df)
+            else:
+                # Return raw DataFrame
+                return df
+
+        except Exception as e:
+            logger.error(f"Error fetching CAISO demand data: {e}")
+            if validate:
+                return CAISODemandResponse(data=[])
+            else:
+                return pd.DataFrame()
                 logger.warning("No demand data returned from CAISO API")
                 return df
 
@@ -347,3 +393,135 @@ class CAISOClient:
             'AS_RESULTS',   # Ancillary Services
             'GEN_FUEL_TYPE' # Generation by fuel type
         ]
+
+    def get_generation_mix(
+        self,
+        start_date: str = None,
+        end_date: str = None,
+        validate: bool = True
+    ) -> Union[CAISOGenerationResponse, pd.DataFrame]:
+        """
+        Get generation mix by fuel type
+
+        Args:
+            start_date: Date in YYYYMMDD format (default: yesterday)
+            end_date: Date in YYYYMMDD format (default: today)
+            validate: Return validated Pydantic model if True, raw DataFrame if False
+
+        Returns:
+            CAISOGenerationResponse if validate=True, DataFrame if validate=False
+        """
+        if not start_date:
+            start_date = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
+        if not end_date:
+            end_date = datetime.now().strftime("%Y%m%d")
+
+        logger.info(f"Fetching CAISO generation mix from {start_date} to {end_date}")
+
+        params = {
+            'queryname': 'ENE_SLRS',  # Energy Slrs (Generation by fuel type)
+            'startdatetime': f"{start_date}T00:00-0000",
+            'enddatetime': f"{end_date}T23:59-0000",
+            'version': '1',
+            'market_run_id': 'RTM',
+            'resultformat': '6'
+        }
+
+        try:
+            response_text = self._make_request(params)
+            df = self._parse_csv_response(response_text)
+
+            if df.empty:
+                logger.warning("No generation data returned from CAISO API")
+                return CAISOGenerationResponse(data=[]) if validate else df
+
+            logger.info(f"Retrieved {len(df)} generation records")
+
+            if validate:
+                return CAISOGenerationResponse.from_dataframe(df)
+            else:
+                return df
+
+        except Exception as e:
+            logger.error(f"Error fetching CAISO generation data: {e}")
+            if validate:
+                return CAISOGenerationResponse(data=[])
+            else:
+                return pd.DataFrame()
+
+    def get_regional_metrics(
+        self,
+        start_date: str = None,
+        end_date: str = None
+    ) -> List[RegionalEnergyMetrics]:
+        """
+        Get comprehensive regional energy metrics for migration analysis
+
+        Args:
+            start_date: Date in YYYYMMDD format (default: yesterday)
+            end_date: Date in YYYYMMDD format (default: today)
+
+        Returns:
+            List of RegionalEnergyMetrics objects
+        """
+        # Get demand and generation data
+        demand_response = self.get_real_time_demand(start_date, end_date, validate=True)
+        generation_response = self.get_generation_mix(start_date, end_date, validate=True)
+
+        if not demand_response.data or not generation_response.data:
+            logger.warning("Insufficient data for regional metrics")
+            return []
+
+        # Process data into regional metrics
+        metrics = []
+
+        # Group demand data by hour/day for aggregation
+        demand_by_time = {}
+        for demand in demand_response.data:
+            time_key = demand.timestamp.replace(minute=0, second=0, microsecond=0)
+            if time_key not in demand_by_time:
+                demand_by_time[time_key] = []
+            demand_by_time[time_key].append(demand.demand_mw)
+
+        # Group generation data by hour/day and fuel type
+        generation_by_time = {}
+        for gen in generation_response.data:
+            time_key = gen.timestamp.replace(minute=0, second=0, microsecond=0)
+            if time_key not in generation_by_time:
+                generation_by_time[time_key] = {'total': 0, 'renewable': 0, 'by_fuel': {}}
+
+            generation_by_time[time_key]['total'] += gen.generation_mw
+            generation_by_time[time_key]['by_fuel'][gen.fuel_type] = gen.generation_mw
+
+            # Count renewable sources
+            renewable_fuels = {'SOLAR', 'WIND', 'HYDRO', 'GEOTHERMAL', 'BIOGAS', 'BIOMASS'}
+            if gen.fuel_type.upper() in renewable_fuels:
+                generation_by_time[time_key]['renewable'] += gen.generation_mw
+
+        # Create metrics for each time period
+        for timestamp in sorted(demand_by_time.keys()):
+            if timestamp in generation_by_time:
+                demand_data = demand_by_time[timestamp]
+                gen_data = generation_by_time[timestamp]
+
+                avg_demand = sum(demand_data) / len(demand_data)
+                peak_demand = max(demand_data)
+                total_gen = gen_data['total']
+                renewable_gen = gen_data['renewable']
+
+                metrics.append(RegionalEnergyMetrics(
+                    region="California",
+                    timestamp=timestamp,
+                    total_demand_mw=avg_demand,
+                    total_generation_mw=total_gen,
+                    renewable_generation_mw=renewable_gen,
+                    renewable_percentage=(renewable_gen / total_gen * 100) if total_gen > 0 else 0,
+                    peak_demand_mw=peak_demand,
+                    load_factor=avg_demand / peak_demand if peak_demand > 0 else 0,
+                    # TODO: Add more sophisticated economic and grid stress calculations
+                    economic_activity_index=avg_demand / 1000,  # Simplified proxy
+                    grid_stress_index=max(0, (peak_demand - avg_demand) / avg_demand) if avg_demand > 0 else 0
+                ))
+
+        logger.info(f"Generated {len(metrics)} regional metrics")
+        return metrics

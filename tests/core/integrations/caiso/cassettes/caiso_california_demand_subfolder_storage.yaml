@@ -1,0 +1,77 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.2
+    method: GET
+    uri: http://oasis.caiso.com/oasisapi/SingleZip?enddatetime=20230102T23%3A59-0000&market_run_id=RTM&queryname=SLD_RTO&resultformat=6&startdatetime=20230101T00%3A00-0000&version=1
+  response:
+    body:
+      string: ''
+    headers:
+      Connection:
+      - Keep-Alive
+      Content-Length:
+      - '0'
+      Location:
+      - https://oasis.caiso.com/oasisapi/SingleZip?queryname=SLD_RTO&startdatetime=20230101T00%3A00-0000&enddatetime=20230102T23%3A59-0000&version=1&market_run_id=RTM&resultformat=6
+      Server:
+      - BigIP
+    status:
+      code: 302
+      message: Moved Temporarily
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.2
+    method: GET
+    uri: https://oasis.caiso.com/oasisapi/SingleZip?enddatetime=20230102T23%3A59-0000&market_run_id=RTM&queryname=SLD_RTO&resultformat=6&startdatetime=20230101T00%3A00-0000&version=1
+  response:
+    body:
+      string: !!binary |
+        UEsDBBQACAgIAEM55VoAAAAAAAAAAAAAAAATAAAASU5WQUxJRF9SRVFVRVNULnhtbG1STW+jMBA9
+        L79ixGVP4SNttiuUuIqAVZEaUQG7h71EDkyDV2BH2IH239d2kjat9mJ73ny8NzNe3r/0HYw4SCb4
+        yg29wAXktWgY36/c39Wv2U/3njjLPsrXZVYWeBCDAp3DZdSv3FapQ+T70zR5NWVSeLXofSmofxW9
+        HUPvRTaurbJBKekeH5A2OBDnm4Yq1mNCFZJ5MF/MgrtZsKjC2ygMouCHt7i5/bv0r4JsSimOQ43E
+        khjv2ba+P6deyDgPwptQHybgAjrG+KLhQ9UTfe0EbSxUVLm9Oe2RxOuszE2qtQycZGX8uM42abHN
+        qnTzBSNVi1ALrpArCeIZVIsS4aA5JNABQR53/7BWoATULeV7hImpVhwVcKFYjR4kWDMjWcKOSmxA
+        cGD8WQw9VRq1xSnj2mESGTcMENOO6RDOKGi93yVMuAPJFFpOEzHqmkoM2iVFhzCgPGgKtmMdU6+e
+        6fCqCeez/dFoWhR5cXlt4zxJSRicBv0OXLxJWsYk46OW1sATHfQAlV7GeSiwZyNyrcN+KzPdSxGb
+        55wtw2bfp634/9mY/+mHkjdQSwcIIoNcbKgBAADYAgAAUEsBAhQAFAAICAgAQznlWiKDXGyoAQAA
+        2AIAABMAAAAAAAAAAAAAAAAAAAAAAElOVkFMSURfUkVRVUVTVC54bWxQSwUGAAAAAAEAAQBBAAAA
+        6QEAAAAA
+    headers:
+      Connection:
+      - keep-alive
+      Content-Disposition:
+      - inline; filename=INVALID_REQUEST.xml.zip;
+      Content-Type:
+      - application/x-zip-compressed
+      Date:
+      - Sat, 05 Jul 2025 14:10:06 GMT
+      Keep-Alive:
+      - timeout=60
+      Set-Cookie:
+      - BIGipServerprod-oasisapi-int=3180664236.10318.0000; path=/; Httponly; Secure
+      - TS010350a5=014824d35f90c89e2a3cf57974fb6867a19d7489b37591f7e3bd1a7882d2829d14398201e841497d9355c9030138539478c9f763ad;
+        Path=/; Domain=.oasis.caiso.com
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: ''
+version: 1
