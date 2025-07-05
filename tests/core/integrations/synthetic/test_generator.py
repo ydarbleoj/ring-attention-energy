@@ -20,7 +20,7 @@ class TestSyntheticDataConfig:
     def test_default_config(self):
         """Test default configuration values."""
         config = SyntheticDataConfig()
-        
+
         assert config.start_date == "2023-01-01"
         assert config.end_date == "2023-12-31"
         assert config.frequency == "1h"
@@ -34,7 +34,7 @@ class TestSyntheticDataConfig:
             base_demand_mw=500.0,
             random_seed=123
         )
-        
+
         assert config.start_date == "2022-01-01"
         assert config.base_demand_mw == 500.0
         assert config.random_seed == 123
@@ -55,14 +55,14 @@ class TestSyntheticEnergyDataGenerator:
     def test_generator_initialization(self):
         """Test generator initialization."""
         assert self.generator.config == self.config
-        
+
         # Test reproducibility
         gen1 = SyntheticEnergyDataGenerator(self.config)
         gen2 = SyntheticEnergyDataGenerator(self.config)
-        
+
         demand1 = gen1.generate_demand_pattern(24)
         demand2 = gen2.generate_demand_pattern(24)
-        
+
         np.testing.assert_array_equal(demand1, demand2)
 
     def test_demand_pattern_generation(self):
@@ -77,7 +77,7 @@ class TestSyntheticEnergyDataGenerator:
 
         # Check for patterns
         assert np.std(demand) > 0, "Demand should have variation"
-        
+
         # Check daily patterns (should have peaks roughly every 24 hours)
         daily_maxima = []
         for day in range(7):
@@ -102,10 +102,10 @@ class TestSyntheticEnergyDataGenerator:
         # Solar should be zero at night (hours 0-6 and 18-24 roughly)
         night_hours = list(range(0, 6)) + list(range(18, 24)) + list(range(24, 30)) + list(range(42, 48))
         day_hours = list(range(8, 16)) + list(range(32, 40))
-        
+
         night_solar = solar[night_hours]
         day_solar = solar[day_hours]
-        
+
         # Night should be generally lower than day
         assert np.mean(night_solar) < np.mean(day_solar)
 
@@ -236,7 +236,7 @@ class TestConvenienceFunctions:
     def test_generate_synthetic_week(self):
         """Test synthetic week generation."""
         df = generate_synthetic_week("TEST_REGION")
-        
+
         assert isinstance(df, pd.DataFrame)
         assert len(df) == 168  # 7 days * 24 hours
         assert "region" in df.columns
@@ -245,7 +245,7 @@ class TestConvenienceFunctions:
     def test_generate_synthetic_month(self):
         """Test synthetic month generation."""
         df = generate_synthetic_month("TEST_REGION")
-        
+
         assert isinstance(df, pd.DataFrame)
         assert len(df) == 744  # 31 days * 24 hours (January)
         assert "region" in df.columns
@@ -254,7 +254,7 @@ class TestConvenienceFunctions:
     def test_generate_synthetic_year(self):
         """Test synthetic year generation."""
         df = generate_synthetic_year("TEST_REGION")
-        
+
         assert isinstance(df, pd.DataFrame)
         assert len(df) == 8760  # 365 days * 24 hours
         assert "region" in df.columns
@@ -291,31 +291,31 @@ class TestDataQuality:
         # Solar should be higher in summer months
         summer_solar = df[df["month"].isin([6, 7, 8])]["solar_generation_mw"].mean()
         winter_solar = df[df["month"].isin([12, 1, 2])]["solar_generation_mw"].mean()
-        
+
         assert summer_solar > winter_solar, "Solar should be higher in summer"
 
     def test_no_missing_values(self):
         """Test that generated data has no missing values."""
         df = self.generator.generate_full_dataset(hours=1000)
-        
+
         assert not df.isnull().any().any(), "Generated data should have no missing values"
 
     def test_realistic_ranges(self):
         """Test that all values are in realistic ranges."""
         df = self.generator.generate_full_dataset(hours=1000)
-        
+
         # Demand should be reasonable (in MW)
         assert df["demand_mw"].min() > 0
         assert df["demand_mw"].max() < 10000  # Reasonable for a region
-        
+
         # Generation should be reasonable
         assert df["solar_generation_mw"].min() >= 0
         assert df["wind_generation_mw"].min() >= 0
-        
+
         # Prices should be reasonable
         assert df["price_usd_per_mwh"].min() > 0
         assert df["price_usd_per_mwh"].max() < 1000  # Extreme but possible
-        
+
         # Grid stability should be 0-1
         assert df["grid_stability"].min() >= 0
         assert df["grid_stability"].max() <= 1.0

@@ -13,27 +13,27 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SyntheticDataConfig:
     """Configuration for synthetic energy data generation."""
-    
+
     # Time parameters
     start_date: str = "2023-01-01"
     end_date: str = "2023-12-31"
     frequency: str = "1h"
-    
+
     # Randomization
     random_seed: int = 42
-    
+
     # Pattern parameters
     base_demand_mw: float = 1000.0
     daily_variation: float = 0.2
     weekly_variation: float = 0.1
     seasonal_variation: float = 0.3
     noise_level: float = 0.05
-    
+
     # Temperature parameters
     base_temperature_c: float = 15.0
     daily_temp_variation: float = 10.0
     seasonal_temp_variation: float = 20.0
-    
+
     # Renewable parameters
     solar_capacity_factor: float = 0.25
     wind_capacity_factor: float = 0.35
@@ -45,7 +45,7 @@ class SyntheticEnergyDataGenerator:
 
     def __init__(self, config: SyntheticDataConfig):
         """Initialize generator with configuration.
-        
+
         Args:
             config: Configuration for data generation
         """
@@ -54,10 +54,10 @@ class SyntheticEnergyDataGenerator:
 
     def generate_demand_pattern(self, hours: int) -> np.ndarray:
         """Generate realistic electricity demand with daily/seasonal patterns.
-        
+
         Args:
             hours: Number of hours to generate
-            
+
         Returns:
             Array of demand values in MW
         """
@@ -85,11 +85,11 @@ class SyntheticEnergyDataGenerator:
 
     def generate_renewable_generation(self, hours: int, source: str = "solar") -> np.ndarray:
         """Generate renewable generation patterns.
-        
+
         Args:
             hours: Number of hours to generate
             source: Type of renewable source ('solar' or 'wind')
-            
+
         Returns:
             Array of generation values in MW
         """
@@ -101,10 +101,10 @@ class SyntheticEnergyDataGenerator:
             # Fix seasonal pattern: higher in summer (middle of year)
             seasonal = 0.5 + 0.5 * np.sin(2 * np.pi * t / (24 * 365.25) - np.pi/2)
             capacity_factor = self.config.solar_capacity_factor
-            
+
             # Base generation pattern
             generation = capacity_factor * daily * seasonal
-            
+
             # Add weather variability (cloud cover effects)
             weather_factor = 0.7 + 0.3 * self.rng.beta(2, 2, hours)
             generation *= weather_factor
@@ -113,10 +113,10 @@ class SyntheticEnergyDataGenerator:
             # Wind: more variable, less predictable patterns
             # Weekly pattern (weather systems)
             weekly_wind = 0.3 + 0.2 * np.sin(2 * np.pi * t / (24 * 7))
-            
+
             # Random wind variations (Rayleigh distribution is common for wind)
             wind_variations = self.rng.rayleigh(0.5, hours)
-            
+
             generation = self.config.wind_capacity_factor * (weekly_wind + 0.3 * wind_variations)
             generation = np.minimum(generation, self.config.wind_capacity_factor * 2)
 
@@ -127,10 +127,10 @@ class SyntheticEnergyDataGenerator:
 
     def generate_temperature(self, hours: int) -> np.ndarray:
         """Generate temperature data with seasonal patterns.
-        
+
         Args:
             hours: Number of hours to generate
-            
+
         Returns:
             Array of temperature values in Celsius
         """
@@ -149,11 +149,11 @@ class SyntheticEnergyDataGenerator:
 
     def generate_price_data(self, demand: np.ndarray, renewable: np.ndarray) -> np.ndarray:
         """Generate electricity prices based on supply/demand dynamics.
-        
+
         Args:
             demand: Demand values in MW
             renewable: Total renewable generation in MW
-            
+
         Returns:
             Array of price values in $/MWh
         """
@@ -178,11 +178,11 @@ class SyntheticEnergyDataGenerator:
 
     def generate_grid_stability_metric(self, demand: np.ndarray, renewable: np.ndarray) -> np.ndarray:
         """Generate a grid stability metric (0-1 scale).
-        
+
         Args:
             demand: Demand values in MW
             renewable: Total renewable generation in MW
-            
+
         Returns:
             Array of stability values (0-1, higher is more stable)
         """
@@ -206,10 +206,10 @@ class SyntheticEnergyDataGenerator:
 
     def generate_full_dataset(self, hours: Optional[int] = None) -> pd.DataFrame:
         """Generate a complete synthetic energy dataset.
-        
+
         Args:
             hours: Number of hours to generate (if None, calculated from config dates)
-            
+
         Returns:
             DataFrame with all synthetic energy data
         """
@@ -225,7 +225,7 @@ class SyntheticEnergyDataGenerator:
         solar = self.generate_renewable_generation(hours, "solar")
         wind = self.generate_renewable_generation(hours, "wind")
         temperature = self.generate_temperature(hours)
-        
+
         # Calculate derived metrics
         total_renewable = solar + wind
         price = self.generate_price_data(demand, total_renewable)
@@ -251,11 +251,11 @@ class SyntheticEnergyDataGenerator:
 
     def generate_dataset_with_region(self, region: str = "SYNTHETIC", hours: Optional[int] = None) -> pd.DataFrame:
         """Generate synthetic dataset with region identifier.
-        
+
         Args:
             region: Region identifier for the synthetic data
             hours: Number of hours to generate
-            
+
         Returns:
             DataFrame with region column added
         """
