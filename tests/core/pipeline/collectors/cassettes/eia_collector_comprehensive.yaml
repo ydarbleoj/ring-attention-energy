@@ -1,0 +1,52 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.2
+    method: GET
+    uri: https://api.eia.gov/v2/electricity/rto/region-data/data/?data%5B0%5D=value&end=2024-01-02&facets%5Brespondent%5D%5B%5D=ERCO&facets%5Btype%5D%5B%5D=D&frequency=hourly&length=5000&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=asc&start=2024-01-01
+  response:
+    body:
+      string: "{\n  \"error\": {\n    \"code\": \"API_KEY_INVALID\",\n    \"message\":
+        \"An invalid api_key was supplied. Get one at https://api.eia.gov:443\"\n
+        \ }\n}"
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 06 Jul 2025 01:49:00 GMT
+      Strict-Transport-Security:
+      - max-age=31536000; preload
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Api-Umbrella-Request-Id:
+      - cnrlm234lppll2g0vkmg
+      X-Cache:
+      - MISS
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - DENY
+      X-Vcap-Request-Id:
+      - 977aa1fa-7f5d-4142-7a38-1e08caf5676d
+      X-Xss-Protection:
+      - 1; mode=block
+      content-length:
+      - '136'
+    status:
+      code: 403
+      message: Forbidden
+version: 1

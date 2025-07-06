@@ -20,7 +20,7 @@ class DataCollectionResult:
         source: str = "unknown",
         collection_time: Optional[datetime] = None
     ):
-        self.data = data or pl.DataFrame()
+        self.data = data if data is not None else pl.DataFrame()
         self.metadata = metadata or {}
         self.errors = errors or []
         self.source = source
