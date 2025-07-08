@@ -38,7 +38,7 @@ class TestDateChunking:
 
         assert len(chunks) == 2
         assert chunks[0] == (date(2023, 1, 1), date(2023, 3, 31))  # 90-day chunk
-        assert chunks[1] == (date(2023, 4, 1), date(2023, 6, 30))  # 90-day chunk
+        assert chunks[1] == (date(2023, 4, 1), date(2023, 6, 29))  # Remaining chunk (limited by 90-day max)
 
     def test_custom_batch_config(self):
         """Test custom batch configuration."""

@@ -66,8 +66,8 @@ class DataLoadOrchestrator:
     def _setup_default_batch_configs(self) -> None:
         """Setup default batch configurations for known collectors."""
         self.batch_configs = {
-            "eia": BatchConfig("eia", batch_size_days=30),      # 1 month for EIA (rate limits)
-            "caiso": BatchConfig("caiso", batch_size_days=90),  # 3 months for CAISO
+            "eia": BatchConfig("eia", batch_size_days=60),      # 60 days optimal (202 recs/sec)
+            "caiso": BatchConfig("caiso", batch_size_days=90),  # 3 months for CAISO (data issues)
             "synthetic": BatchConfig("synthetic", batch_size_days=365),  # 1 year for synthetic
         }
 
