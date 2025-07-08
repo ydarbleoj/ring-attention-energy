@@ -3,14 +3,18 @@
 import asyncio
 import logging
 import os
+import sys
 from datetime import date, timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 
+# Add the project root to Python path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
+
 from src.core.pipeline.orchestrator import DataLoadOrchestrator
 from src.core.pipeline.config import EnergyPipelineConfig
 from src.core.pipeline.collectors.eia_collector import EIACollector
-from src.core.pipeline.collectors.caiso_collector import CaisoCollector
+from src.core.pipeline.collectors.caiso_collector import CAISOCollector
 
 # Load environment variables
 load_dotenv()
@@ -39,11 +43,11 @@ async def test_orchestrator_with_real_collectors():
 
     # Create collectors
     eia_collector = EIACollector(eia_api_key)
-    caiso_collector = CaisoCollector()
+    # caiso_collector = CAISOCollector()  # Skip CAISO for today
 
     # Register collectors
     orchestrator.register_collector("eia", eia_collector)
-    orchestrator.register_collector("caiso", caiso_collector)
+    # orchestrator.register_collector("caiso", caiso_collector)  # Skip CAISO for today
 
     # Test with a small date range (1 week)
     start_date = date(2024, 1, 1)

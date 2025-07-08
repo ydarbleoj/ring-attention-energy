@@ -53,27 +53,39 @@ class EIAClient:
         self.rate_limit_delay = self.config.api.eia_rate_limit_delay
 
     def _create_session(self) -> requests.Session:
-        """Create session with retry strategy"""
+        """Create session with optimized retry strategy and connection pooling"""
         session = requests.Session()
 
+        # Optimized retry strategy
         retry_strategy = Retry(
             total=3,
-            backoff_factor=1,
+            backoff_factor=0.5,  # Faster backoff
             status_forcelist=[429, 500, 502, 503, 504],
         )
 
-        adapter = HTTPAdapter(max_retries=retry_strategy)
+        # Connection pooling for better performance
+        adapter = HTTPAdapter(
+            max_retries=retry_strategy,
+            pool_connections=10,  # Connection pool size
+            pool_maxsize=20,      # Max connections per pool
+            pool_block=False      # Don't block on pool exhaustion
+        )
+
         session.mount("http://", adapter)
         session.mount("https://", adapter)
 
         return session
 
     def _make_request(self, url: str, params: Dict) -> Dict:
-        """Make API request with rate limiting and error handling"""
+        """Make API request with optimized rate limiting and error handling"""
         params['api_key'] = self.api_key
 
         try:
-            time.sleep(self.rate_limit_delay)  # Rate limiting
+            # Optimized rate limiting - more aggressive for parallel requests
+            # EIA allows 5000/hour = 1.39/sec, so 0.3s should be safe with 3 concurrent
+            optimized_delay = max(0.3, self.rate_limit_delay * 0.4)
+            time.sleep(optimized_delay)
+
             response = self.session.get(url, params=params, timeout=30)
             response.raise_for_status()
 

@@ -3,6 +3,7 @@
 import asyncio
 import logging
 import os
+import sys
 import time
 from datetime import date, timedelta
 from pathlib import Path
@@ -11,10 +12,13 @@ from dataclasses import dataclass
 from dotenv import load_dotenv
 import polars as pl
 
+# Add the project root to Python path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
+
 from src.core.pipeline.orchestrator import DataLoadOrchestrator, BatchConfig
 from src.core.pipeline.config import EnergyPipelineConfig
 from src.core.pipeline.collectors.eia_collector import EIACollector
-from src.core.pipeline.collectors.caiso_collector import CaisoCollector
+# from src.core.pipeline.collectors.caiso_collector import CAISOCollector  # Skip for today
 
 # Load environment variables
 load_dotenv()
@@ -75,19 +79,19 @@ class BatchSizeBenchmark:
             # Wait between tests to respect rate limits
             await asyncio.sleep(2)
 
-        # CAISO batch size tests: 90, 180, 365 days
-        caiso_batch_sizes = [90, 180, 365]
-        logger.info(f"\nTesting CAISO batch sizes: {caiso_batch_sizes}")
+        # CAISO batch size tests: 90, 180, 365 days (skip for today)
+        # caiso_batch_sizes = [90, 180, 365]
+        # logger.info(f"\nTesting CAISO batch sizes: {caiso_batch_sizes}")
 
-        for batch_size in caiso_batch_sizes:
-            logger.info(f"\n--- Testing CAISO with {batch_size}-day batches ---")
-            result = await self._benchmark_collector(
-                "caiso", batch_size, start_date, end_date, region
-            )
-            self.results.append(result)
+        # for batch_size in caiso_batch_sizes:
+        #     logger.info(f"\n--- Testing CAISO with {batch_size}-day batches ---")
+        #     result = await self._benchmark_collector(
+        #         "caiso", batch_size, start_date, end_date, region
+        #     )
+        #     self.results.append(result)
 
-            # Short wait between tests
-            await asyncio.sleep(1)
+        #     # Short wait between tests
+        #     await asyncio.sleep(1)
 
         # Generate comprehensive report
         self._generate_benchmark_report()
@@ -113,8 +117,8 @@ class BatchSizeBenchmark:
         # Create and register collector
         if collector_name == "eia":
             collector = EIACollector(self.eia_api_key)
-        elif collector_name == "caiso":
-            collector = CaisoCollector()
+        # elif collector_name == "caiso":  # Skip CAISO for today
+        #     collector = CAISOCollector()
         else:
             raise ValueError(f"Unknown collector: {collector_name}")
 

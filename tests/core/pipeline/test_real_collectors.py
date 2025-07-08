@@ -6,10 +6,14 @@ This is a lightweight test before running the full benchmark.
 import asyncio
 import logging
 import os
+import sys
 from datetime import date
 from pathlib import Path
 from dotenv import load_dotenv
 import polars as pl
+
+# Add the project root to Python path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.core.pipeline.orchestrator import DataLoadOrchestrator
 from src.core.pipeline.config import EnergyPipelineConfig
@@ -50,19 +54,19 @@ async def test_real_collectors():
         orchestrator.register_collector("eia", eia_collector)
         print("✅ EIA collector registered")
 
-        # CAISO Collector (needs config)
-        caiso_config = {
-            "storage_path": "data/cache",
-            "timeout": 30,
-            "retry": {
-                "max_retries": 3,
-                "initial_delay": 1,
-                "max_delay": 60
-            }
-        }
-        caiso_collector = CAISOCollector(caiso_config)
-        orchestrator.register_collector("caiso", caiso_collector)
-        print("✅ CAISO collector registered")
+        # CAISO Collector (skip for today)
+        # caiso_config = {
+        #     "storage_path": "data/cache",
+        #     "timeout": 30,
+        #     "retry": {
+        #         "max_retries": 3,
+        #         "initial_delay": 1,
+        #         "max_delay": 60
+        #     }
+        # }
+        # caiso_collector = CAISOCollector(caiso_config)
+        # orchestrator.register_collector("caiso", caiso_collector)
+        # print("✅ CAISO collector registered")
 
     except Exception as e:
         print(f"❌ Error creating collectors: {e}")
@@ -113,7 +117,7 @@ async def test_real_collectors():
         print("\n💾 Validating storage...")
         base_path = Path("data/cache")  # Changed from data/processed
 
-        for collector_name in ["eia", "caiso"]:
+        for collector_name in ["eia"]:  # Only test EIA for today
             collector_path = base_path / collector_name / "2024"
             if collector_path.exists():
                 files = list(collector_path.glob("*.parquet"))

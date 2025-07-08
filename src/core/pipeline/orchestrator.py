@@ -18,6 +18,10 @@ class BatchConfig:
     collector_name: str
     batch_size_days: int
     max_parallel_batches: int = 1  # Start conservative
+    # Performance optimization settings
+    enable_parallel_chunks: bool = True  # Enable parallel chunk processing
+    max_concurrent_requests: int = 3     # Limit concurrent API requests
+    connection_pool_size: int = 10       # HTTP connection pool size
 
 
 @dataclass
@@ -66,9 +70,26 @@ class DataLoadOrchestrator:
     def _setup_default_batch_configs(self) -> None:
         """Setup default batch configurations for known collectors."""
         self.batch_configs = {
-            "eia": BatchConfig("eia", batch_size_days=60),      # 60 days optimal (202 recs/sec)
-            "caiso": BatchConfig("caiso", batch_size_days=90),  # 3 months for CAISO (data issues)
-            "synthetic": BatchConfig("synthetic", batch_size_days=365),  # 1 year for synthetic
+            "eia": BatchConfig(
+                "eia",
+                batch_size_days=60,
+                max_parallel_batches=3,      # Target: 3x parallel for 500+ rec/s
+                enable_parallel_chunks=True,
+                max_concurrent_requests=3
+            ),
+            "caiso": BatchConfig(
+                "caiso",
+                batch_size_days=90,
+                max_parallel_batches=2,      # Conservative for CAISO
+                enable_parallel_chunks=True,
+                max_concurrent_requests=2
+            ),
+            "synthetic": BatchConfig(
+                "synthetic",
+                batch_size_days=365,
+                max_parallel_batches=1,      # Fast local generation
+                enable_parallel_chunks=False
+            ),
         }
 
     def register_collector(self, name: str, collector: BaseEnergyDataCollector) -> None:
@@ -215,69 +236,178 @@ class DataLoadOrchestrator:
         collector = self.collectors[collector_name]
         chunks = self.generate_date_chunks(start_date, end_date, collector_name)
         progress = self.progress[collector_name]
+        batch_config = self.get_batch_config(collector_name)
 
+        # Filter out completed chunks
+        if skip_completed:
+            chunks = [
+                (chunk_start, chunk_end) for chunk_start, chunk_end in chunks
+                if not progress.is_range_completed(chunk_start, chunk_end)
+            ]
+
+        if not chunks:
+            self.logger.info(f"No chunks to process for {collector_name}")
+            return []
+
+        # Process chunks in parallel if enabled
+        if batch_config.enable_parallel_chunks and len(chunks) > 1:
+            return await self._load_chunks_parallel(
+                collector, collector_name, chunks, region, progress, batch_config
+            )
+        else:
+            return await self._load_chunks_sequential(
+                collector, collector_name, chunks, region, progress
+            )
+
+    async def _load_chunks_parallel(
+        self,
+        collector: BaseEnergyDataCollector,
+        collector_name: str,
+        chunks: List[Tuple[date, date]],
+        region: str,
+        progress: LoadProgress,
+        batch_config: BatchConfig
+    ) -> List[DataCollectionResult]:
+        """Load chunks in parallel with controlled concurrency."""
+        semaphore = asyncio.Semaphore(batch_config.max_concurrent_requests)
+
+        async def process_chunk(chunk_start: date, chunk_end: date) -> List[DataCollectionResult]:
+            async with semaphore:
+                return await self._load_single_chunk(
+                    collector, collector_name, chunk_start, chunk_end, region, progress
+                )
+
+        self.logger.info(
+            f"Processing {len(chunks)} chunks in parallel for {collector_name} "
+            f"(max concurrent: {batch_config.max_concurrent_requests})"
+        )
+
+        # Process all chunks concurrently
+        chunk_tasks = [
+            process_chunk(chunk_start, chunk_end)
+            for chunk_start, chunk_end in chunks
+        ]
+
+        chunk_results = await asyncio.gather(*chunk_tasks, return_exceptions=True)
+
+        # Flatten results and handle exceptions
         results = []
-        for chunk_start, chunk_end in chunks:
-            # Skip if already completed
-            if skip_completed and progress.is_range_completed(chunk_start, chunk_end):
-                self.logger.info(f"Skipping completed range: {chunk_start} to {chunk_end}")
-                continue
-
-            # Mark as in progress
-            progress.in_progress_ranges.add((chunk_start, chunk_end))
-
-            try:
-                self.logger.info(f"Loading {collector_name}: {chunk_start} to {chunk_end}")
-
-                # Use separate demand and generation collection for Option A
-                demand_result = await collector.collect_demand_data(
-                    start_date=chunk_start.strftime("%Y-%m-%d"),
-                    end_date=chunk_end.strftime("%Y-%m-%d"),
-                    region=region,
-                    save_to_storage=True,
-                    storage_filename=self._generate_storage_filename(
-                        collector_name, "demand", chunk_start, chunk_end, region
-                    ),
-                    storage_subfolder=self._generate_storage_subfolder(
-                        collector_name, "demand", chunk_start
-                    )
-                )
-
-                generation_result = await collector.collect_generation_data(
-                    start_date=chunk_start.strftime("%Y-%m-%d"),
-                    end_date=chunk_end.strftime("%Y-%m-%d"),
-                    region=region,
-                    save_to_storage=True,
-                    storage_filename=self._generate_storage_filename(
-                        collector_name, "generation", chunk_start, chunk_end, region
-                    ),
-                    storage_subfolder=self._generate_storage_subfolder(
-                        collector_name, "generation", chunk_start
-                    )
-                )
-
-                # Check if both succeeded
-                if demand_result.success and generation_result.success:
-                    results.extend([demand_result, generation_result])
-                    progress.mark_completed(chunk_start, chunk_end)
-                    self.logger.info(
-                        f"Successfully loaded {collector_name}: {chunk_start} to {chunk_end} "
-                        f"(demand: {demand_result.records_collected}, generation: {generation_result.records_collected})"
-                    )
-                else:
-                    progress.mark_failed(chunk_start, chunk_end)
-                    error_details = []
-                    if not demand_result.success:
-                        error_details.append(f"demand: {demand_result.errors}")
-                    if not generation_result.success:
-                        error_details.append(f"generation: {generation_result.errors}")
-                    self.logger.error(f"Failed to load {collector_name}: {'; '.join(error_details)}")
-
-            except Exception as e:
+        for i, chunk_result in enumerate(chunk_results):
+            if isinstance(chunk_result, Exception):
+                chunk_start, chunk_end = chunks[i]
+                self.logger.error(f"Chunk {chunk_start} to {chunk_end} failed: {chunk_result}")
                 progress.mark_failed(chunk_start, chunk_end)
-                self.logger.error(f"Exception loading {collector_name}: {e}")
+            else:
+                results.extend(chunk_result)
 
         return results
+
+    async def _load_chunks_sequential(
+        self,
+        collector: BaseEnergyDataCollector,
+        collector_name: str,
+        chunks: List[Tuple[date, date]],
+        region: str,
+        progress: LoadProgress
+    ) -> List[DataCollectionResult]:
+        """Load chunks sequentially (fallback method)."""
+        results = []
+        for chunk_start, chunk_end in chunks:
+            chunk_results = await self._load_single_chunk(
+                collector, collector_name, chunk_start, chunk_end, region, progress
+            )
+            results.extend(chunk_results)
+        return results
+
+    async def _load_single_chunk(
+        self,
+        collector: BaseEnergyDataCollector,
+        collector_name: str,
+        chunk_start: date,
+        chunk_end: date,
+        region: str,
+        progress: LoadProgress
+    ) -> List[DataCollectionResult]:
+        """Load a single date chunk."""
+        # Mark as in progress
+        progress.in_progress_ranges.add((chunk_start, chunk_end))
+
+        try:
+            self.logger.info(f"Loading {collector_name}: {chunk_start} to {chunk_end}")
+
+            # Process demand and generation concurrently
+            demand_task = collector.collect_demand_data(
+                start_date=chunk_start.strftime("%Y-%m-%d"),
+                end_date=chunk_end.strftime("%Y-%m-%d"),
+                region=region,
+                save_to_storage=True,
+                storage_filename=self._generate_storage_filename(
+                    collector_name, "demand", chunk_start, chunk_end, region
+                ),
+                storage_subfolder=self._generate_storage_subfolder(
+                    collector_name, "demand", chunk_start
+                )
+            )
+
+            generation_task = collector.collect_generation_data(
+                start_date=chunk_start.strftime("%Y-%m-%d"),
+                end_date=chunk_end.strftime("%Y-%m-%d"),
+                region=region,
+                save_to_storage=True,
+                storage_filename=self._generate_storage_filename(
+                    collector_name, "generation", chunk_start, chunk_end, region
+                ),
+                storage_subfolder=self._generate_storage_subfolder(
+                    collector_name, "generation", chunk_start
+                )
+            )
+
+            # Wait for both to complete
+            demand_result, generation_result = await asyncio.gather(
+                demand_task, generation_task, return_exceptions=True
+            )
+
+            # Handle exceptions
+            if isinstance(demand_result, Exception):
+                self.logger.error(f"Demand collection failed: {demand_result}")
+                demand_result = DataCollectionResult(
+                    collector_name=collector_name,
+                    data_type="demand",
+                    success=False,
+                    errors=[str(demand_result)]
+                )
+
+            if isinstance(generation_result, Exception):
+                self.logger.error(f"Generation collection failed: {generation_result}")
+                generation_result = DataCollectionResult(
+                    collector_name=collector_name,
+                    data_type="generation",
+                    success=False,
+                    errors=[str(generation_result)]
+                )
+
+            # Check if both succeeded
+            if demand_result.success and generation_result.success:
+                progress.mark_completed(chunk_start, chunk_end)
+                self.logger.info(
+                    f"✅ {collector_name}: {chunk_start} to {chunk_end} "
+                    f"(demand: {demand_result.records_collected}, generation: {generation_result.records_collected})"
+                )
+                return [demand_result, generation_result]
+            else:
+                progress.mark_failed(chunk_start, chunk_end)
+                error_details = []
+                if not demand_result.success:
+                    error_details.append(f"demand: {demand_result.errors}")
+                if not generation_result.success:
+                    error_details.append(f"generation: {generation_result.errors}")
+                self.logger.error(f"❌ {collector_name}: {'; '.join(error_details)}")
+                return []
+
+        except Exception as e:
+            progress.mark_failed(chunk_start, chunk_end)
+            self.logger.error(f"Exception loading {collector_name} chunk: {e}")
+            return []
 
     def _generate_storage_filename(
         self,

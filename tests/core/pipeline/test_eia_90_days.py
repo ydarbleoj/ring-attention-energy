@@ -3,6 +3,10 @@
 import asyncio
 import time
 from datetime import date
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
+
 from src.core.pipeline.orchestrator import DataLoadOrchestrator, BatchConfig
 from src.core.pipeline.config import EnergyPipelineConfig
 from src.core.pipeline.collectors.eia_collector import EIACollector
