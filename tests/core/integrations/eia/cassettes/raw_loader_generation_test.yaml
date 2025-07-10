@@ -11,7 +11,7 @@ interactions:
       User-Agent:
       - python-requests/2.28.2
     method: GET
-    uri: https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?frequency=hourly&data%5B0%5D=value&facets%5Brespondent%5D%5B%5D=PACW&start=2024-01-01&end=2024-01-07&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=asc&length=5000&api_key=REDACTED_API_KEY
+    uri: https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?data%5B0%5D=value&end=2024-01-07&facets%5Brespondent%5D%5B%5D=PACW&frequency=hourly&length=5000&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=asc&start=2024-01-01
   response:
     body:
       string: '{"response":{"total":"725","dateFormat":"YYYY-MM-DD\"T\"HH24","frequency":"hourly","data":[{"period":"2024-01-01T00","respondent":"PACW","respondent-name":"PacifiCorp
@@ -741,7 +741,7 @@ interactions:
         West","fueltype":"WAT","type-name":"Hydro","value":"344","value-units":"megawatthours"},{"period":"2024-01-07T00","respondent":"PACW","respondent-name":"PacifiCorp
         West","fueltype":"WND","type-name":"Wind","value":"604","value-units":"megawatthours"}],"description":"Hourly
         net generation by balancing authority and energy source.  \n    Source: Form
-        EIA-930\n    Product: Hourly Electric Grid Monitor"},"request":{"command":"\/v2\/electricity\/rto\/fuel-type-data\/data\/","params":{"frequency":"hourly","data":["value"],"facets":{"respondent":["PACW"]},"start":"2024-01-01","end":"2024-01-07","sort":[{"column":"period","direction":"asc"}],"length":"5000","api_key":"REDACTED_API_KEY"}},"apiVersion":"2.1.8","ExcelAddInVersion":"2.1.0"}'
+        EIA-930\n    Product: Hourly Electric Grid Monitor"},"request":{"command":"\/v2\/electricity\/rto\/fuel-type-data\/data\/","params":{"frequency":"hourly","data":["value"],"facets":{"respondent":["PACW"]},"start":"2024-01-01","end":"2024-01-07","sort":[{"column":"period","direction":"asc"}],"length":"5000","api_key":"pFDJNZZbi4c7p3UIWM5gXOPgvmIdEHMzPgpKLLMw"}},"apiVersion":"2.1.8","ExcelAddInVersion":"2.1.0"}'
     headers:
       Access-Control-Allow-Headers:
       - Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Params
@@ -750,7 +750,7 @@ interactions:
       Access-Control-Allow-Origin:
       - '*'
       Age:
-      - '27'
+      - '0'
       Cache-Control:
       - max-age=0, no-cache, no-store
       Connection:
@@ -758,9 +758,9 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 10 Jul 2025 00:00:59 GMT
+      - Thu, 10 Jul 2025 15:29:17 GMT
       Expires:
-      - Thu, 10 Jul 2025 00:00:59 GMT
+      - Thu, 10 Jul 2025 15:29:17 GMT
       Pragma:
       - no-cache
       Strict-Transport-Security:
@@ -772,7 +772,7 @@ interactions:
       Via:
       - https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
       X-Api-Umbrella-Request-Id:
-      - cnu6h496v5afc23ambug
+      - cnujq8r6r75mmfirel50
       X-Cache:
       - MISS
       X-Content-Type-Options:
@@ -780,7 +780,7 @@ interactions:
       X-Frame-Options:
       - SAMEORIGIN
       X-Vcap-Request-Id:
-      - 4966b03c-719d-4775-5a45-712f079989a6
+      - 24c01774-53c1-4f02-4124-95b2ff04ba0c
       content-length:
       - '119337'
     status:

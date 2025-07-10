@@ -13,8 +13,6 @@ Following project patterns:
 - Async/await patterns for performance testing
 - Comprehensive performance metrics validation
 - Error handling and edge case testing
-
-Run with: pytest tests/core/pipeline/orchestrators/test_extract_orchestrator.py -v
 """
 
 import pytest
@@ -543,16 +541,13 @@ class TestExtractOrchestratorErrorHandling:
             data_types=["invalid_type"]
         )
 
-        # Should handle gracefully and return failed results
         assert "invalid_type" in results
         invalid_results = results["invalid_type"]
         assert len(invalid_results) >= 1
 
-        # All results should be failures
         successful_results = [r for r in invalid_results if r.success]
         assert len(successful_results) == 0
 
-        # Should have error messages
         failed_results = [r for r in invalid_results if not r.success]
         assert len(failed_results) >= 1
         assert all(r.error_message is not None for r in failed_results)
@@ -569,11 +564,9 @@ if __name__ == "__main__":
 
             orchestrator = ExtractOrchestrator(raw_data_path=tmp_dir)
 
-            # Test initialization
             assert orchestrator.raw_data_path == Path(tmp_dir)
             assert isinstance(orchestrator.batch_config, ExtractBatchConfig)
 
-            # Test batch generation
             batches = orchestrator._generate_date_batches(
                 date(2024, 1, 1),
                 date(2024, 1, 14)

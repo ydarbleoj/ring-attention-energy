@@ -1,5 +1,3 @@
-"""Raw data loader for EIA API responses - Extract stage of ETL pipeline."""
-
 import json
 import logging
 from datetime import datetime, date
@@ -39,12 +37,6 @@ class RawDataLoader:
     """
 
     def __init__(self, client: EIAClient, raw_data_path: Union[str, Path] = "data/raw"):
-        """Initialize RawDataLoader.
-
-        Args:
-            client: EIA API client
-            raw_data_path: Base path for raw data storage
-        """
         self.client = client
         self.raw_data_path = Path(raw_data_path)
         self.raw_data_path.mkdir(parents=True, exist_ok=True)
@@ -56,10 +48,6 @@ class RawDataLoader:
         start_date: str,
         end_date: str
     ) -> str:
-        """Generate filename for raw data file.
-
-        Pattern: eia_{data_type}_{region}_{start_date}_to_{end_date}_{timestamp}.json
-        """
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         return f"eia_{data_type}_{region}_{start_date}_to_{end_date}_{timestamp}.json"
 
@@ -69,8 +57,6 @@ class RawDataLoader:
         metadata: RawDataMetadata,
         filename: str
     ) -> Path:
-        """Save raw API response with metadata to JSON file."""
-
         # Create subdirectory structure: data/raw/eia/2024/
         year = metadata.start_date.split('-')[0] if metadata.start_date else datetime.now().strftime("%Y")
         file_dir = self.raw_data_path / "eia" / year
@@ -107,66 +93,12 @@ class RawDataLoader:
         Returns:
             Path to saved raw data file
         """
-        # Convert dates to strings if needed
-        if isinstance(start_date, date):
-            start_date = start_date.strftime("%Y-%m-%d")
-        if isinstance(end_date, date):
-            end_date = end_date.strftime("%Y-%m-%d")
-
-        # Prepare metadata
-        metadata = RawDataMetadata(
-            timestamp=datetime.now().isoformat(),
-            source="eia",
-            api_endpoint="electricity/rto/region-data/data",
-            region=region,
+        return self.extract_data(
             data_type="demand",
+            region=region,
             start_date=start_date,
             end_date=end_date
         )
-
-        try:
-            # Make direct API request to get raw JSON
-            url = f"{self.client.base_url}/electricity/rto/region-data/data/"
-            params = {
-                'frequency': 'hourly',
-                'data[0]': 'value',
-                'facets[respondent][]': region,
-                'facets[type][]': 'D',  # Demand
-                'start': start_date,
-                'end': end_date,
-                'sort[0][column]': 'period',
-                'sort[0][direction]': 'asc',
-                'length': 5000
-            }
-
-            # Store request parameters in metadata
-            metadata.request_params = params.copy()
-
-            # Get raw response
-            raw_data = self.client._make_request(url, params)
-
-            # Update metadata with response info
-            response_json = json.dumps(raw_data)
-            metadata.response_size_bytes = len(response_json.encode('utf-8'))
-            metadata.record_count = len(raw_data.get('response', {}).get('data', []))
-            metadata.success = True
-
-            # Generate filename and save
-            filename = self._generate_filename("demand", region, start_date, end_date)
-            file_path = self._save_raw_response(raw_data, metadata, filename)
-
-            logger.info(f"Successfully extracted {metadata.record_count} demand records for {region}")
-            return file_path
-
-        except Exception as e:
-            metadata.success = False
-            metadata.error_message = str(e)
-            logger.error(f"Failed to extract demand data for {region}: {e}")
-
-            # Still save metadata for failed requests (useful for debugging)
-            filename = self._generate_filename("demand", region, start_date, end_date)
-            filename = filename.replace('.json', '_FAILED.json')
-            return self._save_raw_response({}, metadata, filename)
 
     def extract_generation_data(
         self,
@@ -184,26 +116,49 @@ class RawDataLoader:
         Returns:
             Path to saved raw data file
         """
-        # Convert dates to strings if needed
+        return self.extract_data(
+            data_type="generation",
+            region=region,
+            start_date=start_date,
+            end_date=end_date
+        )
+
+    def extract_data(
+        self,
+        data_type: str,
+        region: str,
+        start_date: Union[str, date],
+        end_date: Union[str, date]
+    ) -> Path:
+        """Extract raw data from EIA API based on data type.
+
+        Args:
+            data_type: Type of data to extract (demand, generation)
+            region: Region code (e.g., PACW, ERCO)
+            start_date: Start date
+            end_date: End date
+
+        Returns:
+            Path to saved raw data file
+        """
         if isinstance(start_date, date):
             start_date = start_date.strftime("%Y-%m-%d")
         if isinstance(end_date, date):
             end_date = end_date.strftime("%Y-%m-%d")
 
-        # Prepare metadata
         metadata = RawDataMetadata(
             timestamp=datetime.now().isoformat(),
             source="eia",
-            api_endpoint="electricity/rto/fuel-type-data/data",
             region=region,
-            data_type="generation",
+            data_type=data_type,
             start_date=start_date,
             end_date=end_date
         )
 
+        facet_type = "demand" if data_type == "region-data" else "fuel-type-data"
+
         try:
-            # Make direct API request to get raw JSON
-            url = f"{self.client.base_url}/electricity/rto/fuel-type-data/data/"
+            url = f"{self.client.base_url}/electricity/rto/{facet_type}/data/"
             params = {
                 'frequency': 'hourly',
                 'data[0]': 'value',
@@ -215,44 +170,29 @@ class RawDataLoader:
                 'length': 5000
             }
 
-            # Store request parameters in metadata
             metadata.request_params = params.copy()
-
-            # Get raw response
             raw_data = self.client._make_request(url, params)
 
-            # Update metadata with response info
             response_json = json.dumps(raw_data)
             metadata.response_size_bytes = len(response_json.encode('utf-8'))
             metadata.record_count = len(raw_data.get('response', {}).get('data', []))
             metadata.success = True
 
-            # Generate filename and save
-            filename = self._generate_filename("generation", region, start_date, end_date)
+            filename = self._generate_filename(data_type, region, start_date, end_date)
             file_path = self._save_raw_response(raw_data, metadata, filename)
 
-            logger.info(f"Successfully extracted {metadata.record_count} generation records for {region}")
+            logger.info(f"Successfully extracted {metadata.record_count} {data_type} records for {region}")
             return file_path
-
         except Exception as e:
             metadata.success = False
             metadata.error_message = str(e)
-            logger.error(f"Failed to extract generation data for {region}: {e}")
+            logger.error(f"Failed to extract {data_type} data for {region}: {e}")
 
-            # Still save metadata for failed requests (useful for debugging)
-            filename = self._generate_filename("generation", region, start_date, end_date)
+            filename = self._generate_filename(data_type, region, start_date, end_date)
             filename = filename.replace('.json', '_FAILED.json')
             return self._save_raw_response({}, metadata, filename)
 
     def list_raw_files(self, data_type: Optional[str] = None) -> List[Path]:
-        """List all raw data files.
-
-        Args:
-            data_type: Optional filter by data type (demand, generation)
-
-        Returns:
-            List of raw data file paths
-        """
         pattern = "*.json"
         if data_type:
             pattern = f"*{data_type}*.json"
@@ -265,14 +205,6 @@ class RawDataLoader:
         return sorted(raw_files)
 
     def load_raw_file(self, file_path: Union[str, Path]) -> Dict[str, Any]:
-        """Load a raw data file and return the complete package.
-
-        Args:
-            file_path: Path to raw data file
-
-        Returns:
-            Dictionary with 'metadata' and 'api_response' keys
-        """
         file_path = Path(file_path)
 
         if not file_path.exists():
