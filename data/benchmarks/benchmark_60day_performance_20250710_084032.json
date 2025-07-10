@@ -1,0 +1,273 @@
+{
+  "timestamp": "20250710_084032",
+  "test_configuration": {
+    "date_range": "2024-01-01 to 2024-03-01",
+    "region": "PACW",
+    "data_types": [
+      "demand",
+      "generation"
+    ],
+    "batch_size_days": 60
+  },
+  "sequential_results": [
+    {
+      "test_name": "Sequential_Run_1",
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 1,
+        "delay_between_operations": 0.3,
+        "max_operations_per_second": 5.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_time": 1752161966.929983,
+      "end_time": 1752161972.315487,
+      "duration_seconds": 5.3855040073394775,
+      "total_records": 10010,
+      "records_per_second": 1858.6932599730985,
+      "total_batches": 4,
+      "successful_batches": 4,
+      "failed_batches": 0,
+      "avg_batch_latency": 1.34200119972229,
+      "total_api_calls": 4,
+      "success_rate": 1.0,
+      "memory_usage_mb": 0.0
+    },
+    {
+      "test_name": "Sequential_Run_2",
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 1,
+        "delay_between_operations": 0.3,
+        "max_operations_per_second": 5.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_time": 1752161974.31812,
+      "end_time": 1752161979.078846,
+      "duration_seconds": 4.760725975036621,
+      "total_records": 10010,
+      "records_per_second": 2102.620493699598,
+      "total_batches": 4,
+      "successful_batches": 4,
+      "failed_batches": 0,
+      "avg_batch_latency": 1.1836729645729065,
+      "total_api_calls": 4,
+      "success_rate": 1.0,
+      "memory_usage_mb": 0.0
+    },
+    {
+      "test_name": "Sequential_Run_3",
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 1,
+        "delay_between_operations": 0.3,
+        "max_operations_per_second": 5.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_time": 1752161981.0837781,
+      "end_time": 1752161985.838229,
+      "duration_seconds": 4.754450798034668,
+      "total_records": 10010,
+      "records_per_second": 2105.39564404322,
+      "total_batches": 4,
+      "successful_batches": 4,
+      "failed_batches": 0,
+      "avg_batch_latency": 1.1821631789207458,
+      "total_api_calls": 4,
+      "success_rate": 1.0,
+      "memory_usage_mb": 0.0
+    }
+  ],
+  "parallel_results": [
+    {
+      "test_name": "Parallel_2_Batches",
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 0.25,
+        "max_operations_per_second": 6.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_time": 1752161987.842144,
+      "end_time": 1752161995.8711371,
+      "duration_seconds": 8.028993129730225,
+      "total_records": 10010,
+      "records_per_second": 1246.731668375003,
+      "total_batches": 4,
+      "successful_batches": 4,
+      "failed_batches": 0,
+      "avg_batch_latency": 2.001369059085846,
+      "total_api_calls": 4,
+      "success_rate": 1.0,
+      "memory_usage_mb": 0.0
+    },
+    {
+      "test_name": "Parallel_3_Batches",
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 3,
+        "delay_between_operations": 0.2,
+        "max_operations_per_second": 7.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_time": 1752161998.8749282,
+      "end_time": 1752162004.267777,
+      "duration_seconds": 5.39284873008728,
+      "total_records": 10010,
+      "records_per_second": 1856.1618359797742,
+      "total_batches": 4,
+      "successful_batches": 4,
+      "failed_batches": 0,
+      "avg_batch_latency": 1.3415977954864502,
+      "total_api_calls": 4,
+      "success_rate": 1.0,
+      "memory_usage_mb": 0.0
+    },
+    {
+      "test_name": "Parallel_4_Batches",
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 4,
+        "delay_between_operations": 0.15,
+        "max_operations_per_second": 8.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_time": 1752162007.270699,
+      "end_time": 1752162012.548864,
+      "duration_seconds": 5.278164863586426,
+      "total_records": 10010,
+      "records_per_second": 1896.4924853064122,
+      "total_batches": 4,
+      "successful_batches": 4,
+      "failed_batches": 0,
+      "avg_batch_latency": 1.3148530721664429,
+      "total_api_calls": 4,
+      "success_rate": 1.0,
+      "memory_usage_mb": 0.0
+    },
+    {
+      "test_name": "Parallel_5_Batches_Aggressive",
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 5,
+        "delay_between_operations": 0.1,
+        "max_operations_per_second": 10.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_time": 1752162015.552671,
+      "end_time": 1752162020.794564,
+      "duration_seconds": 5.24189305305481,
+      "total_records": 10010,
+      "records_per_second": 1909.6154573711665,
+      "total_batches": 4,
+      "successful_batches": 4,
+      "failed_batches": 0,
+      "avg_batch_latency": 1.3038139939308167,
+      "total_api_calls": 4,
+      "success_rate": 1.0,
+      "memory_usage_mb": 0.0
+    },
+    {
+      "test_name": "Parallel_6_Batches_Maximum",
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 6,
+        "delay_between_operations": 0.08,
+        "max_operations_per_second": 12.0,
+        "adaptive_batch_sizing": true
+      },
+      "start_time": 1752162023.7990432,
+      "end_time": 1752162029.0558112,
+      "duration_seconds": 5.256767988204956,
+      "total_records": 10010,
+      "records_per_second": 1904.211869814354,
+      "total_batches": 4,
+      "successful_batches": 4,
+      "failed_batches": 0,
+      "avg_batch_latency": 1.3082585334777832,
+      "total_api_calls": 4,
+      "success_rate": 1.0,
+      "memory_usage_mb": 0.0
+    }
+  ],
+  "best_performance": {
+    "test_name": "Sequential_Run_3",
+    "config": {
+      "days_per_batch": 60,
+      "max_concurrent_batches": 1,
+      "delay_between_operations": 0.3,
+      "max_operations_per_second": 5.0,
+      "adaptive_batch_sizing": false
+    },
+    "start_time": 1752161981.0837781,
+    "end_time": 1752161985.838229,
+    "duration_seconds": 4.754450798034668,
+    "total_records": 10010,
+    "records_per_second": 2105.39564404322,
+    "total_batches": 4,
+    "successful_batches": 4,
+    "failed_batches": 0,
+    "avg_batch_latency": 1.1821631789207458,
+    "total_api_calls": 4,
+    "success_rate": 1.0,
+    "memory_usage_mb": 0.0
+  },
+  "recommendations": {
+    "optimal_config": {
+      "days_per_batch": 60,
+      "max_concurrent_batches": 1,
+      "delay_between_operations": 0.3,
+      "max_operations_per_second": 5.0,
+      "adaptive_batch_sizing": false
+    },
+    "performance_improvement": 4.112238085899911,
+    "target_progress": {
+      "current_best": 2105.39564404322,
+      "target_min": 2000,
+      "target_max": 3000,
+      "gap_to_min": -105.39564404321982,
+      "progress_to_min": 105.26978220216098
+    },
+    "scaling_efficiency": [
+      {
+        "concurrency": 2,
+        "actual_rps": 1246.731668375003,
+        "theoretical_max": 4044.4729318106106,
+        "efficiency": 30.82556588694666,
+        "success_rate": 1.0
+      },
+      {
+        "concurrency": 3,
+        "actual_rps": 1856.1618359797742,
+        "theoretical_max": 6066.709397715916,
+        "efficiency": 30.595858715082176,
+        "success_rate": 1.0
+      },
+      {
+        "concurrency": 4,
+        "actual_rps": 1896.4924853064122,
+        "theoretical_max": 8088.945863621221,
+        "efficiency": 23.445483716680474,
+        "success_rate": 1.0
+      },
+      {
+        "concurrency": 5,
+        "actual_rps": 1909.6154573711665,
+        "theoretical_max": 10111.182329526526,
+        "efficiency": 18.886173694986542,
+        "success_rate": 1.0
+      },
+      {
+        "concurrency": 6,
+        "actual_rps": 1904.211869814354,
+        "theoretical_max": 12133.418795431831,
+        "efficiency": 15.693943330558078,
+        "success_rate": 1.0
+      }
+    ],
+    "next_steps": [
+      "\ud83c\udfaf Target performance achieved! Focus on stability and reliability",
+      "Implement production monitoring and alerting",
+      "Add performance regression testing"
+    ]
+  }
+}
