@@ -1,0 +1,86 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.2
+    method: GET
+    uri: https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?frequency=hourly&data%5B0%5D=value&facets%5Brespondent%5D%5B%5D=PACW&start=2024-01-01&end=2024-01-02&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=asc&length=5000&api_key=pFDJNZZbi4c7p3UIWM5gXOPgvmIdEHMzPgpKLLMw
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAANWcYVPaMBjHv0our0XaAkN4500nbgO5U8emeLvYRuyttF2a6pjnd19S3J34YuSy
+        52kJ53mQpO2PpP88Sf40T1TwIs/SgtPhE5WZZAkdUj/o0T0aMck/ZGLJpEr6pl6t8bh1dDSnF3M6
+        GgVdVeRO8J8lT8OVKnGflSJZrY9jdHj9RHMu4ixSWYEXdFuer/4uPE+VWF8z4qk+8/Tw/WwjrZWy
+        JdcZLIzv4veZyMmMF1JfruSJXOU6c3KiPuv3f0tPmCwFS8gJK1TOA0tKner9fd8q01gWKmXJF+yR
+        SalxC/q8h4t5djF6w3km77l4RdgdNIx4fjl5g3ieJWwDsdMw4uzw4g3iaBWJ7BVi0HvXNOPk6A3j
+        LE4jiFvRd0MxQJgGijloGHG7YqxvRiBCA8EcWIsainGbYFqBLWHghmKAMDEVA4S4XTFNV6KBYgZ+
+        04xbFWNN2HFDMUCYBorpN4yIqBggQpMYYx0HoRjxYkzXDcUAYRooxrqtgRARFQNEaKKYbtOMeDGm
+        54ZigDAxZ/5AiIiKASI0GZU1zogXY965oRggTEzFACEiKgaI0EAxfevZIBQjXozpu6EYIMztiulZ
+        r/IAISIqBojQZHHZut+BYsSLMQduKAYI00Ax1n0PECKiYoAIDRRjH6mhGPFizMANxQBhGijGuu8B
+        QkRUDBChgWIC60gNxbhVMbaEvhuePxSmgWKaRsRTDBShgWJ827UyMEYsy993w/KHwkQclEEhIgqm
+        PsvftzW1wBjRpjG+G5Y/FCamYnbe8ociNBmUNV2LeNMY3w3LHwoTc1C285Y/FCFqjNl5y993w/KH
+        wkSc+EMhIiqmPsvffhqz85a/74blD4WJOSrbecsfihA1xtRm+Vu3sxuWPxQmpmJqs/ybJkRVTF2W
+        v3UluuH4Q2FiCqY2x79vPeKpz/KvQkWjjGiLy244/lCYmNOY2hx/f2DtvdXn+dtPZGrz/K1b2g3P
+        HwoTUzO1ef6BZ62Z+lx/z/apCTBGtKlM4IbrD4WJuMAMhWgSZ5pmNDFlbPseMEa0OBO4YfxDYWJq
+        pjbj3x/Y9uFQjCZxxvY3/2CMeHHGDesfChNxBQAK0WBs1mm6Gk1+9d84I16cccP8h8JEfE4GCtFA
+        M4F1H16f/W/9pAwYI1KcCdzYuQwOE20NAA7RYGxmuSYFx2iiGbu+B5Dx/+PMzR6NeBGKOJdxlupv
+        We0GSFIuyYKnXDCdTm5X5JYlLA3jdEFYqY4WsVwRlkZEF1qsSKGOC/k+IfOUqNd59XFI9D6E5Pj0
+        sDXoeOucqciiMpRD8nKl44SHUsQhORFxRMaZ4syEqjpabVGovvLwiYbZcqmupfDm7Ydg3uYvxyiG
+        eVvIbN7WtdKqakLvYjhvr/+rb58zwZaFPsm/9jx8qTFVG3cs5LIq/7qBrtctdKOwCsmE3OgD1Wl4
+        utnEKqnIdLFrDZ+US121L7eCumgsFP+6vlkRVq2Q8HQh77U6ver2YHn8/QfXrPmHo4+Tq6vbuBv2
+        887l6WzcW3w9my4elqfR8Wj8e7rIP33+PH6kz8/VYV+4KNbnDvb9fR17jn+FPDmMotN0M8+jz38A
+        A0/5L0hSAAA=
+    headers:
+      Access-Control-Allow-Headers:
+      - Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Params
+      Access-Control-Allow-Methods:
+      - GET,POST,PATCH,PUT,DELETE,OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '1'
+      Cache-Control:
+      - max-age=0, no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '1205'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 10 Jul 2025 14:55:28 GMT
+      Expires:
+      - Thu, 10 Jul 2025 14:55:28 GMT
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubdomains;
+      - max-age=31536000; preload
+      Vary:
+      - Accept-Encoding
+      - Accept-Encoding
+      Via:
+      - https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+      X-Api-Umbrella-Request-Id:
+      - cnujap7ht3gl6nlui7m0
+      X-Cache:
+      - MISS
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Vcap-Request-Id:
+      - 96e08914-7f0c-4f6c-6605-b0b80ce5f6ff
+    status:
+      code: 200
+      message: OK
+version: 1

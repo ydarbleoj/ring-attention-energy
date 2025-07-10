@@ -1,0 +1,174 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.2
+    method: GET
+    uri: https://api.eia.gov/v2/electricity/rto/region-data/data/?frequency=hourly&data%5B0%5D=value&facets%5Brespondent%5D%5B%5D=PACW&facets%5Btype%5D%5B%5D=D&start=2024-01-01&end=2024-01-03&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=asc&length=5000&api_key=pFDJNZZbi4c7p3UIWM5gXOPgvmIdEHMzPgpKLLMw
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAL1ZXW/aMBT9K5afSYmdL8JbVehgGxvSunUrVJObmBAtcTLHtGOI/z47UKl92Cbd
+        hxshBNdfJ+c6Pj7xgWrZtY3qJB0fqGmMqOiYhikd0FwYed3oWhgb+WYvb7HwJpM1vVnT2YyHtspG
+        y587qbK9rbFtdrran9oJOl4daCt12eS2iPs89HxmPze+b2uchsylcj0vL69uX8U8JWrpCkRWbsqr
+        RrfkVnbG1jH71hVMzj+fK05kLVRug4+i2rkAj1j0/NfbqdJ0NljLQjwJYxzOjh4Hf8HHMPDFfgLF
+        xzHwJWwExReg8Bf6UHwhyvwLGRRfhIEvjGMovhgDX5CC+UtQ8Png+TfCwMcZeH1JMfCxGJpfhqIf
+        LAyg+FD0g4H1jaHoB+MpFB+KfrAY+vwyFP3gIVR/GYp+BAlUPxiKfoQJOL8o+hHB+UPRjzgCr38o
+        +hEHUP44in7E4PWZo+hHFIH5Q9GPCLx/4Sj6ETHY/oVj+d8Qll+O5X8T2PPBkfzvyAfjQ5l/yQic
+        X5T9SxKA+UPZv8Qxh+JD2b9EHMwfjv8F7l84lv+NwOszjv8F7k85mv+F8ofkfwMwPhz/G4dQfCj6
+        YQUEig9FP8IU9v6AI/nfJIWufzj+N43B+cXQj8D3ofqL4n8DPwDzh6EfFh90/UPxvza/UP5w/G8K
+        PP/gSP43BZ5vcST/mzIYvgDJ/45G/31/cD+guewyXbambJQtn/Xn1yTvOxuQXOw9sZUiP0fIptEy
+        E50ZECUNKaSSWrimA+JKS2WkzrZCFZI87MmDqITKSlUQsbMj6tLsLwhZK2KvT3agTI6JO1sn0/ml
+        lwb+qWSpm3yXmTE5Y5lWMjO6zMgbXeZk0dg7abSllvbH7paS8YFmTd3f/Ziuh498PZTnNnbE9VCb
+        xn7JwsL03LH8enj6tuS0Qou6cz386xD/TKklayMyafr6L7O3OqXv/jk3K5ucewuwM0Kbl5l3j7VU
+        ryeDDXWNq7Zyt1HtapeG86SxCErL9zk3osv6jFVSFWZrA5HfTyTRlt9/SAe8vZ68/XB391CGWdIG
+        n+e3i6j4+nFZPNbzfDpb/F4W7bv37xdP9Hjsm32Rujv1zS/YhVutpr8yWV3m+Vy9LvPp8Q+26HB1
+        JSEAAA==
+    headers:
+      Access-Control-Allow-Headers:
+      - Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Params
+      Access-Control-Allow-Methods:
+      - GET,POST,PATCH,PUT,DELETE,OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '1'
+      Cache-Control:
+      - max-age=0, no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '859'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 10 Jul 2025 14:55:29 GMT
+      Expires:
+      - Thu, 10 Jul 2025 14:55:29 GMT
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubdomains;
+      - max-age=31536000; preload
+      Vary:
+      - Accept-Encoding
+      - Accept-Encoding
+      Via:
+      - https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+      X-Api-Umbrella-Request-Id:
+      - cnujapi35g4h01a8jntg
+      X-Cache:
+      - MISS
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Vcap-Request-Id:
+      - 858bca00-ce1a-48de-4d09-b39a782ec1e5
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.2
+    method: GET
+    uri: https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?frequency=hourly&data%5B0%5D=value&facets%5Brespondent%5D%5B%5D=PACW&start=2024-01-01&end=2024-01-03&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=asc&length=5000&api_key=pFDJNZZbi4c7p3UIWM5gXOPgvmIdEHMzPgpKLLMw
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      Access-Control-Allow-Headers:
+      - Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Params
+      Access-Control-Allow-Methods:
+      - GET,POST,PATCH,PUT,DELETE,OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '1'
+      Cache-Control:
+      - max-age=0, no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '1798'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 10 Jul 2025 14:55:31 GMT
+      Expires:
+      - Thu, 10 Jul 2025 14:55:31 GMT
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubdomains;
+      - max-age=31536000; preload
+      Vary:
+      - Accept-Encoding
+      - Accept-Encoding
+      Via:
+      - https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+      X-Api-Umbrella-Request-Id:
+      - cnujapumk6167fm1l0sg
+      X-Cache:
+      - MISS
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Vcap-Request-Id:
+      - ee9175aa-0b12-41b0-5519-982eb1be7991
+    status:
+      code: 200
+      message: OK
+version: 1

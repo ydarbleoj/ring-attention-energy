@@ -1,0 +1,77 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.28.2
+    method: GET
+    uri: https://api.eia.gov/v2/electricity/rto/region-data/data/?frequency=hourly&data%5B0%5D=value&facets%5Brespondent%5D%5B%5D=PACW&facets%5Btype%5D%5B%5D=D&start=2024-01-01&end=2024-01-02&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=asc&length=5000&api_key=pFDJNZZbi4c7p3UIWM5gXOPgvmIdEHMzPgpKLLMw
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAAL1Y32/aMBD+Vyw/kxLnFyVvVaGDrWxI69atUE2uc4RoiZM5ph1D/O87h1QaD9sk
+        PzhCEdydz1++O/zFPlAFbVPLFmh6oLrWvKQpDWI6oBnXcFOrimu0fMXLWyy8yWRN79Z0NgsiDNko
+        +LEDKfYYsa13qtyfxnGarg60AVXUmUnnB5HnM/zc+T5GnKbMQJrMy6vr+zObJ3kFxsFFsSmua9WQ
+        e2g1xuh9YxyT/utr4AQqLjM0PvNyBx18Fr/+9Hay0C0aK8j5C9fa4GzpcfAXfMwFvsQf2eILXOAb
+        sUtbfKET/iLfFl/kpP8iZosvdoEvShJbfIkLfOHYmr+RE3y+df9dusAXMOv1ZewCH0ts68uc6AeL
+        Qlt8TvSDWesbc6IfLBjb4nOiHyyx/f8yJ/oRRLb6y5zoRziy1Q/mRD+ikXV9nehHbM+fE/1IYuv1
+        z4l+JKEtf4ET/Uis1+fAiX7EsTV/TvQjtn5/CZzoR8zs3l8CV/vf6L/1fcSNOrRCFY0uaon+Wbd/
+        J1mXbEAyvvf4FnjWW8imViB4qwdEgiY5SFDcDB0Q4y2kBiW2XOZAnvbkiZdcikLmhO9wRlXo/QUh
+        a0nw+ogTCUiJOVsg0/mVNw79k2ep6mwndEp6LNMShFaFIG9UkZFFjU9SK6SWdscOSEl6oKKuuqdP
+        6Xr4HKyH0I/BGddDpWu8QY4wPXMssR6e7khOwxWvWpPhX4cYPaVI1oYL0F38n9Vbncr3+FqbFRbn
+        EQG2mit91pmYE+R5M6CprU3YyjxGuatMGfqmQQQF8t3Xhreiq1gJMtdbNMR+10i8Kb59BwO8uZm8
+        ff/w8FREYtSEn+b3izj/8mGZP1fzbDpb/Frmzbvb28ULPR67YZ9BtafcwQW7MKIy/SmgvMqyuTz3
+        +fT4G7MNnNslEgAA
+    headers:
+      Access-Control-Allow-Headers:
+      - Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Params
+      Access-Control-Allow-Methods:
+      - GET,POST,PATCH,PUT,DELETE,OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Age:
+      - '1'
+      Cache-Control:
+      - max-age=0, no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '696'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 10 Jul 2025 14:55:26 GMT
+      Expires:
+      - Thu, 10 Jul 2025 14:55:26 GMT
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubdomains;
+      - max-age=31536000; preload
+      Vary:
+      - Accept-Encoding
+      - Accept-Encoding
+      Via:
+      - https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+      X-Api-Umbrella-Request-Id:
+      - cnujaossptbbjoo2dcc0
+      X-Cache:
+      - MISS
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Vcap-Request-Id:
+      - 564e5468-554a-4423-46cc-511941996deb
+    status:
+      code: 200
+      message: OK
+version: 1
