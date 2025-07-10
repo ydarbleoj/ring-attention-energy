@@ -14,7 +14,11 @@ from pydantic_settings import BaseSettings
 class APIConfig(BaseSettings):
     """API configuration and rate limiting settings"""
 
-    model_config = ConfigDict(env_file='.env', env_file_encoding='utf-8')
+    model_config = ConfigDict(
+        env_file='.env',
+        env_file_encoding='utf-8',
+        extra='ignore'  # Ignore extra fields that don't match this model
+    )
 
     # EIA Configuration
     eia_api_key: Optional[str] = Field(None, validation_alias='EIA_API_KEY')
@@ -54,7 +58,11 @@ class APIConfig(BaseSettings):
 class DataConfig(BaseSettings):
     """Data storage and caching configuration"""
 
-    model_config = ConfigDict(env_file='.env', env_file_encoding='utf-8')
+    model_config = ConfigDict(
+        env_file='.env',
+        env_file_encoding='utf-8',
+        extra='ignore'  # Ignore extra fields that don't match this model
+    )
 
     data_cache_dir: Path = Field(Path("data/cache"), validation_alias='DATA_CACHE_DIR')
     max_cache_size_gb: int = Field(10, validation_alias='MAX_CACHE_SIZE_GB')
@@ -82,7 +90,11 @@ class DataConfig(BaseSettings):
 class LoggingConfig(BaseSettings):
     """Logging configuration"""
 
-    model_config = ConfigDict(env_file='.env', env_file_encoding='utf-8')
+    model_config = ConfigDict(
+        env_file='.env',
+        env_file_encoding='utf-8',
+        extra='ignore'  # Ignore extra fields that don't match this model
+    )
 
     log_level: str = Field("INFO", validation_alias='LOG_LEVEL')
     log_file: Optional[Path] = Field(None, validation_alias='LOG_FILE')

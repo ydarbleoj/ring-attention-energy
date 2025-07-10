@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "timestamp": "2025-07-09T16:54:34.736758",
+    "source": "eia",
+    "api_endpoint": "electricity/rto/region-data/data",
+    "region": "PACW",
+    "data_type": "demand",
+    "start_date": "2024-01-01",
+    "end_date": "2024-01-07",
+    "request_params": {
+      "frequency": "hourly",
+      "data[0]": "value",
+      "facets[respondent][]": "PACW",
+      "facets[type][]": "D",
+      "start": "2024-01-01",
+      "end": "2024-01-07",
+      "sort[0][column]": "period",
+      "sort[0][direction]": "asc",
+      "length": 5000
+    },
+    "response_size_bytes": 0,
+    "record_count": 0,
+    "success": false,
+    "error_message": "403 Client Error: Forbidden for url: https://api.eia.gov/v2/electricity/rto/region-data/data/?frequency=hourly&data%5B0%5D=value&facets%5Brespondent%5D%5B%5D=PACW&facets%5Btype%5D%5B%5D=D&start=2024-01-01&end=2024-01-07&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=asc&length=5000&api_key=pFDJNZZbi4c7p3UIWM5gXOPgvmIdEHMzPgpKLLMw"
+  },
+  "api_response": {}
+}
