@@ -281,25 +281,22 @@ class TestExtractOrchestratorWithMocks:
                 }
             }
 
-            orchestrator = ExtractOrchestrator(raw_data_path=str(tmp_path))
+            orchestrator = ExtractOrchestrator(raw_data_path=str(tmp_path))        # Test single batch extraction
+        result = orchestrator._extract_single_batch(
+            start_date=OREGON_TEST_DATES["start"],
+            end_date=OREGON_TEST_DATES["end"],
+            region=OREGON_REGION,
+            data_type="demand"
+        )
 
-            # Test single batch extraction
-            result = await orchestrator._extract_single_batch(
-                start_date=OREGON_TEST_DATES["start"],
-                end_date=OREGON_TEST_DATES["end"],
-                region=OREGON_REGION,
-                data_type="demand"
-            )
+        assert isinstance(result, ExtractBatchResult)
+        assert result.success is True
+        assert result.data_type == "demand"
+        assert result.region == OREGON_REGION
+        assert result.records_processed == 168
+        assert result.bytes_processed == 5000
 
-            assert isinstance(result, ExtractBatchResult)
-            assert result.success is True
-            assert result.data_type == "demand"
-            assert result.region == OREGON_REGION
-            assert result.records_processed == 168
-            assert result.bytes_processed == 5000
-
-    @pytest.mark.asyncio
-    async def test_extract_single_batch_error(self, tmp_path):
+    def test_extract_single_batch_error(self, tmp_path):
         """Test single batch extraction with error."""
         with patch('src.core.pipeline.orchestrators.extract_orchestrator.EIAClient') as mock_eia_client, \
              patch('src.core.pipeline.orchestrators.extract_orchestrator.RawDataLoader') as mock_raw_loader, \
@@ -307,16 +304,18 @@ class TestExtractOrchestratorWithMocks:
 
             # Setup mocks
             mock_config.return_value = get_test_config()
+            mock_eia_client_instance = MagicMock()
+            mock_eia_client.return_value = mock_eia_client_instance
             mock_raw_loader_instance = MagicMock()
             mock_raw_loader.return_value = mock_raw_loader_instance
 
-            # Mock extraction error
-            mock_raw_loader_instance.extract_demand_data.side_effect = Exception("API Error")
+            # Mock API error
+            mock_eia_client_instance.get_demand_data_raw.side_effect = Exception("API Error")
 
             orchestrator = ExtractOrchestrator(raw_data_path=str(tmp_path))
 
             # Test single batch extraction with error
-            result = await orchestrator._extract_single_batch(
+            result = orchestrator._extract_single_batch(
                 start_date=OREGON_TEST_DATES["start"],
                 end_date=OREGON_TEST_DATES["end"],
                 region=OREGON_REGION,
@@ -332,85 +331,61 @@ class TestExtractOrchestratorWithMocks:
 class TestExtractOrchestratorIntegration:
     """Integration tests for ExtractOrchestrator (may require API key or VCR)."""
 
-    @pytest.mark.asyncio
-    async def test_oregon_demand_extraction_with_vcr(self, tmp_path, vcr_cassette):
+    def test_oregon_demand_extraction_with_vcr(self, tmp_path, vcr_cassette):
         """Test Oregon demand extraction with VCR cassette."""
         with vcr_cassette("extract_orchestrator_oregon_demand"):
             orchestrator = ExtractOrchestrator(raw_data_path=str(tmp_path))
 
             # Test small date range
-            results = await orchestrator.process_data(
+            results = orchestrator.extract_historical_data(
                 start_date=OREGON_TEST_DATES["start"],
                 end_date=OREGON_TEST_DATES["start"] + timedelta(days=1),  # 2 days only
-                region=OREGON_REGION,
+                regions=[OREGON_REGION],
                 data_types=["demand"]
             )
 
-            assert "demand" in results
-            demand_results = results["demand"]
-            assert len(demand_results) >= 1
+            assert results["success"] is True
+            assert "demand" in results["data_types_processed"]
+            assert results["total_files_created"] >= 1
 
-            # Verify at least one successful result
-            successful_results = [r for r in demand_results if r.success]
-            assert len(successful_results) >= 1
-
-            # Check performance metrics
-            metrics = orchestrator.get_performance_metrics()
-            assert metrics.total_operations > 0
-            assert metrics.successful_operations > 0
-            assert metrics.duration_seconds > 0
-
-    @pytest.mark.asyncio
-    async def test_oregon_generation_extraction_with_vcr(self, tmp_path, vcr_cassette):
+    def test_oregon_generation_extraction_with_vcr(self, tmp_path, vcr_cassette):
         """Test Oregon generation extraction with VCR cassette."""
         with vcr_cassette("extract_orchestrator_oregon_generation"):
             orchestrator = ExtractOrchestrator(raw_data_path=str(tmp_path))
 
             # Test generation data
-            results = await orchestrator.process_data(
+            results = orchestrator.extract_historical_data(
                 start_date=OREGON_TEST_DATES["start"],
                 end_date=OREGON_TEST_DATES["start"] + timedelta(days=1),
-                region=OREGON_REGION,
+                regions=[OREGON_REGION],
                 data_types=["generation"]
             )
 
-            assert "generation" in results
-            generation_results = results["generation"]
-            assert len(generation_results) >= 1
+            assert results["success"] is True
+            assert "generation" in results["data_types_processed"]
+            assert results["total_files_created"] >= 1
 
-            # Verify at least one successful result
-            successful_results = [r for r in generation_results if r.success]
-            assert len(successful_results) >= 1
-
-    @pytest.mark.asyncio
-    async def test_comprehensive_extraction_with_vcr(self, tmp_path, vcr_cassette):
+    def test_comprehensive_extraction_with_vcr(self, tmp_path, vcr_cassette):
         """Test comprehensive extraction with both demand and generation."""
         with vcr_cassette("extract_orchestrator_comprehensive"):
             orchestrator = ExtractOrchestrator(raw_data_path=str(tmp_path))
 
             # Test both data types
-            results = await orchestrator.process_data(
+            results = orchestrator.extract_historical_data(
                 start_date=OREGON_TEST_DATES["start"],
                 end_date=OREGON_TEST_DATES["start"] + timedelta(days=2),
-                region=OREGON_REGION,
+                regions=[OREGON_REGION],
                 data_types=["demand", "generation"]
             )
 
-            assert "demand" in results
-            assert "generation" in results
-
-            # Verify both have results
-            assert len(results["demand"]) >= 1
-            assert len(results["generation"]) >= 1
-
-            # Check extraction summary
-            summary = orchestrator.get_extraction_summary()
-            assert summary["total_files"] > 0
-            assert summary["total_records"] > 0
-            assert summary["total_size_bytes"] > 0
+            assert results["success"] is True
+            assert "demand" in results["data_types_processed"]
+            assert "generation" in results["data_types_processed"]
+            assert results["total_files_created"] >= 2  # At least one for each data type
 
             # Check that files were actually created
-            raw_files = orchestrator.list_extracted_files()
+            raw_files = orchestrator.raw_loader.list_raw_files()
+            assert len(raw_files) >= 2
             assert len(raw_files) > 0
 
 
@@ -476,81 +451,74 @@ class TestExtractOrchestratorPerformanceBenchmark:
 class TestExtractOrchestratorErrorHandling:
     """Test error handling and edge cases."""
 
-    @pytest.mark.asyncio
-    async def test_invalid_date_range(self, tmp_path):
+    def test_invalid_date_range(self, tmp_path):
         """Test handling of invalid date ranges."""
         orchestrator = ExtractOrchestrator(raw_data_path=str(tmp_path))
 
         # Test end date before start date - should validate internally
         # The orchestrator may not explicitly validate this, so let's check if it handles gracefully
         try:
-            results = await orchestrator.process_data(
+            results = orchestrator.extract_historical_data(
                 start_date=date(2024, 1, 10),
                 end_date=date(2024, 1, 5),  # Invalid: end before start
-                region=OREGON_REGION
+                regions=[OREGON_REGION]
             )
-            # If no exception is raised, verify results are empty or handled gracefully
+            # If no exception is raised, verify results structure
             assert isinstance(results, dict)
-            for data_type, batch_results in results.items():
-                assert isinstance(batch_results, list)
+            assert "success" in results
+            # For invalid dates, should handle gracefully with minimal processing
+            assert results["total_files_created"] == 0
         except ValueError:
             # This is also acceptable - explicit validation
             pass
 
-    @pytest.mark.asyncio
-    async def test_invalid_region(self, tmp_path):
+    def test_invalid_region(self, tmp_path):
         """Test handling of invalid region codes."""
         with patch('src.core.pipeline.orchestrators.extract_orchestrator.EIAClient') as mock_eia_client, \
              patch('src.core.pipeline.orchestrators.extract_orchestrator.RawDataLoader') as mock_raw_loader, \
              patch('src.core.pipeline.orchestrators.extract_orchestrator.get_config') as mock_config:
 
             mock_config.return_value = get_test_config()
+            mock_eia_client_instance = MagicMock()
+            mock_eia_client.return_value = mock_eia_client_instance
             mock_raw_loader_instance = MagicMock()
             mock_raw_loader.return_value = mock_raw_loader_instance
 
             # Mock API error for invalid region
-            mock_raw_loader_instance.extract_demand_data.side_effect = Exception("Invalid region")
+            mock_eia_client_instance.get_demand_data_raw.side_effect = Exception("Invalid region")
 
             orchestrator = ExtractOrchestrator(raw_data_path=str(tmp_path))
 
-            results = await orchestrator.process_data(
+            results = orchestrator.extract_historical_data(
                 start_date=OREGON_TEST_DATES["start"],
                 end_date=OREGON_TEST_DATES["end"],
-                region="INVALID_REGION",
+                regions=["INVALID_REGION"],
                 data_types=["demand"]
             )
 
-            # Should handle gracefully
-            assert "demand" in results
-            demand_results = results["demand"]
+            # Should handle gracefully and return failed result
+            assert isinstance(results, dict)
+            assert "data_types_processed" in results
+            assert "demand" in results["data_types_processed"]
+            assert results["total_files_created"] == 0  # No successful files due to errors
 
-            # All results should be failures
-            successful_results = [r for r in demand_results if r.success]
-            assert len(successful_results) == 0
-
-    @pytest.mark.asyncio
-    async def test_invalid_data_types(self, tmp_path):
+    def test_invalid_data_types(self, tmp_path):
         """Test handling of invalid data types."""
         orchestrator = ExtractOrchestrator(raw_data_path=str(tmp_path))
 
         # Test unsupported data type - should handle gracefully
-        results = await orchestrator.process_data(
+        results = orchestrator.extract_historical_data(
             start_date=OREGON_TEST_DATES["start"],
             end_date=OREGON_TEST_DATES["end"],
-            region=OREGON_REGION,
+            regions=[OREGON_REGION],
             data_types=["invalid_type"]
         )
 
-        assert "invalid_type" in results
-        invalid_results = results["invalid_type"]
-        assert len(invalid_results) >= 1
-
-        successful_results = [r for r in invalid_results if r.success]
-        assert len(successful_results) == 0
-
-        failed_results = [r for r in invalid_results if not r.success]
-        assert len(failed_results) >= 1
-        assert all(r.error_message is not None for r in failed_results)
+        # Should handle gracefully and process invalid type
+        assert isinstance(results, dict)
+        assert "data_types_processed" in results
+        assert "invalid_type" in results["data_types_processed"]
+        assert results["total_files_created"] == 0  # No files created due to invalid type
 
 
 if __name__ == "__main__":

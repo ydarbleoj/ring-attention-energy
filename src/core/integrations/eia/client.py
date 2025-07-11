@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 import numpy as np
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union, Tuple
 from datetime import datetime, timedelta
 import logging
 import time
@@ -167,6 +167,31 @@ class EIAClient:
                 'total': len(all_data)
             }
         }
+
+    def _fetch_page(self, url: str, params: Dict, offset: int = 0, page_size: int = 5000) -> Tuple[Dict, int]:
+        """Fetch a single page of data with pagination info.
+
+        This gives the orchestrator more control over pagination strategy
+        compared to _make_paginated_request which fetches all pages.
+
+        Args:
+            url: API endpoint URL
+            params: Request parameters
+            offset: Starting offset for this page
+            page_size: Number of records per page
+
+        Returns:
+            Tuple of (response_data, total_records)
+        """
+        paginated_params = params.copy()
+        paginated_params['length'] = page_size
+        paginated_params['offset'] = offset
+
+        response = self._make_request(url, paginated_params)
+        response_data = response.get('response', {})
+        total_records = len(response_data.get('data', []))
+
+        return response, total_records
 
     def get_electricity_demand(
         self,
@@ -453,3 +478,54 @@ class EIAClient:
         except Exception as e:
             logger.error(f"EIA API connection test failed: {e}")
             return False
+
+    def get_demand_data_raw(
+        self,
+        region: str = "US48",
+        start_date: str = "2020-01-01",
+        end_date: str = "2024-01-01"
+    ) -> Dict:
+        """Get raw demand data response (no DataFrame processing).
+
+        Returns the raw JSON response for the orchestrator to save directly.
+        """
+        logger.info(f"Fetching raw demand data for {region} from {start_date} to {end_date}")
+
+        url = f"{self.base_url}/electricity/rto/region-data/data/"
+        params = {
+            'frequency': 'hourly',
+            'data[0]': 'value',
+            'facets[respondent][]': region,
+            'facets[type][]': 'D',  # Demand
+            'start': start_date,
+            'end': end_date,
+            'sort[0][column]': 'period',
+            'sort[0][direction]': 'asc'
+        }
+
+        return self._make_paginated_request(url, params)
+
+    def get_generation_data_raw(
+        self,
+        region: str = "US48",
+        start_date: str = "2020-01-01",
+        end_date: str = "2024-01-01"
+    ) -> Dict:
+        """Get raw generation data response (no DataFrame processing).
+
+        Returns the raw JSON response for the orchestrator to save directly.
+        """
+        logger.info(f"Fetching raw generation data for {region} from {start_date} to {end_date}")
+
+        url = f"{self.base_url}/electricity/rto/fuel-type-data/data/"
+        params = {
+            'frequency': 'hourly',
+            'data[0]': 'value',
+            'facets[respondent][]': region,
+            'start': start_date,
+            'end': end_date,
+            'sort[0][column]': 'period',
+            'sort[0][direction]': 'asc'
+        }
+
+        return self._make_paginated_request(url, params)
