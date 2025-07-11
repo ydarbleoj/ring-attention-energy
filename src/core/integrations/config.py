@@ -23,7 +23,7 @@ class APIConfig(BaseSettings):
     # EIA Configuration
     eia_api_key: Optional[str] = Field(None, validation_alias='EIA_API_KEY')
     eia_base_url: str = Field("https://api.eia.gov/v2", validation_alias='EIA_BASE_URL')
-    eia_rate_limit_delay: float = Field(0.72, validation_alias='EIA_RATE_LIMIT_DELAY')
+    eia_rate_limit_delay: float = Field(0.25, validation_alias='EIA_RATE_LIMIT_DELAY')
 
     # CAISO Configuration
     caiso_base_url: str = Field(

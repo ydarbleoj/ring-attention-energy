@@ -5,8 +5,6 @@ from pathlib import Path
 from typing import Dict, List, Optional, Union, Any
 from dataclasses import dataclass, asdict
 
-from ..client import EIAClient
-
 logger = logging.getLogger(__name__)
 
 
@@ -30,33 +28,43 @@ class RawDataMetadata:
 
 class RawDataLoader:
     """
-    Extracts raw JSON data from EIA API and saves to data/raw/ directory.
+    Saves raw JSON data to data/raw/ directory.
 
-    This is the Extract stage of our ETL pipeline:
-    EIA API → data/raw/*.json (with metadata)
+    This handles the storage part of the Extract stage:
+    JSON Response → data/raw/*.json (with metadata)
+
+    Simple responsibility: Take JSON and save it with proper metadata.
     """
 
-    def __init__(self, client: EIAClient, raw_data_path: Union[str, Path] = "data/raw"):
-        self.client = client
+    def __init__(self, raw_data_path: Union[str, Path] = "data/raw"):
         self.raw_data_path = Path(raw_data_path)
         self.raw_data_path.mkdir(parents=True, exist_ok=True)
 
-    def _generate_filename(
+    def save_raw_data(
         self,
-        data_type: str,
-        region: str,
-        start_date: str,
-        end_date: str
-    ) -> str:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        return f"eia_{data_type}_{region}_{start_date}_to_{end_date}_{timestamp}.json"
-
-    def _save_raw_response(
-        self,
-        data: Dict[str, Any],
+        api_response: Dict[str, Any],
         metadata: RawDataMetadata,
-        filename: str
+        filename: Optional[str] = None
     ) -> Path:
+        """
+        Save raw API response to file with metadata.
+
+        Args:
+            api_response: Raw JSON response from API
+            metadata: Metadata about the request/response
+            filename: Optional custom filename (auto-generated if not provided)
+
+        Returns:
+            Path to saved raw data file
+        """
+        if filename is None:
+            filename = self._generate_filename(
+                metadata.data_type,
+                metadata.region,
+                metadata.start_date,
+                metadata.end_date
+            )
+
         # Create subdirectory structure: data/raw/eia/2024/
         year = metadata.start_date.split('-')[0] if metadata.start_date else datetime.now().strftime("%Y")
         file_dir = self.raw_data_path / "eia" / year
@@ -64,10 +72,18 @@ class RawDataLoader:
 
         file_path = file_dir / filename
 
+        # Calculate metadata if not provided
+        if metadata.response_size_bytes == 0 and api_response:
+            response_json = json.dumps(api_response)
+            metadata.response_size_bytes = len(response_json.encode('utf-8'))
+
+        if metadata.record_count == 0 and api_response:
+            metadata.record_count = len(api_response.get('response', {}).get('data', []))
+
         # Prepare complete raw data package
         raw_package = {
             "metadata": asdict(metadata),
-            "api_response": data
+            "api_response": api_response
         }
 
         # Save to JSON file
@@ -77,122 +93,19 @@ class RawDataLoader:
         logger.info(f"Saved raw data to {file_path} ({metadata.response_size_bytes} bytes, {metadata.record_count} records)")
         return file_path
 
-    def extract_demand_data(
-        self,
-        region: str,
-        start_date: Union[str, date],
-        end_date: Union[str, date]
-    ) -> Path:
-        """Extract raw demand data from EIA API.
-
-        Args:
-            region: Region code (e.g., PACW, ERCO)
-            start_date: Start date
-            end_date: End date
-
-        Returns:
-            Path to saved raw data file
-        """
-        return self.extract_data(
-            data_type="demand",
-            region=region,
-            start_date=start_date,
-            end_date=end_date
-        )
-
-    def extract_generation_data(
-        self,
-        region: str,
-        start_date: Union[str, date],
-        end_date: Union[str, date]
-    ) -> Path:
-        """Extract raw generation data from EIA API.
-
-        Args:
-            region: Region code (e.g., PACW, ERCO)
-            start_date: Start date
-            end_date: End date
-
-        Returns:
-            Path to saved raw data file
-        """
-        return self.extract_data(
-            data_type="generation",
-            region=region,
-            start_date=start_date,
-            end_date=end_date
-        )
-
-    def extract_data(
+    def _generate_filename(
         self,
         data_type: str,
         region: str,
-        start_date: Union[str, date],
-        end_date: Union[str, date]
-    ) -> Path:
-        """Extract raw data from EIA API based on data type.
-
-        Args:
-            data_type: Type of data to extract (demand, generation)
-            region: Region code (e.g., PACW, ERCO)
-            start_date: Start date
-            end_date: End date
-
-        Returns:
-            Path to saved raw data file
-        """
-        if isinstance(start_date, date):
-            start_date = start_date.strftime("%Y-%m-%d")
-        if isinstance(end_date, date):
-            end_date = end_date.strftime("%Y-%m-%d")
-
-        metadata = RawDataMetadata(
-            timestamp=datetime.now().isoformat(),
-            source="eia",
-            region=region,
-            data_type=data_type,
-            start_date=start_date,
-            end_date=end_date
-        )
-
-        facet_type = "demand" if data_type == "region-data" else "fuel-type-data"
-
-        try:
-            url = f"{self.client.base_url}/electricity/rto/{facet_type}/data/"
-            params = {
-                'frequency': 'hourly',
-                'data[0]': 'value',
-                'facets[respondent][]': region,
-                'start': start_date,
-                'end': end_date,
-                'sort[0][column]': 'period',
-                'sort[0][direction]': 'asc',
-                'length': 5000
-            }
-
-            metadata.request_params = params.copy()
-            raw_data = self.client._make_request(url, params)
-
-            response_json = json.dumps(raw_data)
-            metadata.response_size_bytes = len(response_json.encode('utf-8'))
-            metadata.record_count = len(raw_data.get('response', {}).get('data', []))
-            metadata.success = True
-
-            filename = self._generate_filename(data_type, region, start_date, end_date)
-            file_path = self._save_raw_response(raw_data, metadata, filename)
-
-            logger.info(f"Successfully extracted {metadata.record_count} {data_type} records for {region}")
-            return file_path
-        except Exception as e:
-            metadata.success = False
-            metadata.error_message = str(e)
-            logger.error(f"Failed to extract {data_type} data for {region}: {e}")
-
-            filename = self._generate_filename(data_type, region, start_date, end_date)
-            filename = filename.replace('.json', '_FAILED.json')
-            return self._save_raw_response({}, metadata, filename)
+        start_date: str,
+        end_date: str
+    ) -> str:
+        """Generate filename for raw data file."""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        return f"eia_{data_type}_{region}_{start_date}_to_{end_date}_{timestamp}.json"
 
     def list_raw_files(self, data_type: Optional[str] = None) -> List[Path]:
+        """List all raw data files."""
         pattern = "*.json"
         if data_type:
             pattern = f"*{data_type}*.json"
@@ -205,6 +118,7 @@ class RawDataLoader:
         return sorted(raw_files)
 
     def load_raw_file(self, file_path: Union[str, Path]) -> Dict[str, Any]:
+        """Load raw data file."""
         file_path = Path(file_path)
 
         if not file_path.exists():
@@ -216,11 +130,7 @@ class RawDataLoader:
         return raw_package
 
     def get_extraction_summary(self) -> Dict[str, Any]:
-        """Get summary of all extracted raw data.
-
-        Returns:
-            Summary statistics of raw data extractions
-        """
+        """Get summary of all saved raw data."""
         raw_files = self.list_raw_files()
 
         summary = {

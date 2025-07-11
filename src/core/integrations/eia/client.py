@@ -91,15 +91,10 @@ class EIAClient:
 
         # Use optimal request length for maximum data per API call
         if 'length' not in params:
-            params['length'] = 8000  # Optimal length from performance testing
+            params['length'] = 5000  # Optimal length from performance testing
 
         try:
-            # Ultimate optimized rate limiting - theoretical maximum with safety margin
-            # EIA allows 5000/hour = 1.389/sec, using 0.72s = theoretical maximum
-            optimized_delay = 0.72
-            time.sleep(optimized_delay)
-
-            response = self.session.get(url, params=params, timeout=20)
+            response = self.session.get(url, params=params)
             response.raise_for_status()
 
             data = response.json()
@@ -115,6 +110,63 @@ class EIAClient:
         except ValueError as e:
             logger.error(f"EIA API response error: {e}")
             raise
+
+    def _make_paginated_request(self, url: str, params: Dict) -> Dict:
+        """Make paginated API requests to get complete datasets.
+
+        EIA API returns max 5000 records per request, so we need pagination
+        for large date ranges.
+
+        Args:
+            url: API endpoint URL
+            params: Request parameters
+
+        Returns:
+            Combined response with all paginated data
+        """
+        all_data = []
+        offset = 0
+        page_size = 5000
+
+        # Add pagination parameters
+        paginated_params = params.copy()
+        paginated_params['length'] = page_size
+
+        while True:
+            # Set offset for this page
+            paginated_params['offset'] = offset
+
+            logger.debug(f"Fetching page at offset {offset}")
+            response = self._make_request(url, paginated_params)
+
+            # Extract data from response
+            page_data = response.get('response', {}).get('data', [])
+
+            if not page_data:
+                # No more data available
+                break
+
+            all_data.extend(page_data)
+
+            # Check if we got less than page_size records (last page)
+            if len(page_data) < page_size:
+                break
+
+            # Move to next page
+            offset += page_size
+
+            # Safety check to prevent infinite loops
+            if offset > 100000:  # Max 100k records for safety
+                logger.warning(f"Reached maximum offset limit (100k records), stopping pagination")
+                break
+
+        # Return response in same format as original
+        return {
+            'response': {
+                'data': all_data,
+                'total': len(all_data)
+            }
+        }
 
     def get_electricity_demand(
         self,
@@ -149,7 +201,7 @@ class EIAClient:
         }
 
         try:
-            data = self._make_request(url, params)
+            data = self._make_paginated_request(url, params)
             df = pd.DataFrame(data['response']['data'])
 
             if df.empty:
@@ -197,7 +249,7 @@ class EIAClient:
         }
 
         try:
-            data = self._make_request(url, params)
+            data = self._make_paginated_request(url, params)
             df = pd.DataFrame(data['response']['data'])
 
             if df.empty:
@@ -304,7 +356,7 @@ class EIAClient:
         }
 
         try:
-            data = self._make_request(url, params)
+            data = self._make_paginated_request(url, params)
             df = pd.DataFrame(data['response']['data'])
 
             if df.empty:
