@@ -101,12 +101,12 @@ class ExtractOrchestrator(BaseOrchestrator):
         if data_types is None:
             data_types = ['demand', 'generation']
 
-        self.logger.info(f"🚀 Starting historical data extraction")
-        self.logger.info(f"   Date range: {start_date} to {end_date}")
-        self.logger.info(f"   Regions: {regions}")
-        self.logger.info(f"   Data types: {data_types}")
-        self.logger.info(f"   Batch size: {batch_days} days")
-        self.logger.info(f"   Max workers: {max_workers}")
+        print(f"🚀 Starting historical data extraction")
+        print(f"   Date range: {start_date} to {end_date}")
+        print(f"   Regions: {regions}")
+        print(f"   Data types: {data_types}")
+        print(f"   Batch size: {batch_days} days")
+        print(f"   Max workers: {max_workers}")
 
         # Start performance tracking
         self._start_performance_tracking()
@@ -126,31 +126,41 @@ class ExtractOrchestrator(BaseOrchestrator):
             # Execute all tasks with ThreadPoolExecutor
             file_paths = []
             with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-                # Submit all tasks
-                future_to_task = {
-                    executor.submit(self._extract_single_task, task): task
-                    for task in extraction_tasks
-                }
+                try:
+                    # Submit all tasks
+                    future_to_task = {
+                        executor.submit(self._extract_single_task, task): task
+                        for task in extraction_tasks
+                    }
 
-                # Collect results as they complete
-                completed_tasks = 0
-                for future in concurrent.futures.as_completed(future_to_task):
-                    task = future_to_task[future]
-                    completed_tasks += 1
+                    # Collect results as they complete
+                    completed_tasks = 0
+                    for future in concurrent.futures.as_completed(future_to_task, timeout=300):  # 5-minute timeout per task
+                        task = future_to_task[future]
+                        completed_tasks += 1
 
-                    try:
-                        result = future.result()
-                        if result.success and result.file_path:
-                            file_paths.append(result.file_path)
+                        try:
+                            result = future.result(timeout=30)  # 30-second timeout for getting result
+                            if result.success and result.file_path:
+                                file_paths.append(result.file_path)
 
-                        # Log progress every 10% completion
-                        if completed_tasks % max(1, len(extraction_tasks) // 10) == 0:
-                            progress = (completed_tasks / len(extraction_tasks)) * 100
-                            self.logger.info(f"Progress: {progress:.1f}% ({completed_tasks}/{len(extraction_tasks)} tasks)")
+                            # Log progress every 10% completion
+                            if completed_tasks % max(1, len(extraction_tasks) // 10) == 0:
+                                progress = (completed_tasks / len(extraction_tasks)) * 100
+                                self.logger.info(f"Progress: {progress:.1f}% ({completed_tasks}/{len(extraction_tasks)} tasks)")
 
-                    except Exception as e:
-                        region, data_type, batch_start, batch_end = task
-                        self.logger.error(f"Task failed: {region} {data_type} {batch_start}-{batch_end}: {e}")
+                        except concurrent.futures.TimeoutError:
+                            region, data_type, batch_start, batch_end = task
+                            self.logger.error(f"Task timeout: {region} {data_type} {batch_start}-{batch_end}")
+                        except Exception as e:
+                            region, data_type, batch_start, batch_end = task
+                            self.logger.error(f"Task failed: {region} {data_type} {batch_start}-{batch_end}: {e}")
+
+                except Exception as e:
+                    self.logger.error(f"ThreadPoolExecutor error: {e}")
+                    # Cancel remaining futures
+                    for future in future_to_task:
+                        future.cancel()
 
             extraction_end_time = time.time()
             total_duration = extraction_end_time - extraction_start_time
@@ -263,7 +273,7 @@ class ExtractOrchestrator(BaseOrchestrator):
             if self.batch_config.log_individual_operations:
                 self.logger.info(f"✅ {data_type} batch {start_date} to {end_date}: "
                                f"{records:,} records, {bytes_size:,} bytes, "
-                               f"{operation_latency:.2f}s latency")
+                               f"{operation_latency*1000:.0f}ms latency")
 
             return ExtractBatchResult(
                 start_date=start_date,
