@@ -1,0 +1,2266 @@
+{
+  "metadata": {
+    "timestamp": "2025-07-10T16:57:15.206535",
+    "source": "eia",
+    "api_endpoint": "",
+    "region": "PACW",
+    "data_type": "generation",
+    "start_date": "2024-01-10",
+    "end_date": "2024-01-12",
+    "request_params": {
+      "frequency": "hourly",
+      "data[0]": "value",
+      "facets[respondent][]": "PACW",
+      "start": "2024-01-10",
+      "end": "2024-01-12",
+      "sort[0][column]": "period",
+      "sort[0][direction]": "asc",
+      "length": 5000
+    },
+    "response_size_bytes": 44224,
+    "record_count": 245,
+    "success": true,
+    "error_message": null
+  },
+  "api_response": {
+    "response": {
+      "total": "245",
+      "dateFormat": "YYYY-MM-DD\"T\"HH24",
+      "frequency": "hourly",
+      "data": [
+        {
+          "period": "2024-01-10T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "42",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "99",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "242",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "228",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T01",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T01",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T01",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "6",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T01",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "359",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T01",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "305",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T02",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T02",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "43",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T02",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T02",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "369",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T02",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "291",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T03",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T03",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T03",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T03",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "382",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T03",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "303",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T04",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T04",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T04",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T04",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "379",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T04",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "312",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T05",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T05",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T05",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T05",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "360",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T05",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "331",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T06",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T06",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T06",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T06",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "328",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T06",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "352",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T07",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T07",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T07",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T07",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "324",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T07",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "402",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T08",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T08",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "39",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T08",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T08",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "307",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T08",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "439",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T09",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T09",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "38",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T09",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T09",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "227",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T09",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "462",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T10",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T10",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "42",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T10",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T10",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "229",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T10",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "375",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T11",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T11",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T11",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T11",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "213",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T11",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "263",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T12",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T12",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T12",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T12",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "193",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T12",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "297",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T13",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T13",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "42",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T13",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T13",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "191",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T13",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "238",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T14",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T14",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T14",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T14",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "195",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T14",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "272",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T15",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T15",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T15",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T15",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "211",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T15",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "381",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T16",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T16",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "43",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T16",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T16",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "219",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T16",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "475",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T17",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T17",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T17",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "21",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T17",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "217",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T17",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "524",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T18",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T18",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T18",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "81",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T18",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "202",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T18",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "534",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T19",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T19",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "44",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T19",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "141",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T19",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "194",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T19",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "545",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T20",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T20",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T20",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "158",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T20",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "187",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T20",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "559",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T21",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T21",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "43",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T21",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "191",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T21",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "191",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T21",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "549",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T22",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T22",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T22",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "199",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T22",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "266",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T22",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "535",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T23",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T23",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "42",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T23",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "202",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T23",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "269",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-10T23",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "516",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "43",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "109",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "294",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "510",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T01",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T01",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T01",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "18",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T01",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "316",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T01",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "516",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T02",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T02",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T02",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T02",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "317",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T02",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "531",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T03",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T03",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "38",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T03",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T03",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "329",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T03",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "536",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T04",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T04",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T04",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T04",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "330",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T04",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "529",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T05",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T05",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "37",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T05",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T05",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "297",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T05",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "473",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T06",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T06",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "38",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T06",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T06",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "269",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T06",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "472",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T07",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T07",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "36",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T07",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T07",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "262",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T07",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "506",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T08",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T08",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "36",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T08",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T08",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "186",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T08",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "542",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T09",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T09",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "33",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T09",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T09",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "282",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T09",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "566",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T10",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T10",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "36",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T10",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T10",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "292",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T10",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "584",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T11",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T11",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "36",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T11",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T11",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "294",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T11",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "603",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T12",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T12",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T12",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T12",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "292",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T12",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "605",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T13",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T13",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "42",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T13",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T13",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "282",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T13",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "594",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T14",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T14",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T14",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T14",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "267",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T14",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "583",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T15",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T15",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T15",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T15",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "274",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T15",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "608",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T16",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T16",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "39",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T16",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "1",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T16",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "264",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T16",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "587",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T17",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T17",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T17",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "55",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T17",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "266",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T17",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "524",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T18",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T18",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T18",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "174",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T18",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "266",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T18",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "536",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T19",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T19",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "42",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T19",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "198",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T19",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "264",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T19",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "562",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T20",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T20",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T20",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "196",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T20",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "261",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T20",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "590",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T21",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T21",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T21",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "185",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T21",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "281",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T21",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "601",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T22",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T22",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T22",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "189",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T22",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "266",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T22",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "583",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T23",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T23",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "40",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T23",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "160",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T23",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "312",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-11T23",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "580",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-12T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "NG",
+          "type-name": "Natural Gas",
+          "value": "0",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-12T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "OTH",
+          "type-name": "Other",
+          "value": "41",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-12T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "SUN",
+          "type-name": "Solar",
+          "value": "86",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-12T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WAT",
+          "type-name": "Hydro",
+          "value": "321",
+          "value-units": "megawatthours"
+        },
+        {
+          "period": "2024-01-12T00",
+          "respondent": "PACW",
+          "respondent-name": "PacifiCorp West",
+          "fueltype": "WND",
+          "type-name": "Wind",
+          "value": "565",
+          "value-units": "megawatthours"
+        }
+      ],
+      "description": "Hourly net generation by balancing authority and energy source.  \n    Source: Form EIA-930\n    Product: Hourly Electric Grid Monitor"
+    },
+    "request": {
+      "command": "/v2/electricity/rto/fuel-type-data/data/",
+      "params": {
+        "frequency": "hourly",
+        "data": [
+          "value"
+        ],
+        "facets": {
+          "respondent": [
+            "PACW"
+          ]
+        },
+        "start": "2024-01-10",
+        "end": "2024-01-12",
+        "sort": [
+          {
+            "column": "period",
+            "direction": "asc"
+          }
+        ],
+        "length": "5000",
+        "api_key": "pFDJNZZbi4c7p3UIWM5gXOPgvmIdEHMzPgpKLLMw"
+      }
+    },
+    "apiVersion": "2.1.8",
+    "ExcelAddInVersion": "2.1.0"
+  }
+}

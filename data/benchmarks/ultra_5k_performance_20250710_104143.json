@@ -1,0 +1,184 @@
+{
+  "timestamp": "20250710_104143",
+  "test_type": "ultra_aggressive_5k",
+  "target_rps": 5000,
+  "description": "Ultra-aggressive test pushing towards 5K RPS for ML/AI pipelines",
+  "results": [
+    {
+      "name": "Optimal_45_Day_Range_Ultra_Parallel_Fast",
+      "config": {
+        "name": "Optimal_45_Day_Range_Ultra_Parallel_Fast",
+        "days_per_batch": 15,
+        "max_concurrent_batches": 4,
+        "delay_between_operations": 0.08,
+        "max_operations_per_second": 12.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-02-15",
+      "date_range_days": 45,
+      "duration": 45.79995536804199,
+      "total_records": 10120,
+      "rps": 220.960914015682,
+      "success_rate": 1.0,
+      "total_batches": 8,
+      "successful_batches": 8,
+      "total_api_calls": 8,
+      "api_calls_per_second": 0.1746726593009344
+    },
+    {
+      "name": "Optimal_45_Day_Range_Optimal_Enhanced",
+      "config": {
+        "name": "Optimal_45_Day_Range_Optimal_Enhanced",
+        "days_per_batch": 22,
+        "max_concurrent_batches": 3,
+        "delay_between_operations": 0.05,
+        "max_operations_per_second": 15.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-02-15",
+      "date_range_days": 45,
+      "duration": 8.799161195755005,
+      "total_records": 10350,
+      "rps": 1176.2484820704465,
+      "success_rate": 1.0,
+      "total_batches": 6,
+      "successful_batches": 6,
+      "total_api_calls": 6,
+      "api_calls_per_second": 0.681883178011853
+    },
+    {
+      "name": "Optimal_45_Day_Range_Balanced_Speed",
+      "config": {
+        "name": "Optimal_45_Day_Range_Balanced_Speed",
+        "days_per_batch": 30,
+        "max_concurrent_batches": 3,
+        "delay_between_operations": 0.03,
+        "max_operations_per_second": 18.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-02-15",
+      "date_range_days": 45,
+      "duration": 5.858389139175415,
+      "total_records": 10580,
+      "rps": 1805.9571920975472,
+      "success_rate": 1.0,
+      "total_batches": 4,
+      "successful_batches": 4,
+      "total_api_calls": 4,
+      "api_calls_per_second": 0.6827815471068232
+    },
+    {
+      "name": "Optimal_45_Day_Range_Maximum_Throughput",
+      "config": {
+        "name": "Optimal_45_Day_Range_Maximum_Throughput",
+        "days_per_batch": 12,
+        "max_concurrent_batches": 5,
+        "delay_between_operations": 0.06,
+        "max_operations_per_second": 16.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-02-15",
+      "date_range_days": 45,
+      "duration": 14.168493747711182,
+      "total_records": 10120,
+      "rps": 714.2608226534181,
+      "success_rate": 1.0,
+      "total_batches": 8,
+      "successful_batches": 8,
+      "total_api_calls": 8,
+      "api_calls_per_second": 0.5646330613861013
+    },
+    {
+      "name": "Extended_90_Day_Range_Ultra_Parallel_Fast",
+      "config": {
+        "name": "Extended_90_Day_Range_Ultra_Parallel_Fast",
+        "days_per_batch": 15,
+        "max_concurrent_batches": 4,
+        "delay_between_operations": 0.08,
+        "max_operations_per_second": 12.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-04-01",
+      "date_range_days": 91,
+      "duration": 21.73607301712036,
+      "total_records": 20470,
+      "rps": 941.7524492062968,
+      "success_rate": 1.0,
+      "total_batches": 14,
+      "successful_batches": 14,
+      "total_api_calls": 14,
+      "api_calls_per_second": 0.6440905856809064
+    },
+    {
+      "name": "Extended_90_Day_Range_Optimal_Enhanced",
+      "config": {
+        "name": "Extended_90_Day_Range_Optimal_Enhanced",
+        "days_per_batch": 22,
+        "max_concurrent_batches": 3,
+        "delay_between_operations": 0.05,
+        "max_operations_per_second": 15.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-04-01",
+      "date_range_days": 91,
+      "duration": 13.554281234741211,
+      "total_records": 20930,
+      "rps": 1544.1615558598533,
+      "success_rate": 1.0,
+      "total_batches": 10,
+      "successful_batches": 10,
+      "total_api_calls": 10,
+      "api_calls_per_second": 0.7377742741805319
+    },
+    {
+      "name": "Extended_90_Day_Range_Balanced_Speed",
+      "config": {
+        "name": "Extended_90_Day_Range_Balanced_Speed",
+        "days_per_batch": 30,
+        "max_concurrent_batches": 3,
+        "delay_between_operations": 0.03,
+        "max_operations_per_second": 18.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-04-01",
+      "date_range_days": 91,
+      "duration": 10.313976764678955,
+      "total_records": 21160,
+      "rps": 2051.5849979868217,
+      "success_rate": 1.0,
+      "total_batches": 8,
+      "successful_batches": 8,
+      "total_api_calls": 8,
+      "api_calls_per_second": 0.7756465020744128
+    },
+    {
+      "name": "Extended_90_Day_Range_Maximum_Throughput",
+      "config": {
+        "name": "Extended_90_Day_Range_Maximum_Throughput",
+        "days_per_batch": 12,
+        "max_concurrent_batches": 5,
+        "delay_between_operations": 0.06,
+        "max_operations_per_second": 16.0,
+        "adaptive_batch_sizing": false
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-04-01",
+      "date_range_days": 91,
+      "duration": 21.74335217475891,
+      "total_records": 20240,
+      "rps": 930.8592271018772,
+      "success_rate": 1.0,
+      "total_batches": 16,
+      "successful_batches": 16,
+      "total_api_calls": 16,
+      "api_calls_per_second": 0.7358570965232231
+    }
+  ]
+}

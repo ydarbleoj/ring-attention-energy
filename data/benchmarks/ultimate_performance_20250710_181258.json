@@ -1,0 +1,103 @@
+{
+  "benchmark_type": "ultimate_performance",
+  "timestamp": "20250710_181258",
+  "test_region": "PACW",
+  "date_range": {
+    "start": "2024-01-01",
+    "end": "2024-04-01"
+  },
+  "optimizations_included": [
+    "ultimate_connection_pooling",
+    "theoretical_maximum_rate_limiting",
+    "optimal_request_parameters",
+    "fine_tuned_batch_sizing",
+    "enhanced_session_management"
+  ],
+  "eia_api_limits": {
+    "requests_per_hour": 5000,
+    "theoretical_max_per_second": 1.389
+  },
+  "results": [
+    {
+      "test_name": "Previous_Best_Connection",
+      "rps": 1333.4670756955657,
+      "total_records": 20250,
+      "total_api_calls": 6,
+      "api_calls_per_sec": 0.39510135576164906,
+      "duration": 15.18597674369812,
+      "used_ultimate_client": false,
+      "config": {
+        "days_per_batch": 45,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 1.5,
+        "max_operations_per_second": 10.0
+      }
+    },
+    {
+      "test_name": "Ultimate_Theoretical_Max",
+      "rps": 2673.569068152191,
+      "total_records": 20250,
+      "total_api_calls": 6,
+      "api_calls_per_sec": 0.7921686127858344,
+      "duration": 7.574145078659058,
+      "used_ultimate_client": true,
+      "config": {
+        "days_per_batch": 45,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 0.72,
+        "max_operations_per_second": 20.0
+      }
+    },
+    {
+      "test_name": "Ultimate_Safe_Margin",
+      "rps": 2830.7563464307877,
+      "total_records": 20250,
+      "total_api_calls": 6,
+      "api_calls_per_sec": 0.8387426211646779,
+      "duration": 7.153565168380737,
+      "used_ultimate_client": true,
+      "config": {
+        "days_per_batch": 45,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 0.8,
+        "max_operations_per_second": 18.0
+      }
+    },
+    {
+      "test_name": "Ultimate_Large_Batches",
+      "rps": 2278.9023646460255,
+      "total_records": 17450,
+      "total_api_calls": 4,
+      "api_calls_per_sec": 0.5223844961939313,
+      "duration": 7.657195091247559,
+      "used_ultimate_client": true,
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 0.75,
+        "max_operations_per_second": 16.0
+      }
+    },
+    {
+      "test_name": "Ultimate_Max_Concurrency",
+      "rps": 3120.882079821416,
+      "total_records": 20250,
+      "total_api_calls": 6,
+      "api_calls_per_sec": 0.9247058014285676,
+      "duration": 6.488550186157227,
+      "used_ultimate_client": true,
+      "config": {
+        "days_per_batch": 45,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 0.8,
+        "max_operations_per_second": 25.0
+      }
+    }
+  ],
+  "summary": {
+    "total_tests": 5,
+    "successful_tests": 5,
+    "best_rps": 3120.882079821416,
+    "best_config": "Ultimate_Max_Concurrency"
+  }
+}

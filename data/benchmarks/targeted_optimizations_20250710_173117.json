@@ -1,0 +1,91 @@
+{
+  "benchmark_type": "targeted_optimizations",
+  "timestamp": "20250710_173117",
+  "test_region": "PACW",
+  "date_range": {
+    "start": "2024-01-01",
+    "end": "2024-04-01"
+  },
+  "eia_rate_limit": {
+    "theoretical_max_per_hour": 5000,
+    "theoretical_max_per_second": 1.389
+  },
+  "results": [
+    {
+      "test_name": "Baseline_Current_Best",
+      "rps": 1002.7224434854086,
+      "total_records": 20250,
+      "total_api_calls": 6,
+      "api_calls_per_sec": 0.29710294621789884,
+      "duration": 20.19502019882202,
+      "config": {
+        "days_per_batch": 45,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 2.0,
+        "max_operations_per_second": 8.0
+      }
+    },
+    {
+      "test_name": "Theoretical_Maximum_Rate",
+      "rps": 1252.7318913689512,
+      "total_records": 20250,
+      "total_api_calls": 6,
+      "api_calls_per_sec": 0.37117981966487446,
+      "duration": 16.164671897888184,
+      "config": {
+        "days_per_batch": 45,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 0.72,
+        "max_operations_per_second": 20.0
+      }
+    },
+    {
+      "test_name": "Safe_Aggressive_Rate",
+      "rps": 621.4921906831961,
+      "total_records": 20250,
+      "total_api_calls": 6,
+      "api_calls_per_sec": 0.18414583427650255,
+      "duration": 32.582871198654175,
+      "config": {
+        "days_per_batch": 45,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 0.8,
+        "max_operations_per_second": 18.0
+      }
+    },
+    {
+      "test_name": "Large_Batches_Optimized",
+      "rps": 516.1602981340942,
+      "total_records": 17450,
+      "total_api_calls": 4,
+      "api_calls_per_sec": 0.11831754685022217,
+      "duration": 33.80732703208923,
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 0.9,
+        "max_operations_per_second": 15.0
+      }
+    },
+    {
+      "test_name": "Ultra_Aggressive",
+      "rps": 925.0242656981969,
+      "total_records": 13850,
+      "total_api_calls": 4,
+      "api_calls_per_sec": 0.2671550225843168,
+      "duration": 14.972580194473267,
+      "config": {
+        "days_per_batch": 75,
+        "max_concurrent_batches": 3,
+        "delay_between_operations": 0.75,
+        "max_operations_per_second": 25.0
+      }
+    }
+  ],
+  "summary": {
+    "total_tests": 5,
+    "successful_tests": 5,
+    "best_rps": 1252.7318913689512,
+    "best_config": "Theoretical_Maximum_Rate"
+  }
+}

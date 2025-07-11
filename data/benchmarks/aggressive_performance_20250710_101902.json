@@ -1,0 +1,85 @@
+{
+  "timestamp": "20250710_101902",
+  "results": [
+    {
+      "name": "Ultra_Fast_Sequential",
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 1,
+        "delay_between_operations": 0.1,
+        "max_operations_per_second": 10.0,
+        "adaptive_batch_sizing": false
+      },
+      "duration": 8.714975833892822,
+      "total_records": 10010,
+      "rps": 1148.5975624936086,
+      "success_rate": 1.0,
+      "total_batches": 4,
+      "successful_batches": 4
+    },
+    {
+      "name": "Minimal_Delay_Sequential",
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 1,
+        "delay_between_operations": 0.05,
+        "max_operations_per_second": 15.0,
+        "adaptive_batch_sizing": false
+      },
+      "duration": 5.216795921325684,
+      "total_records": 10010,
+      "rps": 1918.8022976095785,
+      "success_rate": 1.0,
+      "total_batches": 4,
+      "successful_batches": 4
+    },
+    {
+      "name": "No_Delay_Sequential",
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 1,
+        "delay_between_operations": 0.01,
+        "max_operations_per_second": 20.0,
+        "adaptive_batch_sizing": false
+      },
+      "duration": 5.882627010345459,
+      "total_records": 10010,
+      "rps": 1701.6207184980371,
+      "success_rate": 1.0,
+      "total_batches": 4,
+      "successful_batches": 4
+    },
+    {
+      "name": "Optimized_30_Day_Batches",
+      "config": {
+        "days_per_batch": 30,
+        "max_concurrent_batches": 1,
+        "delay_between_operations": 0.1,
+        "max_operations_per_second": 10.0,
+        "adaptive_batch_sizing": false
+      },
+      "duration": 7.599941253662109,
+      "total_records": 13950,
+      "rps": 1835.5405041161403,
+      "success_rate": 1.0,
+      "total_batches": 6,
+      "successful_batches": 6
+    },
+    {
+      "name": "Optimized_90_Day_Batches",
+      "config": {
+        "days_per_batch": 90,
+        "max_concurrent_batches": 1,
+        "delay_between_operations": 0.1,
+        "max_operations_per_second": 10.0,
+        "adaptive_batch_sizing": false
+      },
+      "duration": 3.147019147872925,
+      "total_records": 10000,
+      "rps": 3177.6101542817164,
+      "success_rate": 1.0,
+      "total_batches": 2,
+      "successful_batches": 2
+    }
+  ]
+}

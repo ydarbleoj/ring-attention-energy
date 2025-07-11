@@ -1,0 +1,87 @@
+{
+  "benchmark_type": "ultimate_performance",
+  "timestamp": "20250710_175509",
+  "test_region": "PACW",
+  "date_range": {
+    "start": "2024-01-01",
+    "end": "2024-04-01"
+  },
+  "optimizations_included": [
+    "ultimate_connection_pooling",
+    "theoretical_maximum_rate_limiting",
+    "optimal_request_parameters",
+    "fine_tuned_batch_sizing",
+    "enhanced_session_management"
+  ],
+  "eia_api_limits": {
+    "requests_per_hour": 5000,
+    "theoretical_max_per_second": 1.389
+  },
+  "results": [
+    {
+      "test_name": "Previous_Best_Connection",
+      "rps": 2316.049122418751,
+      "total_records": 20250,
+      "total_api_calls": 6,
+      "api_calls_per_sec": 0.6862367770129633,
+      "duration": 8.743337869644165,
+      "used_ultimate_client": false,
+      "config": {
+        "days_per_batch": 45,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 1.5,
+        "max_operations_per_second": 10.0
+      }
+    },
+    {
+      "test_name": "Ultimate_Theoretical_Max",
+      "rps": 0,
+      "error": "HTTPAdapter.__init__() got an unexpected keyword argument 'socket_options'",
+      "used_ultimate_client": true,
+      "config": {
+        "days_per_batch": 45,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 0.72
+      }
+    },
+    {
+      "test_name": "Ultimate_Safe_Margin",
+      "rps": 0,
+      "error": "HTTPAdapter.__init__() got an unexpected keyword argument 'socket_options'",
+      "used_ultimate_client": true,
+      "config": {
+        "days_per_batch": 45,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 0.8
+      }
+    },
+    {
+      "test_name": "Ultimate_Large_Batches",
+      "rps": 0,
+      "error": "HTTPAdapter.__init__() got an unexpected keyword argument 'socket_options'",
+      "used_ultimate_client": true,
+      "config": {
+        "days_per_batch": 60,
+        "max_concurrent_batches": 2,
+        "delay_between_operations": 0.75
+      }
+    },
+    {
+      "test_name": "Ultimate_Max_Concurrency",
+      "rps": 0,
+      "error": "HTTPAdapter.__init__() got an unexpected keyword argument 'socket_options'",
+      "used_ultimate_client": true,
+      "config": {
+        "days_per_batch": 45,
+        "max_concurrent_batches": 3,
+        "delay_between_operations": 0.85
+      }
+    }
+  ],
+  "summary": {
+    "total_tests": 5,
+    "successful_tests": 1,
+    "best_rps": 2316.049122418751,
+    "best_config": "Previous_Best_Connection"
+  }
+}

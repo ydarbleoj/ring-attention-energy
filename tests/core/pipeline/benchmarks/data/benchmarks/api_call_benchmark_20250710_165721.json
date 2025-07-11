@@ -1,0 +1,403 @@
+{
+  "timestamp": "20250710_165721",
+  "test_type": "api_call_performance",
+  "description": "Pure API call latency and throughput measurement",
+  "results": [
+    {
+      "test_name": "Short_7_Days_Sequential_Run_1",
+      "config": {
+        "days_per_batch": 7,
+        "max_concurrent_batches": 1
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-08",
+      "date_range_days": 7,
+      "total_duration": 5.229238033294678,
+      "total_records": 1460,
+      "total_api_calls": 4,
+      "rps": 279.19937679335817,
+      "avg_latency_ms": 1307.3095083236694,
+      "api_calls_per_second": 0.764929799433858,
+      "success_rate": 1.0,
+      "records_per_api_call": 365.0
+    },
+    {
+      "test_name": "Short_7_Days_Sequential_Run_2",
+      "config": {
+        "days_per_batch": 7,
+        "max_concurrent_batches": 1
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-08",
+      "date_range_days": 7,
+      "total_duration": 4.203089952468872,
+      "total_records": 1460,
+      "total_api_calls": 4,
+      "rps": 347.3634912672768,
+      "avg_latency_ms": 1050.772488117218,
+      "api_calls_per_second": 0.9516807979925392,
+      "success_rate": 1.0,
+      "records_per_api_call": 365.0
+    },
+    {
+      "test_name": "Short_7_Days_Sequential_Run_3",
+      "config": {
+        "days_per_batch": 7,
+        "max_concurrent_batches": 1
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-08",
+      "date_range_days": 7,
+      "total_duration": 3.5969998836517334,
+      "total_records": 1460,
+      "total_api_calls": 4,
+      "rps": 405.8938135182212,
+      "avg_latency_ms": 899.2499709129333,
+      "api_calls_per_second": 1.1120378452554005,
+      "success_rate": 1.0,
+      "records_per_api_call": 365.0
+    },
+    {
+      "test_name": "Short_7_Days_Sequential_Run_4",
+      "config": {
+        "days_per_batch": 7,
+        "max_concurrent_batches": 1
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-08",
+      "date_range_days": 7,
+      "total_duration": 3.7955899238586426,
+      "total_records": 1460,
+      "total_api_calls": 4,
+      "rps": 384.65693852294413,
+      "avg_latency_ms": 948.8974809646606,
+      "api_calls_per_second": 1.053854626090258,
+      "success_rate": 1.0,
+      "records_per_api_call": 365.0
+    },
+    {
+      "test_name": "Short_7_Days_Sequential_Run_5",
+      "config": {
+        "days_per_batch": 7,
+        "max_concurrent_batches": 1
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-08",
+      "date_range_days": 7,
+      "total_duration": 3.5905039310455322,
+      "total_records": 1460,
+      "total_api_calls": 4,
+      "rps": 406.628158063277,
+      "avg_latency_ms": 897.625982761383,
+      "api_calls_per_second": 1.114049748118567,
+      "success_rate": 1.0,
+      "records_per_api_call": 365.0
+    },
+    {
+      "test_name": "Short_7_Days_Parallel_2_Run_1",
+      "config": {
+        "days_per_batch": 3,
+        "max_concurrent_batches": 2
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-08",
+      "date_range_days": 7,
+      "total_duration": 6.689143180847168,
+      "total_records": 1230,
+      "total_api_calls": 6,
+      "rps": 183.88005260850505,
+      "avg_latency_ms": 1114.8571968078613,
+      "api_calls_per_second": 0.8969758663829515,
+      "success_rate": 1.0,
+      "records_per_api_call": 205.0
+    },
+    {
+      "test_name": "Short_7_Days_Parallel_2_Run_2",
+      "config": {
+        "days_per_batch": 3,
+        "max_concurrent_batches": 2
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-08",
+      "date_range_days": 7,
+      "total_duration": 7.422248840332031,
+      "total_records": 1230,
+      "total_api_calls": 6,
+      "rps": 165.71796856449458,
+      "avg_latency_ms": 1237.0414733886719,
+      "api_calls_per_second": 0.8083803344609493,
+      "success_rate": 1.0,
+      "records_per_api_call": 205.0
+    },
+    {
+      "test_name": "Short_7_Days_Parallel_3_Run_1",
+      "config": {
+        "days_per_batch": 2,
+        "max_concurrent_batches": 3
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-08",
+      "date_range_days": 7,
+      "total_duration": 9.21536898612976,
+      "total_records": 1000,
+      "total_api_calls": 8,
+      "rps": 108.5143743571332,
+      "avg_latency_ms": 1151.92112326622,
+      "api_calls_per_second": 0.8681149948570657,
+      "success_rate": 1.0,
+      "records_per_api_call": 125.0
+    },
+    {
+      "test_name": "Short_7_Days_Parallel_3_Run_2",
+      "config": {
+        "days_per_batch": 2,
+        "max_concurrent_batches": 3
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-08",
+      "date_range_days": 7,
+      "total_duration": 8.029881000518799,
+      "total_records": 1000,
+      "total_api_calls": 8,
+      "rps": 124.53484677237327,
+      "avg_latency_ms": 1003.7351250648499,
+      "api_calls_per_second": 0.9962787741789861,
+      "success_rate": 1.0,
+      "records_per_api_call": 125.0
+    },
+    {
+      "test_name": "Short_7_Days_Parallel_4_Run_1",
+      "config": {
+        "days_per_batch": 1,
+        "max_concurrent_batches": 4
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-08",
+      "date_range_days": 7,
+      "total_duration": 18.241981029510498,
+      "total_records": 80,
+      "total_api_calls": 16,
+      "rps": 4.385488608423726,
+      "avg_latency_ms": 1140.1238143444061,
+      "api_calls_per_second": 0.8770977216847452,
+      "success_rate": 1.0,
+      "records_per_api_call": 5.0
+    },
+    {
+      "test_name": "Short_7_Days_Parallel_4_Run_2",
+      "config": {
+        "days_per_batch": 1,
+        "max_concurrent_batches": 4
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-08",
+      "date_range_days": 7,
+      "total_duration": 14.768305778503418,
+      "total_records": 80,
+      "total_api_calls": 16,
+      "rps": 5.417005931475709,
+      "avg_latency_ms": 923.0191111564636,
+      "api_calls_per_second": 1.0834011862951418,
+      "success_rate": 1.0,
+      "records_per_api_call": 5.0
+    },
+    {
+      "test_name": "Medium_15_Days_Sequential_Run_1",
+      "config": {
+        "days_per_batch": 15,
+        "max_concurrent_batches": 1
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-16",
+      "date_range_days": 15,
+      "total_duration": 4.758927822113037,
+      "total_records": 3380,
+      "total_api_calls": 4,
+      "rps": 710.2440142702623,
+      "avg_latency_ms": 1189.7319555282593,
+      "api_calls_per_second": 0.8405254606748666,
+      "success_rate": 1.0,
+      "records_per_api_call": 845.0
+    },
+    {
+      "test_name": "Medium_15_Days_Sequential_Run_2",
+      "config": {
+        "days_per_batch": 15,
+        "max_concurrent_batches": 1
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-16",
+      "date_range_days": 15,
+      "total_duration": 4.660271883010864,
+      "total_records": 3380,
+      "total_api_calls": 4,
+      "rps": 725.279572705162,
+      "avg_latency_ms": 1165.067970752716,
+      "api_calls_per_second": 0.8583190209528544,
+      "success_rate": 1.0,
+      "records_per_api_call": 845.0
+    },
+    {
+      "test_name": "Medium_15_Days_Sequential_Run_3",
+      "config": {
+        "days_per_batch": 15,
+        "max_concurrent_batches": 1
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-16",
+      "date_range_days": 15,
+      "total_duration": 4.002687931060791,
+      "total_records": 3380,
+      "total_api_calls": 4,
+      "rps": 844.4325558760794,
+      "avg_latency_ms": 1000.6719827651978,
+      "api_calls_per_second": 0.9993284684924016,
+      "success_rate": 1.0,
+      "records_per_api_call": 845.0
+    },
+    {
+      "test_name": "Medium_15_Days_Sequential_Run_4",
+      "config": {
+        "days_per_batch": 15,
+        "max_concurrent_batches": 1
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-16",
+      "date_range_days": 15,
+      "total_duration": 4.616643905639648,
+      "total_records": 3380,
+      "total_api_calls": 4,
+      "rps": 732.1335734538728,
+      "avg_latency_ms": 1154.160976409912,
+      "api_calls_per_second": 0.8664302644424531,
+      "success_rate": 1.0,
+      "records_per_api_call": 845.0
+    },
+    {
+      "test_name": "Medium_15_Days_Sequential_Run_5",
+      "config": {
+        "days_per_batch": 15,
+        "max_concurrent_batches": 1
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-16",
+      "date_range_days": 15,
+      "total_duration": 5.025570869445801,
+      "total_records": 3380,
+      "total_api_calls": 4,
+      "rps": 672.5604091168119,
+      "avg_latency_ms": 1256.3927173614502,
+      "api_calls_per_second": 0.7959294782447478,
+      "success_rate": 1.0,
+      "records_per_api_call": 845.0
+    },
+    {
+      "test_name": "Medium_15_Days_Parallel_2_Run_1",
+      "config": {
+        "days_per_batch": 7,
+        "max_concurrent_batches": 2
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-16",
+      "date_range_days": 15,
+      "total_duration": 6.820294141769409,
+      "total_records": 3150,
+      "total_api_calls": 6,
+      "rps": 461.8569132830371,
+      "avg_latency_ms": 1136.7156902949016,
+      "api_calls_per_second": 0.8797274538724517,
+      "success_rate": 1.0,
+      "records_per_api_call": 525.0
+    },
+    {
+      "test_name": "Medium_15_Days_Parallel_2_Run_2",
+      "config": {
+        "days_per_batch": 7,
+        "max_concurrent_batches": 2
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-16",
+      "date_range_days": 15,
+      "total_duration": 6.211762189865112,
+      "total_records": 3150,
+      "total_api_calls": 6,
+      "rps": 507.10247812439223,
+      "avg_latency_ms": 1035.293698310852,
+      "api_calls_per_second": 0.9659094821416995,
+      "success_rate": 1.0,
+      "records_per_api_call": 525.0
+    },
+    {
+      "test_name": "Medium_15_Days_Parallel_3_Run_1",
+      "config": {
+        "days_per_batch": 5,
+        "max_concurrent_batches": 3
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-16",
+      "date_range_days": 15,
+      "total_duration": 9.106640100479126,
+      "total_records": 2920,
+      "total_api_calls": 8,
+      "rps": 320.64515208483647,
+      "avg_latency_ms": 1138.3300125598907,
+      "api_calls_per_second": 0.8784798687255794,
+      "success_rate": 1.0,
+      "records_per_api_call": 365.0
+    },
+    {
+      "test_name": "Medium_15_Days_Parallel_3_Run_2",
+      "config": {
+        "days_per_batch": 5,
+        "max_concurrent_batches": 3
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-16",
+      "date_range_days": 15,
+      "total_duration": 8.052794218063354,
+      "total_records": 2920,
+      "total_api_calls": 8,
+      "rps": 362.60705550504446,
+      "avg_latency_ms": 1006.5992772579193,
+      "api_calls_per_second": 0.9934439876850534,
+      "success_rate": 1.0,
+      "records_per_api_call": 365.0
+    },
+    {
+      "test_name": "Medium_15_Days_Parallel_4_Run_1",
+      "config": {
+        "days_per_batch": 3,
+        "max_concurrent_batches": 4
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-16",
+      "date_range_days": 15,
+      "total_duration": 11.96006464958191,
+      "total_records": 2460,
+      "total_api_calls": 12,
+      "rps": 205.6845069049016,
+      "avg_latency_ms": 996.6720541318258,
+      "api_calls_per_second": 1.0033390580726909,
+      "success_rate": 1.0,
+      "records_per_api_call": 205.0
+    },
+    {
+      "test_name": "Medium_15_Days_Parallel_4_Run_2",
+      "config": {
+        "days_per_batch": 3,
+        "max_concurrent_batches": 4
+      },
+      "start_date": "2024-01-01",
+      "end_date": "2024-01-16",
+      "date_range_days": 15,
+      "total_duration": 10.336015224456787,
+      "total_records": 2460,
+      "total_api_calls": 12,
+      "rps": 238.00274540803863,
+      "avg_latency_ms": 861.3346020380656,
+      "api_calls_per_second": 1.1609890019904323,
+      "success_rate": 1.0,
+      "records_per_api_call": 205.0
+    }
+  ]
+}
