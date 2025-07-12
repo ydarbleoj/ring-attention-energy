@@ -2,18 +2,18 @@
 
 **High-Performance Energy Data Pipeline + Ring Attention Research Platform**
 
-This project builds a production-grade energy data extraction pipeline capable of **4,000+ RPS** and implements Ring Attention mechanisms for analyzing multi-year energy datasets. The system combines optimized data engineering with cutting-edge ML research.
+This project builds a production-grade energy data ingestion pipeline capable of **4,000+ RPS** and implements Ring Attention mechanisms for analyzing multi-year energy datasets. The system combines optimized data engineering with cutting-edge ML research.
 
 ## 🎯 Project Goals
 
-**Primary Objective**: Build a fast, reliable pipeline for energy data extraction and implement Ring Attention with Reinforcement Learning for energy analysis and ring attention research.
+**Primary Objective**: Build a fast, reliable pipeline for energy data ingestion and implement Ring Attention with Reinforcement Learning for energy analysis and ring attention research.
 
 **Key Outcomes**:
 
 - ✅ **High-Speed Data Pipeline**: 4,051 RPS sustained throughput
 - 🔬 **Ring Attention Research**: Memory-efficient attention for long sequences
 - 📊 **Energy Analysis**: ML models for grid forecasting and optimization
-- 🚀 **Production Ready**: Complete 2019-2025 extraction in 5.1 minutes
+- 🚀 **Production Ready**: Complete 2019-2025 ingestion in 5.1 minutes
 
 ## 📋 Current Status
 
@@ -22,7 +22,7 @@ This project builds a production-grade energy data extraction pipeline capable o
 - **Performance**: 4,051 RPS achieved (12.5x baseline improvement)
 - **Coverage**: Complete 2019-2025 historical data (1.2M+ records)
 - **Reliability**: 100% success rate across all test phases
-- **Infrastructure**: Production-ready extraction system
+- **Infrastructure**: Production-ready ingestion system
 
 ### 🔬 Phase 2: Ring Attention Implementation
 
@@ -41,7 +41,7 @@ This project builds a production-grade energy data extraction pipeline capable o
 ### Prerequisites
 
 ```bash
-python 3.11+
+python 3.12+
 pip install -r requirements.txt
 ```
 
@@ -51,7 +51,7 @@ pip install -r requirements.txt
 # Test mode (January 2024 only - ~30 seconds)
 python scripts/run_full_extraction_monitored.py --test
 
-# Full production extraction (2019-2025 - ~5 minutes)
+# Full production ingestion (2019-2025 - ~5 minutes)
 python scripts/run_full_extraction_monitored.py
 ```
 
@@ -121,42 +121,12 @@ Multi-year   Connection pools  ~150MB      Segmentation  Long sequences
 - **Time Series**: Preprocessing, segmentation, normalization
 - **Distributed**: Multi-device coordination and KV state rotation
 
-## 📁 Project Structure
-
-```
-├── scripts/                          # Entry points and utilities
-│   └── run_full_extraction_monitored.py  # Main extraction script
-├── src/core/                         # Core pipeline components
-│   ├── integrations/eia/             # EIA API client + data loaders
-│   ├── pipeline/orchestrators/       # Extraction orchestrators
-│   └── llms/ring_attention.py        # Ring attention implementation
-├── docs/                             # Documentation and benchmarks
-│   └── extraction_benchmark_documentation.md
-├── data/                             # Data storage (gitignored)
-│   ├── raw/eia/                      # Raw JSON responses
-│   └── processed/                    # Cleaned time series data
-└── tests/                            # Test suites and benchmarks
-```
-
 ## 📚 Documentation
 
-- **[Extraction Benchmarks](docs/extraction_benchmark_documentation.md)**: Complete performance journey and optimization details
+- **[Ingestion Benchmarks](docs/extraction_benchmark_documentation.md)**: Complete performance journey and optimization details
 - **[Data Architecture](docs/data_architecture_plan.md)**: Pipeline design and API optimization strategies
 - **[MLX Integration](docs/mlx_integration_summary.md)**: Ring attention implementation details
-
-## 🤝 Contributing
-
-This project welcomes contributions in:
-
-- **Pipeline Optimization**: API client improvements, concurrency patterns
-- **Ring Attention Research**: Memory efficiency, distributed communication
-- **Energy Applications**: Forecasting models, grid optimization algorithms
-- **Infrastructure**: Monitoring, testing, deployment automation
 
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) for details.
-
----
-
-**Built for engineering teams working on high-performance data pipelines and ML research teams exploring efficient attention mechanisms for long-sequence modeling.**
