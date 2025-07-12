@@ -361,23 +361,40 @@ class BatchTransformOrchestrator(BaseOrchestrator):
             )
 
     def _generate_output_filename(self, input_file: Path) -> Path:
-        """Generate output Parquet filename from input JSON filename."""
+        """Generate output Parquet filename from input JSON filename.
 
-        # Convert: eia_demand_PACW_2024-01-20_to_2024-03-04_20250711_160836.json
-        # To:      eia_demand_PACW_2024-01-20_to_2024-03-04.parquet
+        For year-based structure, we'll collect files by year and combine them later.
+        For now, still create individual files but organize by year.
+        """
 
+        # Extract year from input filename
+        # Format: eia_demand_PACW_2024-01-20_to_2024-03-04_20250711_160836.json
         input_name = input_file.stem  # Remove .json extension
 
+        try:
+            # Parse year from filename
+            parts = input_name.split("_")
+            if len(parts) >= 4:
+                date_part = parts[3]  # Should be start date like "2024-01-20"
+                year = date_part.split("-")[0]
+            else:
+                year = "unknown"
+        except (IndexError, ValueError):
+            year = "unknown"
+
         # Remove timestamp suffix (pattern: _YYYYMMDD_HHMMSS)
-        parts = input_name.split("_")
         if len(parts) >= 7:
             # Keep everything except the last part (timestamp)
             clean_name = "_".join(parts[:-1])
         else:
             clean_name = input_name
 
+        # Organize by year subdirectory for now (we'll combine later)
+        year_dir = self.interim_data_path / year
+        year_dir.mkdir(exist_ok=True)
+
         output_filename = f"{clean_name}.parquet"
-        return self.interim_data_path / output_filename
+        return year_dir / output_filename
 
     def _is_empty_file(self, file_path: Path) -> bool:
         """Quick check if a JSON file has no data records."""

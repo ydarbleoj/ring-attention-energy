@@ -470,3 +470,135 @@ class EIAGenerationResponse(BaseModel):
 # Type aliases for backwards compatibility
 EIADemandRecord = DemandRecord
 EIAGenerationRecord = GenerationRecord
+
+
+# =============================================================================
+# API Endpoint Configuration
+# =============================================================================
+
+from dataclasses import dataclass
+
+
+@dataclass
+class EIAEndpoint:
+    """Configuration for an EIA API endpoint."""
+    path: str
+    required_params: Dict[str, str]
+    optional_params: Dict[str, str]
+    description: str
+
+
+class EIAEndpoints:
+    """EIA API endpoint schemas and parameter definitions."""
+
+    # Base endpoint configurations
+    ENDPOINTS = {
+        'demand': EIAEndpoint(
+            path="/electricity/rto/region-data/data/",
+            required_params={
+                'frequency': 'hourly',
+                'data[0]': 'value',
+                'facets[type][]': 'D',  # Demand
+                'start': 'YYYY-MM-DD',
+                'end': 'YYYY-MM-DD',
+                'sort[0][column]': 'period',
+                'sort[0][direction]': 'asc'
+            },
+            optional_params={
+                'facets[respondent][]': 'region_code',  # Single region
+                'facets[respondent][0]': 'region_code_1',  # Multi-region format
+                'facets[respondent][1]': 'region_code_2',  # Multi-region format
+                'length': '5000',
+                'offset': '0'
+            },
+            description="Electricity demand data by region"
+        ),
+
+        'generation': EIAEndpoint(
+            path="/electricity/rto/fuel-type-data/data/",
+            required_params={
+                'frequency': 'hourly',
+                'data[0]': 'value',
+                'start': 'YYYY-MM-DD',
+                'end': 'YYYY-MM-DD',
+                'sort[0][column]': 'period',
+                'sort[0][direction]': 'asc'
+            },
+            optional_params={
+                'facets[respondent][]': 'region_code',  # Single region
+                'facets[respondent][0]': 'region_code_1',  # Multi-region format
+                'facets[respondent][1]': 'region_code_2',  # Multi-region format
+                'length': '5000',
+                'offset': '0'
+            },
+            description="Electricity generation data by fuel type and region"
+        )
+    }
+
+    @classmethod
+    def get_demand_params(cls, regions: List[str], start_date: str, end_date: str) -> Dict[str, str]:
+        """
+        Build parameters for demand data request.
+
+        Args:
+            regions: List of region codes (e.g., ['PACW', 'ERCO'])
+            start_date: Start date in YYYY-MM-DD format
+            end_date: End date in YYYY-MM-DD format
+
+        Returns:
+            Dictionary of API parameters
+        """
+        endpoint = cls.ENDPOINTS['demand']
+        params = endpoint.required_params.copy()
+
+        # Update with actual values
+        params['start'] = start_date
+        params['end'] = end_date
+
+        # Handle single vs multiple regions
+        if len(regions) == 1:
+            params['facets[respondent][]'] = regions[0]
+        else:
+            # Multi-region format
+            for i, region in enumerate(regions):
+                params[f'facets[respondent][{i}]'] = region
+
+        return params
+
+    @classmethod
+    def get_generation_params(cls, regions: List[str], start_date: str, end_date: str) -> Dict[str, str]:
+        """
+        Build parameters for generation data request.
+
+        Args:
+            regions: List of region codes
+            start_date: Start date in YYYY-MM-DD format
+            end_date: End date in YYYY-MM-DD format
+
+        Returns:
+            Dictionary of API parameters
+        """
+        endpoint = cls.ENDPOINTS['generation']
+        params = endpoint.required_params.copy()
+
+        # Update with actual values
+        params['start'] = start_date
+        params['end'] = end_date
+
+        # Handle single vs multiple regions
+        if len(regions) == 1:
+            params['facets[respondent][]'] = regions[0]
+        else:
+            # Multi-region format
+            for i, region in enumerate(regions):
+                params[f'facets[respondent][{i}]'] = region
+
+        return params
+
+    @classmethod
+    def get_endpoint_path(cls, data_type: str) -> str:
+        """Get the API endpoint path for a data type."""
+        if data_type not in cls.ENDPOINTS:
+            raise ValueError(f"Unknown data type: {data_type}. Available: {list(cls.ENDPOINTS.keys())}")
+
+        return cls.ENDPOINTS[data_type].path

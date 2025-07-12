@@ -101,38 +101,34 @@ class EIATransformService:
             # Return empty DataFrame with expected schema
             return pl.DataFrame(schema=self._get_schema())
 
-        # Flatten records and add metadata
+        # Flatten records and add metadata - include ALL records for validation
         flattened_records = []
 
-        for record in records:
-            # Skip malformed records (like those with only "value-units")
-            if not self._is_valid_record(record):
-                continue
+        # Determine data type from metadata for unified schema
+        data_type_from_metadata = metadata.get("data_type", "unknown")
 
+        for record in records:
+            # Process ALL records, even potentially malformed ones
             flattened = {
-                # Core energy data
-                "datetime": self._parse_datetime(record.get("period")),
+                # Core energy data (unified schema for both demand & generation)
+                "timestamp": self._parse_datetime(record.get("period")),
                 "region": record.get("respondent"),
-                "region_name": record.get("respondent-name"),
-                "data_type": record.get("type"),
-                "data_type_name": record.get("type-name"),
+                "data_type": data_type_from_metadata,  # Use metadata for consistency
+                "fuel_type": record.get("fueltype"),    # Nullable - only for generation
+                "type_name": record.get("type-name"),
                 "value": self._parse_numeric_value(record.get("value")),
                 "value_units": record.get("value-units"),
 
-                # Metadata columns (added to each record for easy filtering/analysis)
-                "source_file": source_file.name,
-                "extraction_timestamp": metadata.get("timestamp"),
-                "api_endpoint": metadata.get("api_endpoint"),
-                "extraction_date_range_start": metadata.get("start_date"),
-                "extraction_date_range_end": metadata.get("end_date"),
-                "record_count_in_file": metadata.get("record_count"),
-                "extraction_success": metadata.get("success", True)
+                # Source metadata (minimal for traceability)
+                "source_file": source_file.name
             }
             flattened_records.append(flattened)
 
         # Create DataFrame
         if flattened_records:
             df = pl.DataFrame(flattened_records)
+            # Ensure consistent schema - cast fuel_type to String even if all null
+            df = df.with_columns(pl.col("fuel_type").cast(pl.Utf8))
         else:
             df = pl.DataFrame(schema=self._get_schema())
 
@@ -140,7 +136,8 @@ class EIATransformService:
 
     def _is_valid_record(self, record: Dict) -> bool:
         """Check if a record has minimum required fields."""
-        required_fields = ["period", "respondent", "type", "value"]
+        # Updated for unified schema - both demand and generation need these core fields
+        required_fields = ["period", "respondent", "value"]
         return all(field in record and record[field] is not None for field in required_fields)
 
     def _parse_datetime(self, period_str: Optional[str]) -> Optional[datetime]:
@@ -174,22 +171,16 @@ class EIATransformService:
             return None
 
     def _get_schema(self) -> Dict[str, pl.DataType]:
-        """Get expected DataFrame schema."""
+        """Get expected DataFrame schema for unified demand/generation data."""
         return {
-            "datetime": pl.Datetime,
+            "timestamp": pl.Datetime,
             "region": pl.Utf8,
-            "region_name": pl.Utf8,
             "data_type": pl.Utf8,
-            "data_type_name": pl.Utf8,
+            "fuel_type": pl.Utf8,      # Nullable - only for generation
+            "type_name": pl.Utf8,
             "value": pl.Float64,
             "value_units": pl.Utf8,
-            "source_file": pl.Utf8,
-            "extraction_timestamp": pl.Utf8,
-            "api_endpoint": pl.Utf8,
-            "extraction_date_range_start": pl.Utf8,
-            "extraction_date_range_end": pl.Utf8,
-            "record_count_in_file": pl.Int64,
-            "extraction_success": pl.Boolean
+            "source_file": pl.Utf8
         }
 
     def _validate_and_clean_data(self, df: pl.DataFrame) -> Tuple[pl.DataFrame, Dict[str, Any]]:
@@ -199,28 +190,43 @@ class EIATransformService:
         quality_issues = []
 
         # Check for missing critical values
-        null_datetime_count = df.filter(pl.col("datetime").is_null()).height
+        null_timestamp_count = df.filter(pl.col("timestamp").is_null()).height
         null_value_count = df.filter(pl.col("value").is_null()).height
+        null_region_count = df.filter(pl.col("region").is_null()).height
 
-        if null_datetime_count > 0:
-            quality_issues.append(f"{null_datetime_count} records with null datetime")
+        if null_timestamp_count > 0:
+            quality_issues.append(f"{null_timestamp_count} records with null timestamp")
 
         if null_value_count > 0:
             quality_issues.append(f"{null_value_count} records with null value")
 
+        if null_region_count > 0:
+            quality_issues.append(f"{null_region_count} records with null region")
+
         # Remove records with critical missing data
         df_cleaned = df.filter(
-            pl.col("datetime").is_not_null() &
-            pl.col("value").is_not_null()
+            pl.col("timestamp").is_not_null() &
+            pl.col("value").is_not_null() &
+            pl.col("region").is_not_null()
         )
 
-        # Check for duplicate timestamps
-        duplicate_count = len(df_cleaned) - df_cleaned.unique(subset=["datetime", "region"]).height
-        if duplicate_count > 0:
-            quality_issues.append(f"{duplicate_count} duplicate datetime/region combinations")
+        # Check for duplicate timestamps (accounting for fuel_type for generation data)
+        # For demand data, fuel_type will be null, so we group by timestamp+region
+        # For generation data, we need timestamp+region+fuel_type to be unique
+        has_fuel_types = df_cleaned.filter(pl.col("fuel_type").is_not_null()).height > 0
 
-        # Remove duplicates (keep first occurrence)
-        df_cleaned = df_cleaned.unique(subset=["datetime", "region"], keep="first")
+        if has_fuel_types:
+            # Generation data - check for duplicates including fuel_type
+            duplicate_count = len(df_cleaned) - df_cleaned.unique(subset=["timestamp", "region", "fuel_type"], maintain_order=True).height
+            if duplicate_count > 0:
+                quality_issues.append(f"{duplicate_count} duplicate timestamp/region/fuel_type combinations")
+            df_cleaned = df_cleaned.unique(subset=["timestamp", "region", "fuel_type"], keep="first")
+        else:
+            # Demand data - check for duplicates without fuel_type
+            duplicate_count = len(df_cleaned) - df_cleaned.unique(subset=["timestamp", "region"], maintain_order=True).height
+            if duplicate_count > 0:
+                quality_issues.append(f"{duplicate_count} duplicate timestamp/region combinations")
+            df_cleaned = df_cleaned.unique(subset=["timestamp", "region"], keep="first")
 
         final_count = len(df_cleaned)
         records_dropped = initial_count - final_count
@@ -251,9 +257,9 @@ class EIATransformService:
                 "columns": df.columns,
                 "schema": dict(zip(df.columns, [str(dtype) for dtype in df.dtypes])),
                 "date_range": {
-                    "start": df.select(pl.col("datetime").min()).item(),
-                    "end": df.select(pl.col("datetime").max()).item()
-                } if "datetime" in df.columns and len(df) > 0 else None,
+                    "start": df.select(pl.col("timestamp").min()).item(),
+                    "end": df.select(pl.col("timestamp").max()).item()
+                } if "timestamp" in df.columns and len(df) > 0 else None,
                 "regions": df.select(pl.col("region").unique()).to_series().to_list() if "region" in df.columns else [],
                 "data_types": df.select(pl.col("data_type").unique()).to_series().to_list() if "data_type" in df.columns else []
             }
