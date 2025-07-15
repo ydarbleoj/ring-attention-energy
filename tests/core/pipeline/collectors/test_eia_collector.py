@@ -1,23 +1,18 @@
-"""Tests for EIA data collector with retry logic and comprehensive data collection."""
+"""Tests for simplified EIA data collector focused on raw data extraction."""
 
 import pytest
-import polars as pl
-import asyncio
-from unittest.mock import Mock, patch, AsyncMock
+from unittest.mock import Mock, patch
 from pathlib import Path
 import tempfile
 import shutil
-from datetime import datetime
+from datetime import date, datetime
+import json
 
 from src.core.pipeline.collectors.eia_collector import EIACollector
-from src.core.pipeline.collectors.base import DataCollectionResult
-from src.core.integrations.eia.service.data_loader import DataLoader
-from src.core.integrations.eia.client import EIAClient
-from tests.vcr_config import create_vcr_config
 
 
 class TestEIACollector:
-    """Test EIA collector functionality."""
+    """Test simplified EIA collector functionality."""
 
     @pytest.fixture
     def temp_storage_path(self):
@@ -27,26 +22,195 @@ class TestEIACollector:
         shutil.rmtree(temp_dir)
 
     @pytest.fixture
-    def collector_config(self, temp_storage_path):
-        """Create collector configuration."""
-        return {
-            "storage_path": str(temp_storage_path),
-            "timeout": 30,
-            "retry": {
-                "max_retries": 3,
-                "initial_delay": 1.0,
-                "max_delay": 60.0,
-                "exponential_base": 2.0,
-                "jitter": True
-            }
-        }
-
-    @pytest.fixture
     def mock_api_key(self):
         """Mock API key for testing."""
         return "test_api_key_12345678"
 
     @pytest.fixture
+    def mock_config(self):
+        """Mock configuration."""
+        return {
+            "eia_api_key": "test_api_key_12345678",
+            "eia_base_url": "https://api.eia.gov/v2",
+            "eia_rate_limit_delay": 0.1
+        }
+
+    @pytest.fixture
+    def eia_collector(self, mock_api_key, mock_config, temp_storage_path):
+        """Create EIA collector instance with mocked services."""
+        with patch('src.core.pipeline.collectors.eia_collector.EIADataService') as mock_service, \
+             patch('src.core.pipeline.collectors.eia_collector.RawDataLoader') as mock_loader:
+
+            collector = EIACollector(
+                api_key=mock_api_key,
+                config=mock_config,
+                raw_data_path=str(temp_storage_path)
+            )
+
+            # Store mocks for access in tests
+            collector._mock_service = mock_service.return_value
+            collector._mock_loader = mock_loader.return_value
+
+            return collector
+
+    @pytest.fixture
+    def sample_api_response(self):
+        """Sample API response data."""
+        return {
+            "response": {
+                "data": [
+                    {
+                        "period": "2024-01-01T00",
+                        "respondent": "PACW",
+                        "respondent-name": "PacifiCorp West",
+                        "type": "D",
+                        "type-name": "Demand",
+                        "value": "2455",
+                        "value-units": "megawatthours"
+                    },
+                    {
+                        "period": "2024-01-01T01",
+                        "respondent": "ERCO",
+                        "respondent-name": "Electric Reliability Council of Texas",
+                        "type": "D",
+                        "type-name": "Demand",
+                        "value": "3200",
+                        "value-units": "megawatthours"
+                    }
+                ],
+                "total": "2"
+            }
+        }
+
+    def test_collector_initialization(self, eia_collector, mock_api_key, temp_storage_path):
+        """Test collector initialization."""
+        assert eia_collector.api_key == mock_api_key
+        assert eia_collector.raw_data_path == Path(temp_storage_path)
+        assert eia_collector.DEFAULT_REGIONS == ['PACW', 'ERCO', 'CAL', 'TEX', 'MISO']
+
+    def test_collect_batch_data_sync_success(self, eia_collector, sample_api_response, temp_storage_path):
+        """Test successful batch data collection."""
+        # Setup mocks
+        eia_collector._mock_service.get_raw_data.return_value = sample_api_response
+
+        mock_file_path = Path(temp_storage_path) / "test_file.json"
+        eia_collector._mock_loader.save_raw_data.return_value = mock_file_path
+        eia_collector._mock_loader.load_raw_file.return_value = {
+            "metadata": {
+                "record_count": 2,
+                "response_size_bytes": 1024
+            }
+        }
+
+        # Test the method
+        result = eia_collector.collect_batch_data_sync(
+            data_type="demand",
+            start_date=date(2024, 1, 1),
+            end_date=date(2024, 1, 7)
+        )
+
+        # Verify results
+        assert result['success'] is True
+        assert result['data_type'] == "demand"
+        assert result['total_records'] == 2
+        assert result['total_bytes'] == 1024
+        assert result['api_calls'] == 1
+        assert len(result['file_paths']) == 1
+
+        # Verify API call was made correctly
+        eia_collector._mock_service.get_raw_data.assert_called_once_with(
+            data_type="demand",
+            regions=['PACW', 'ERCO', 'CAL', 'TEX', 'MISO'],
+            start_date="2024-01-01",
+            end_date="2024-01-07"
+        )
+
+    def test_collect_batch_data_sync_with_custom_regions(self, eia_collector, sample_api_response):
+        """Test batch collection with custom regions."""
+        # Setup mocks
+        eia_collector._mock_service.get_raw_data.return_value = sample_api_response
+        eia_collector._mock_loader.save_raw_data.return_value = Path("test.json")
+        eia_collector._mock_loader.load_raw_file.return_value = {
+            "metadata": {"record_count": 2, "response_size_bytes": 1024}
+        }
+
+        custom_regions = ['PACW', 'ERCO']
+
+        result = eia_collector.collect_batch_data_sync(
+            data_type="generation",
+            start_date=date(2024, 1, 1),
+            end_date=date(2024, 1, 7),
+            regions=custom_regions
+        )
+
+        assert result['success'] is True
+        assert result['regions_processed'] == custom_regions
+
+        # Verify correct regions were used
+        eia_collector._mock_service.get_raw_data.assert_called_once_with(
+            data_type="generation",
+            regions=custom_regions,
+            start_date="2024-01-01",
+            end_date="2024-01-07"
+        )
+
+    def test_collect_batch_data_sync_error_handling(self, eia_collector):
+        """Test error handling in batch collection."""
+        # Setup mock to raise exception
+        eia_collector._mock_service.get_raw_data.side_effect = Exception("API Error")
+
+        result = eia_collector.collect_batch_data_sync(
+            data_type="demand",
+            start_date=date(2024, 1, 1),
+            end_date=date(2024, 1, 7)
+        )
+
+        assert result['success'] is False
+        assert result['error_count'] == 1
+        assert len(result['errors']) == 1
+        assert "API Error" in result['errors'][0]
+        assert result['files_created'] == 0
+
+    def test_generate_date_batches(self, eia_collector):
+        """Test date batch generation."""
+        start_date = date(2024, 1, 1)
+        end_date = date(2024, 1, 15)
+        batch_days = 7
+
+        batches = eia_collector._generate_date_batches(start_date, end_date, batch_days)
+
+        assert len(batches) == 3  # 1-7, 8-14, 15-15
+        assert batches[0] == (date(2024, 1, 1), date(2024, 1, 7))
+        assert batches[1] == (date(2024, 1, 8), date(2024, 1, 14))
+        assert batches[2] == (date(2024, 1, 15), date(2024, 1, 15))
+
+    @patch('concurrent.futures.ThreadPoolExecutor')
+    def test_collect_date_range_batch_basic(self, mock_executor, eia_collector):
+        """Test basic date range batch collection setup."""
+        # Mock the executor to avoid actual threading in tests
+        mock_future = Mock()
+        mock_future.result.return_value = {
+            'success': True,
+            'total_records': 100,
+            'total_bytes': 2048,
+            'files_created': 1,
+            'api_calls': 1,
+            'errors': []
+        }
+
+        mock_executor.return_value.__enter__.return_value.submit.return_value = mock_future
+        mock_executor.return_value.__enter__.return_value.as_completed.return_value = [mock_future]
+
+        result = eia_collector.collect_date_range_batch(
+            start_date=date(2024, 1, 1),
+            end_date=date(2024, 1, 7),
+            batch_days=7
+        )
+
+        assert result['success'] is True
+        assert result['total_records'] == 200  # 2 data types * 100 records each
+        assert 'rps' in result
+        assert result['successful_batches'] == 2  # demand + generation
     def eia_collector(self, mock_api_key, collector_config):
         """Create EIA collector instance with mocked data loader."""
         with patch('src.core.pipeline.collectors.eia_collector.DataLoader') as mock_data_loader:
