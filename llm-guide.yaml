@@ -153,6 +153,10 @@ development_workflow:
         - "Integration with ring attention for planning"
 
 testing_strategy:
+  basics:
+    - "No tests or demos in root"
+    - "Tests and demos should be in tests/"
+
   unit_tests:
     - "Ring attention mathematical correctness"
     - "Causal masking across segments"

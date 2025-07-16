@@ -114,7 +114,7 @@ class StorageConfig:
 
     # Base paths
     storage_root: str = "data/processed"
-    cache_root: str = "data/cache"
+    cache_root: str = "data/raw"
     interim_root: str = "data/interim"
 
     # Storage formats
