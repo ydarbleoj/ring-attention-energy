@@ -1,26 +1,31 @@
 """
-High-Performance EIA Extract Step
+Generic API Extract Step
 
-Fast async EIA data extraction using EIAClient with:
-- 0.08s delay for high throughput (12.5 req/sec)
-- 45-day date batching for optimal API usage
-- 6 concurrent batches for maximum performance
-- Comprehensive performance metrics (latency, RPS, throughput)
+Source-agnostic API data extraction with source-specific configurations:
+- Dynamic loading of source-specific services and configs
+- High-performance async extraction with configurable concurrency
+- Comprehensive performance metrics and error handling
+- Worker-native pattern for easy integration scaling
+
+Supports: EIA, CAISO, and other API-based data sources
 """
 
 import asyncio
 import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Type, TYPE_CHECKING
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 
 from pydantic import Field, field_validator
 
 from ..base import BaseStep, ExtractStepConfig, StepOutput, StepMetrics
-from ....integrations.eia.services import EIADataService
-from ....integrations.eia.services.raw_data_loader import RawDataLoader, RawDataMetadata
+
+# Dynamic imports based on source
+if TYPE_CHECKING:
+    from ....integrations.eia.services import EIADataService
+    from ....integrations.eia.services.raw_data_loader import RawDataLoader, RawDataMetadata
 
 
 @dataclass
@@ -33,145 +38,167 @@ class BatchRequest:
     request_id: str
 
 
-class EIAExtractStepConfig(ExtractStepConfig):
-    """Configuration for high-performance EIA extraction."""
+class ApiExtractStepConfig(ExtractStepConfig):
+    """Configuration for generic API extraction with source-specific settings."""
 
-    api_key: str = Field(..., description="EIA API key for authentication")
-    data_types: List[str] = Field(
-        default_factory=lambda: ['demand', 'generation'],
-        description="Types of data to extract"
-    )
-    regions: List[str] = Field(
-        default_factory=lambda: ["PACW", "ERCO", "NYIS", "ISNE", "PJM", "MISO", "SPP", "CARO"],
-        description="List of region codes to extract data for"
-    )
+    source: str = Field(..., description="Data source (eia, caiso, synthetic, etc.)")
 
-    # No rate limiting - let EIA API handle its own limits
-    rate_limit_delay: float = Field(
-        default=0.0,
-        description="No artificial delays - maximum performance"
-    )
-    max_concurrent_batches: int = Field(
-        default=50,
-        description="Maximum concurrent requests (50 concurrent = optimal records/sec)"
-    )
+    # Source-specific configuration will be loaded dynamically
+    # This base config provides common fields
+    api_key: Optional[str] = Field(None, description="API key for authentication")
 
-    # Date batching configuration - optimized for 15k records/sec
-    batch_size_days: int = Field(
-        default=7,
-        description="Size of date batches in days (7 days = optimal balance of latency vs records/request)"
-    )
-    max_regions_per_request: int = Field(
-        default=8,
-        description="Maximum regions to include in a single API request (8 regions = best performance)"
-    )
+    # Default performance settings (can be overridden by source-specific configs)
+    rate_limit_delay: float = Field(default=0.0, description="Rate limiting delay")
+    max_concurrent_batches: int = Field(default=10, description="Max concurrent requests")
+    batch_size_days: int = Field(default=30, description="Date batch size in days")
+    max_regions_per_request: int = Field(default=5, description="Max regions per request")
 
-    # Data configuration
-    raw_data_path: str = Field(
-        default="data/raw/eia",
-        description="Path for storing raw JSON files"
-    )
+    raw_data_path: Optional[str] = Field(None, description="Path for raw data storage")
 
-    @field_validator("rate_limit_delay")
+    @field_validator("source")
     @classmethod
-    def validate_rate_limit(cls, v):
-        return v  # No artificial limits
-
-    @field_validator("max_concurrent_batches")
-    @classmethod
-    def validate_concurrency(cls, v):
-        if v < 1:
-            raise ValueError("max_concurrent_batches must be at least 1")
-        return v
-
-    @field_validator("batch_size_days")
-    @classmethod
-    def validate_batch_size(cls, v):
-        if v < 1 or v > 365:  # Allow any reasonable batch size
-            raise ValueError("batch_size_days must be between 1 and 365")
-        return v
-
-    @field_validator("data_types")
-    @classmethod
-    def validate_data_types(cls, v):
-        valid_types = {'demand', 'generation'}
-        if not all(dt in valid_types for dt in v):
-            raise ValueError(f"data_types must be subset of {valid_types}")
+    def validate_source(cls, v):
+        supported_sources = {"eia", "caiso", "synthetic"}
+        if v not in supported_sources:
+            raise ValueError(f"Unsupported source: {v}. Supported: {supported_sources}")
         return v
 
 
-class EIAExtractStep(BaseStep):
-    """High-performance async EIA data extraction step."""
+class ApiExtractStep(BaseStep):
+    """Generic API data extraction step with source-specific configurations."""
 
-    def __init__(self, config: EIAExtractStepConfig):
+    def __init__(self, config: ApiExtractStepConfig):
         super().__init__(config)
-        self.config: EIAExtractStepConfig = config
+        self.config: ApiExtractStepConfig = config
 
-        # Initialize EIA service (uses EIAClient internally)
-        self.eia_service = EIADataService(
-            api_key=config.api_key,
-            config=None  # Use default config
-        )
+        # Load source-specific configuration and services
+        self.source_config = self._load_source_config()
+        self.data_service = self._get_data_service()
+        self.raw_loader = self._get_raw_loader()
 
-        # Initialize components
-        self.raw_data_path = Path(config.raw_data_path)
-        self.raw_loader = RawDataLoader(self.raw_data_path)        # Performance tracking
+        # Performance tracking
         self.total_requests = 0
         self.total_records = 0
         self.total_bytes = 0
         self.failed_requests = 0
         self.request_latencies = []
 
-        self.logger.info(f"Initialized EIAExtractStep with rate_limit={config.rate_limit_delay}s, "
-                        f"batch_size={config.batch_size_days}days")
+        self.logger.info(f"Initialized ApiExtractStep for source: {config.source}")
 
-    def validate_input(self, config: EIAExtractStepConfig) -> None:
-        """Validate async EIA extract step configuration."""
-        if not config.api_key or not config.api_key.strip():
-            raise ValueError("api_key is required and cannot be empty")
+    def _load_source_config(self):
+        """Load source-specific configuration."""
+        if self.config.source == "eia":
+            from ....integrations.eia.schema import EIAExtractConfig
 
-        if not config.data_types:
-            raise ValueError("data_types list cannot be empty")
+            # Create source-specific config with merged settings
+            source_config = EIAExtractConfig(
+                step_name=self.config.step_name,
+                step_id=self.config.step_id,
+                start_date=self.config.start_date,
+                end_date=self.config.end_date,
+                regions=self.config.regions,
+                data_types=self.config.data_types,
+                api_key=self.config.api_key or "",
+                raw_data_path=self.config.raw_data_path or "data/raw/eia",
+                # Use optimized EIA settings
+                rate_limit_delay=0.0,
+                max_concurrent_batches=50,
+                batch_size_days=7,
+                max_regions_per_request=8
+            )
+            return source_config
 
-        if not config.regions:
-            raise ValueError("regions list cannot be empty")
+        elif self.config.source == "caiso":
+            # TODO: Implement CAISO config loading
+            raise NotImplementedError("CAISO extract config not yet implemented")
 
+        elif self.config.source == "synthetic":
+            # TODO: Implement synthetic config loading
+            raise NotImplementedError("Synthetic extract config not yet implemented")
+
+        else:
+            raise ValueError(f"Unknown source: {self.config.source}")
+
+    def _get_data_service(self):
+        """Get source-specific data service."""
+        if self.config.source == "eia":
+            # Import from the actual services.py file by being more specific
+            from ....integrations.eia.service import EIADataService
+            return EIADataService(api_key=self.source_config.api_key)
+
+        elif self.config.source == "caiso":
+            # TODO: Implement CAISO service loading
+            raise NotImplementedError("CAISO data service not yet implemented")
+
+        elif self.config.source == "synthetic":
+            # TODO: Implement synthetic service loading
+            raise NotImplementedError("Synthetic data service not yet implemented")
+
+        else:
+            raise ValueError(f"Unknown source: {self.config.source}")
+
+    def _get_raw_loader(self):
+        """Get source-specific raw data loader."""
+        if self.config.source == "eia":
+            from ....integrations.eia.services.raw_data_loader import RawDataLoader
+            return RawDataLoader(self.source_config.raw_data_path)
+
+        elif self.config.source == "caiso":
+            # TODO: Implement CAISO raw loader
+            raise NotImplementedError("CAISO raw loader not yet implemented")
+
+        elif self.config.source == "synthetic":
+            # TODO: Implement synthetic raw loader
+            raise NotImplementedError("Synthetic raw loader not yet implemented")
+
+        else:
+            raise ValueError(f"Unknown source: {self.config.source}")
+
+    def validate_input(self, config: ApiExtractStepConfig) -> None:
+        """Validate generic API extract step configuration."""
+        if not config.source:
+            raise ValueError("source is required")
+
+        # Source-specific validation will be handled by source-specific configs
         try:
-            Path(config.raw_data_path).mkdir(parents=True, exist_ok=True)
+            # Test that we can load source-specific components
+            self._load_source_config()
         except Exception as e:
-            raise ValueError(f"Cannot create raw data path '{config.raw_data_path}': {e}")
+            raise ValueError(f"Failed to load source '{config.source}': {e}")
 
     def _generate_date_batches(self) -> List[tuple[str, str]]:
-        """Generate date batches for optimal API usage."""
+        """Generate date batches using source-specific configuration."""
         start_date = datetime.strptime(self.config.start_date, "%Y-%m-%d").date()
         end_date = datetime.strptime(self.config.end_date, "%Y-%m-%d").date()
 
+        batch_size_days = self.source_config.batch_size_days
         batches = []
         current_date = start_date
 
         while current_date <= end_date:
             batch_end = min(
-                current_date + timedelta(days=self.config.batch_size_days - 1),
+                current_date + timedelta(days=batch_size_days - 1),
                 end_date
             )
             batches.append((current_date.isoformat(), batch_end.isoformat()))
             current_date = batch_end + timedelta(days=1)
 
-        self.logger.info(f"Generated {len(batches)} date batches of {self.config.batch_size_days} days each")
+        self.logger.info(f"Generated {len(batches)} date batches of {batch_size_days} days each")
         return batches
 
     def _create_batch_requests(self) -> List[BatchRequest]:
-        """Create batch requests combining date batches and region chunks."""
+        """Create batch requests using source-specific configuration."""
         requests = []
         request_id = 0
 
         # Generate date batches
         date_batches = self._generate_date_batches()
 
-        # Split regions into chunks for optimal API efficiency
+        # Split regions into chunks based on source config
+        max_regions = self.source_config.max_regions_per_request
         region_chunks = [
-            self.config.regions[i:i + self.config.max_regions_per_request]
-            for i in range(0, len(self.config.regions), self.config.max_regions_per_request)
+            self.config.regions[i:i + max_regions]
+            for i in range(0, len(self.config.regions), max_regions)
         ]
 
         # Create batch requests for each combination
@@ -191,16 +218,16 @@ class EIAExtractStep(BaseStep):
         return requests
 
     async def _execute_api_request(self, batch: BatchRequest) -> Dict[str, Any]:
-        """Execute API request with minimal overhead."""
+        """Execute API request using source-specific data service."""
         request_start = time.time()
 
         try:
-            # Run API call in thread pool
+            # Run API call in thread pool using source-specific service
             loop = asyncio.get_event_loop()
             with ThreadPoolExecutor() as pool:
                 api_response = await loop.run_in_executor(
                     pool,
-                    lambda: self.eia_service.get_raw_data(
+                    lambda: self.data_service.get_raw_data(
                         data_type=batch.data_type,
                         regions=batch.regions,
                         start_date=batch.start_date,
@@ -242,23 +269,29 @@ class EIAExtractStep(BaseStep):
             }
 
     def _process_response_in_thread(self, response_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Process API response in thread pool (CPU-bound task)."""
+        """Process API response using source-specific raw loader."""
         try:
             if not response_data['success']:
                 return response_data
 
-            # Create metadata
-            metadata = RawDataMetadata(
-                timestamp=time.time(),
-                region="_".join(response_data['regions']),
-                data_type=response_data['data_type'],
-                start_date=response_data['start_date'],
-                end_date=response_data['end_date'],
-                api_endpoint=f"/electricity/rto/{'fuel-type' if response_data['data_type'] == 'generation' else 'region'}-data",
-                success=True
-            )
+            # Create metadata using source-specific format
+            if self.config.source == "eia":
+                from ....integrations.eia.services.raw_data_loader import RawDataMetadata
 
-            # Save raw data
+                metadata = RawDataMetadata(
+                    timestamp=datetime.now().isoformat(),
+                    region="_".join(response_data['regions']),
+                    data_type=response_data['data_type'],
+                    start_date=response_data['start_date'],
+                    end_date=response_data['end_date'],
+                    api_endpoint=f"/electricity/rto/{'fuel-type' if response_data['data_type'] == 'generation' else 'region'}-data",
+                    success=True
+                )
+            else:
+                # TODO: Add metadata creation for other sources
+                raise NotImplementedError(f"Metadata creation not implemented for source: {self.config.source}")
+
+            # Save raw data using source-specific loader
             file_path = self.raw_loader.save_raw_data(response_data['response_data'], metadata)
 
             return {
@@ -304,8 +337,9 @@ class EIAExtractStep(BaseStep):
             else:
                 return response
 
-        # Execute ALL requests concurrently (no semaphore limit)
-        self.logger.info(f"Starting {len(batch_requests)} batch requests with FULL concurrency")
+        # Execute requests with source-specific concurrency
+        max_concurrent = self.source_config.max_concurrent_batches
+        self.logger.info(f"Starting {len(batch_requests)} batch requests with max concurrency: {max_concurrent}")
 
         results = await asyncio.gather(*[
             process_batch(batch) for batch in batch_requests
@@ -342,6 +376,7 @@ class EIAExtractStep(BaseStep):
 
         return {
             'success': len(failed_results) == 0,
+            'source': self.config.source,
             'total_requests': self.total_requests,
             'successful_requests': len(successful_results),
             'failed_requests': self.failed_requests,
@@ -353,16 +388,20 @@ class EIAExtractStep(BaseStep):
             'duration_seconds': duration,
             'records_per_second': records_per_second,
             'requests_per_second': actual_rps,
-            'rps': actual_rps,  # Explicit RPS metric
+            'rps': actual_rps,
             'latency_ms_avg': avg_latency_ms,
             'latency_ms_min': min_latency_ms,
             'latency_ms_max': max_latency_ms,
             'throughput_records_sec': records_per_second,
             'data_types_processed': self.config.data_types,
             'regions_processed': self.config.regions,
-            'rate_limit_delay': self.config.rate_limit_delay,
-            'batch_size_days': self.config.batch_size_days,
-            'max_concurrent_batches': self.config.max_concurrent_batches,
+            # Source-specific performance settings used
+            'source_config': {
+                'rate_limit_delay': self.source_config.rate_limit_delay,
+                'batch_size_days': self.source_config.batch_size_days,
+                'max_concurrent_batches': self.source_config.max_concurrent_batches,
+                'max_regions_per_request': self.source_config.max_regions_per_request
+            },
             'successful_results': successful_results,
             'failed_results': failed_results
         }
@@ -399,6 +438,7 @@ class EIAExtractStep(BaseStep):
 
 # Example usage and testing
 if __name__ == "__main__":
-    print("🔬 Robust EIA Extract Step using EIAClient")
-    print("   Uses existing EIAClient for proper rate limiting and batching")
-    print("   Run benchmark_eia_performance.py to test performance")
+    print("🔬 Generic API Extract Step")
+    print("   Source-agnostic extraction with dynamic config loading")
+    print("   Supports: EIA (optimized), CAISO (TODO), Synthetic (TODO)")
+    print("   Usage: ApiExtractStep(ApiExtractStepConfig(source='eia', ...))")

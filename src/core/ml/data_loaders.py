@@ -7,7 +7,7 @@ from typing import Iterator, List, Optional, Tuple, Dict, Any, Union
 from pathlib import Path
 import logging
 
-from ..integrations.eia.service import DataLoader, StorageManager
+from ..integrations.eia.services import DataLoader, StorageManager
 from .sequence_generator import SequenceGenerator, RingAttentionSequenceGenerator
 
 logger = logging.getLogger(__name__)

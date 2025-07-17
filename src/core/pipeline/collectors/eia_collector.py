@@ -6,7 +6,7 @@ from datetime import date, timedelta
 from pathlib import Path
 
 from ...integrations.eia.services import EIADataService
-from ...integrations.eia.service.raw_data_loader import RawDataLoader, RawDataMetadata
+from ...integrations.eia.services.raw_data_loader import RawDataLoader, RawDataMetadata
 
 logger = logging.getLogger(__name__)
 

@@ -602,3 +602,78 @@ class EIAEndpoints:
             raise ValueError(f"Unknown data type: {data_type}. Available: {list(cls.ENDPOINTS.keys())}")
 
         return cls.ENDPOINTS[data_type].path
+
+
+# =============================================================================
+# EIA Extract Step Configuration
+# =============================================================================
+
+from pydantic import Field, field_validator
+from ...pipeline.steps.base import ExtractStepConfig
+
+
+class EIAExtractConfig(ExtractStepConfig):
+    """Configuration for high-performance EIA data extraction."""
+
+    api_key: str = Field(..., description="EIA API key for authentication")
+    data_types: List[str] = Field(
+        default_factory=lambda: ['demand', 'generation'],
+        description="Types of data to extract"
+    )
+    regions: List[str] = Field(
+        default_factory=lambda: ["PACW", "ERCO", "NYIS", "ISNE", "PJM", "MISO", "SPP", "CARO"],
+        description="List of region codes to extract data for"
+    )
+
+    # Performance tuning - optimized for EIA API
+    rate_limit_delay: float = Field(
+        default=0.0,
+        description="No artificial delays - EIA API handles its own limits"
+    )
+    max_concurrent_batches: int = Field(
+        default=50,
+        description="Maximum concurrent requests (50 = optimal for EIA)"
+    )
+
+    # Date batching configuration - optimized for EIA API
+    batch_size_days: int = Field(
+        default=7,
+        description="Size of date batches in days (7 days = optimal balance)"
+    )
+    max_regions_per_request: int = Field(
+        default=8,
+        description="Maximum regions per API request (8 = best performance)"
+    )
+
+    # Data storage configuration
+    raw_data_path: str = Field(
+        default="data/raw/eia",
+        description="Path for storing raw JSON files"
+    )
+
+    @field_validator("rate_limit_delay")
+    @classmethod
+    def validate_rate_limit(cls, v):
+        return v  # No artificial limits for EIA
+
+    @field_validator("max_concurrent_batches")
+    @classmethod
+    def validate_concurrency(cls, v):
+        if v < 1:
+            raise ValueError("max_concurrent_batches must be at least 1")
+        return v
+
+    @field_validator("batch_size_days")
+    @classmethod
+    def validate_batch_size(cls, v):
+        if v < 1 or v > 365:
+            raise ValueError("batch_size_days must be between 1 and 365")
+        return v
+
+    @field_validator("data_types")
+    @classmethod
+    def validate_data_types(cls, v):
+        valid_types = {'demand', 'generation'}
+        if not all(dt in valid_types for dt in v):
+            raise ValueError(f"data_types must be subset of {valid_types}")
+        return v

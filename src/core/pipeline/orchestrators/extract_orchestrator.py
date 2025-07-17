@@ -17,7 +17,7 @@ from pathlib import Path
 
 from .base import BaseOrchestrator, BatchConfig, BatchResult, PerformanceMetrics
 from ...integrations.eia.client import EIAClient
-from ...integrations.eia.service.raw_data_loader import RawDataLoader, RawDataMetadata
+from ...integrations.eia.services.raw_data_loader import RawDataLoader, RawDataMetadata
 from ...integrations.config import get_config
 from ..collectors.eia_collector import EIACollector
 

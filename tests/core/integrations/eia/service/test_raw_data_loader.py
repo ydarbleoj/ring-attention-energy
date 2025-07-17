@@ -19,7 +19,7 @@ from datetime import datetime
 import tempfile
 import shutil
 
-from src.core.integrations.eia.service.raw_data_loader import RawDataLoader, RawDataMetadata
+from src.core.integrations.eia.services.raw_data_loader import RawDataLoader, RawDataMetadata
 
 # Test constants for consistent testing
 TEST_REGION = "PACW"  # Pacific West region
