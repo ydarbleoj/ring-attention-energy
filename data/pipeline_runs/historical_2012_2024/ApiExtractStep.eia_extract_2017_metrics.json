@@ -1,0 +1,22 @@
+{
+  "total_operations": 1,
+  "successful_operations": 1,
+  "failed_operations": 0,
+  "start_time": "2025-07-17T16:17:03.882060",
+  "end_time": "2025-07-17T16:17:09.935276",
+  "operation_latencies": [
+    6.053009271621704
+  ],
+  "total_records_processed": 0,
+  "total_bytes_processed": 4028,
+  "files_created": 106,
+  "api_calls_made": 106,
+  "peak_memory_mb": null,
+  "avg_cpu_percent": null,
+  "disk_io_read_mb": null,
+  "disk_io_write_mb": null,
+  "error_messages": [],
+  "retry_attempts": 0,
+  "operation_name": "ApiExtractStep.eia_extract_2017",
+  "benchmark_version": "1.0"
+}

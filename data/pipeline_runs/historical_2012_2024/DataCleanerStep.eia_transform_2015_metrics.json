@@ -1,0 +1,22 @@
+{
+  "total_operations": 1,
+  "successful_operations": 1,
+  "failed_operations": 0,
+  "start_time": "2025-07-17T16:17:00.193352",
+  "end_time": "2025-07-17T16:17:00.409337",
+  "operation_latencies": [
+    0.2158818244934082
+  ],
+  "total_records_processed": 0,
+  "total_bytes_processed": 870,
+  "files_created": 1,
+  "api_calls_made": 0,
+  "peak_memory_mb": null,
+  "avg_cpu_percent": null,
+  "disk_io_read_mb": null,
+  "disk_io_write_mb": null,
+  "error_messages": [],
+  "retry_attempts": 0,
+  "operation_name": "DataCleanerStep.eia_transform_2015",
+  "benchmark_version": "1.0"
+}

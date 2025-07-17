@@ -90,7 +90,6 @@ class RawDataLoader:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(raw_package, f, indent=2, ensure_ascii=False, default=str)
 
-        logger.info(f"Saved raw data to {file_path} ({metadata.response_size_bytes} bytes, {metadata.record_count} records)")
         return file_path
 
     def _generate_filename(

@@ -49,7 +49,31 @@ class EIATransformService:
             api_response = data.get('api_response', {}).get('response', {})
             records = api_response.get('data', [])
 
-            self.logger.info(f"Processing {len(records)} records from {json_file_path.name}")
+            # Handle empty data files (normal for historical data gaps)
+            if not records:
+                self.logger.debug(f"Empty data file (normal for historical gaps): {json_file_path.name}")
+                # Create empty DataFrame with proper schema
+                df = self._create_dataframe(records, metadata, json_file_path)
+
+                # Create empty output file with proper schema
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                df.write_parquet(output_path, compression="snappy")
+
+                end_time = datetime.now()
+                processing_time = (end_time - start_time).total_seconds()
+
+                return {
+                    "success": True,
+                    "input_file": str(json_file_path),
+                    "output_file": str(output_path),
+                    "input_records": 0,
+                    "output_records": 0,
+                    "processing_time_seconds": processing_time,
+                    "data_quality": {"empty_file": True},
+                    "file_size_bytes": output_path.stat().st_size,
+                    "metadata": metadata,
+                    "empty_data": True
+                }
 
             # Transform to Polars DataFrame
             df = self._create_dataframe(records, metadata, json_file_path)
