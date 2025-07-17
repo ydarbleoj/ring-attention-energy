@@ -1,10 +1,3 @@
-"""
-Pipeline step runners for executing individual steps and step sequences.
-
-Provides execution environment for steps with monitoring, error handling,
-and result aggregation.
-"""
-
 import logging
 from typing import List, Dict, Any, Optional
 from pathlib import Path

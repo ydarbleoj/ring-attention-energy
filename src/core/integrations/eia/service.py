@@ -32,9 +32,6 @@ class EIADemandService:
         Returns:
             Raw JSON response from EIA API
         """
-        logger.info(f"Fetching raw demand data for {len(regions)} regions: {regions}")
-
-        # Build parameters using schema
         params = EIAEndpoints.get_demand_params(regions, start_date, end_date)
         endpoint_path = EIAEndpoints.get_endpoint_path('demand')
 
@@ -65,9 +62,6 @@ class EIAGenerationService:
         Returns:
             Raw JSON response from EIA API
         """
-        logger.info(f"Fetching raw generation data for {len(regions)} regions: {regions}")
-
-        # Build parameters using schema
         params = EIAEndpoints.get_generation_params(regions, start_date, end_date)
         endpoint_path = EIAEndpoints.get_endpoint_path('generation')
 

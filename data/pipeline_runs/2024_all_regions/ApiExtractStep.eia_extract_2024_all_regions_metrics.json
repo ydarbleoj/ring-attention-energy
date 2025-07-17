@@ -1,0 +1,22 @@
+{
+  "total_operations": 1,
+  "successful_operations": 1,
+  "failed_operations": 0,
+  "start_time": "2025-07-17T15:55:25.239286",
+  "end_time": "2025-07-17T15:55:52.728063",
+  "operation_latencies": [
+    27.48855495452881
+  ],
+  "total_records_processed": 375604,
+  "total_bytes_processed": 72787449,
+  "files_created": 106,
+  "api_calls_made": 106,
+  "peak_memory_mb": null,
+  "avg_cpu_percent": null,
+  "disk_io_read_mb": null,
+  "disk_io_write_mb": null,
+  "error_messages": [],
+  "retry_attempts": 0,
+  "operation_name": "ApiExtractStep.eia_extract_2024_all_regions",
+  "benchmark_version": "1.0"
+}
