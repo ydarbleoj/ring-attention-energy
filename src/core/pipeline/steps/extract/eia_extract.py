@@ -20,7 +20,7 @@ from pydantic import Field, field_validator
 
 from ..base import BaseStep, ExtractStepConfig, StepOutput, StepMetrics
 from ....integrations.eia.services import EIADataService
-from ....integrations.eia.service.raw_data_loader import RawDataLoader, RawDataMetadata
+from ....integrations.eia.services.raw_data_loader import RawDataLoader, RawDataMetadata
 
 
 @dataclass
