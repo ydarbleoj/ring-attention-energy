@@ -9,7 +9,7 @@ from unittest.mock import Mock, patch
 import tempfile
 import shutil
 
-from src.core.integrations.eia.service import StorageManager, DataLoader
+from src.core.integrations.eia.services import StorageManager, DataLoader
 from src.core.integrations.eia.client import EIAClient
 from src.core.integrations.eia.schema import EIADemandResponse, EIAGenerationResponse
 

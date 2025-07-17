@@ -6,23 +6,12 @@ external sources like APIs, databases, and file systems. Each extract step
 follows the BaseStep interface pattern for consistency and composability.
 
 Available extract steps:
-- EIAExtractStep: Extract EIA energy data (demand/generation) - synchronous
-- AsyncEIAExtractStep: High-performance async EIA extraction targeting 15,000 RPS
+- ApiExtractStep: Generic API extraction with source-specific configurations
 """
 
-from .eia_extract import EIAExtractStep, EIAExtractStepConfig
+from .api_extract import ApiExtractStep, ApiExtractStepConfig
 
-try:
-    from .eia_extract import AsyncEIAExtractStep, AsyncEIAExtractStepConfig
-    __all__ = [
-        "EIAExtractStep",
-        "EIAExtractStepConfig",
-        "AsyncEIAExtractStep",
-        "AsyncEIAExtractStepConfig",
-    ]
-except ImportError:
-    # aiohttp not available
-    __all__ = [
-        "EIAExtractStep",
-        "EIAExtractStepConfig",
-    ]
+__all__ = [
+    "ApiExtractStep",
+    "ApiExtractStepConfig"
+]

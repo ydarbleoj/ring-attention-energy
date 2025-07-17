@@ -12,7 +12,7 @@ import tempfile
 import shutil
 import os
 
-from src.core.integrations.eia.service.raw_data_loader import RawDataLoader, RawDataMetadata
+from src.core.integrations.eia.services.raw_data_loader import RawDataLoader, RawDataMetadata
 
 # Oregon-specific constants for consistent testing
 OREGON_REGION = "PACW"  # Pacific West region includes Oregon
