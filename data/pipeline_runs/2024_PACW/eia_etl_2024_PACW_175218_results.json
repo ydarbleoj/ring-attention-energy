@@ -1,0 +1,60 @@
+{
+  "pipeline_name": "EIA Extract-Transform 2024 PACW",
+  "pipeline_id": "eia_etl_2024_PACW_175218",
+  "success": true,
+  "duration_seconds": 0.002641,
+  "total_steps": 2,
+  "completed_steps": 2,
+  "failed_steps": 0,
+  "total_records_processed": 0,
+  "total_bytes_processed": 0,
+  "total_files_created": 0,
+  "step_results": {
+    "eia_extract": {
+      "step_id": "eia_extract",
+      "success": true,
+      "metrics": {
+        "duration_seconds": 0.0,
+        "start_time": "2025-07-17 17:52:18.223872",
+        "end_time": "2025-07-17 17:52:18.223872",
+        "memory_usage_mb": null,
+        "records_processed": 0,
+        "bytes_processed": 0,
+        "api_calls_made": 0,
+        "files_created": 0
+      },
+      "output_paths": [],
+      "metadata": {
+        "dry_run": true
+      },
+      "errors": []
+    },
+    "eia_transform": {
+      "step_id": "eia_transform",
+      "success": true,
+      "metrics": {
+        "duration_seconds": 0.0,
+        "start_time": "2025-07-17 17:52:18.225416",
+        "end_time": "2025-07-17 17:52:18.225416",
+        "memory_usage_mb": null,
+        "records_processed": 0,
+        "bytes_processed": 0,
+        "api_calls_made": 0,
+        "files_created": 0
+      },
+      "output_paths": [],
+      "metadata": {
+        "dry_run": true
+      },
+      "errors": []
+    }
+  },
+  "execution_summary": {
+    "completed_step_ids": [
+      "eia_transform",
+      "eia_extract"
+    ],
+    "failed_step_ids": [],
+    "step_execution_order": []
+  }
+}
