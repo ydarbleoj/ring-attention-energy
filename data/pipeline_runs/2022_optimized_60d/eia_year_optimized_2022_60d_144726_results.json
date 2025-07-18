@@ -1,0 +1,427 @@
+{
+  "pipeline_name": "EIA Year Pipeline 2022 Optimized (60d)",
+  "pipeline_id": "eia_year_optimized_2022_60d_144726",
+  "success": true,
+  "duration_seconds": 40.092461,
+  "total_steps": 2,
+  "completed_steps": 2,
+  "failed_steps": 0,
+  "total_records_processed": 2141869,
+  "total_bytes_processed": 91223534,
+  "total_files_created": 15,
+  "step_results": {
+    "eia_extract_year_optimized": {
+      "step_id": "eia_extract_year_optimized",
+      "success": true,
+      "metrics": {
+        "duration_seconds": 34.745630979537964,
+        "start_time": "2025-07-18 14:47:26.349239",
+        "end_time": "2025-07-18 14:48:01.094866",
+        "memory_usage_mb": null,
+        "records_processed": 425835,
+        "bytes_processed": 82377121,
+        "api_calls_made": 14,
+        "files_created": 14
+      },
+      "output_paths": [
+        "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-01-01_to_2022-03-01_20250718_144732.json",
+        "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-03-02_to_2022-04-30_20250718_144731.json",
+        "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-05-01_to_2022-06-29_20250718_144733.json",
+        "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-06-30_to_2022-08-28_20250718_144732.json",
+        "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-08-29_to_2022-10-27_20250718_144732.json",
+        "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-10-28_to_2022-12-26_20250718_144731.json",
+        "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-12-27_to_2022-12-31_20250718_144728.json",
+        "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-01-01_to_2022-03-01_20250718_144759.json",
+        "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-03-02_to_2022-04-30_20250718_144757.json",
+        "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-05-01_to_2022-06-29_20250718_144759.json",
+        "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-06-30_to_2022-08-28_20250718_144759.json",
+        "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-08-29_to_2022-10-27_20250718_144756.json",
+        "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-10-28_to_2022-12-26_20250718_144800.json",
+        "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-12-27_to_2022-12-31_20250718_144729.json"
+      ],
+      "metadata": {
+        "success": true,
+        "source": "eia",
+        "total_requests": 14,
+        "successful_requests": 14,
+        "failed_requests": 0,
+        "records_processed": 425835,
+        "bytes_processed": 82377121,
+        "api_calls_made": 14,
+        "files_created": 14,
+        "output_paths": [
+          "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-01-01_to_2022-03-01_20250718_144732.json",
+          "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-03-02_to_2022-04-30_20250718_144731.json",
+          "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-05-01_to_2022-06-29_20250718_144733.json",
+          "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-06-30_to_2022-08-28_20250718_144732.json",
+          "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-08-29_to_2022-10-27_20250718_144732.json",
+          "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-10-28_to_2022-12-26_20250718_144731.json",
+          "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-12-27_to_2022-12-31_20250718_144728.json",
+          "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-01-01_to_2022-03-01_20250718_144759.json",
+          "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-03-02_to_2022-04-30_20250718_144757.json",
+          "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-05-01_to_2022-06-29_20250718_144759.json",
+          "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-06-30_to_2022-08-28_20250718_144759.json",
+          "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-08-29_to_2022-10-27_20250718_144756.json",
+          "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-10-28_to_2022-12-26_20250718_144800.json",
+          "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-12-27_to_2022-12-31_20250718_144729.json"
+        ],
+        "duration_seconds": 34.74518609046936,
+        "records_per_second": 12255.942417208897,
+        "requests_per_second": 0.4029335161293096,
+        "rps": 0.4029335161293096,
+        "latency_ms_avg": 16780.00591482435,
+        "latency_ms_min": 1846.0001945495605,
+        "latency_ms_max": 34191.90192222595,
+        "throughput_records_sec": 12255.942417208897,
+        "data_types_processed": [
+          "demand",
+          "generation"
+        ],
+        "regions_processed": [
+          "PACW",
+          "ERCO",
+          "NYIS",
+          "ISNE",
+          "PJM",
+          "MISO",
+          "SPP",
+          "CARO"
+        ],
+        "source_config": {
+          "rate_limit_delay": 0.8,
+          "batch_size_days": 60,
+          "max_concurrent_batches": 2,
+          "max_regions_per_request": 8
+        },
+        "successful_results": [
+          {
+            "success": true,
+            "batch_id": "batch_0000_demand_8regions_2022-01-01",
+            "file_path": "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-01-01_to_2022-03-01_20250718_144732.json",
+            "record_count": 8502,
+            "response_size": 1611957,
+            "data_type": "demand",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-01-01",
+            "end_date": "2022-03-01"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0001_demand_8regions_2022-03-02",
+            "file_path": "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-03-02_to_2022-04-30_20250718_144731.json",
+            "record_count": 8502,
+            "response_size": 1611022,
+            "data_type": "demand",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-03-02",
+            "end_date": "2022-04-30"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0002_demand_8regions_2022-05-01",
+            "file_path": "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-05-01_to_2022-06-29_20250718_144733.json",
+            "record_count": 8502,
+            "response_size": 1611382,
+            "data_type": "demand",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-05-01",
+            "end_date": "2022-06-29"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0003_demand_8regions_2022-06-30",
+            "file_path": "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-06-30_to_2022-08-28_20250718_144732.json",
+            "record_count": 8502,
+            "response_size": 1612157,
+            "data_type": "demand",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-06-30",
+            "end_date": "2022-08-28"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0004_demand_8regions_2022-08-29",
+            "file_path": "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-08-29_to_2022-10-27_20250718_144732.json",
+            "record_count": 8502,
+            "response_size": 1611241,
+            "data_type": "demand",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-08-29",
+            "end_date": "2022-10-27"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0005_demand_8regions_2022-10-28",
+            "file_path": "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-10-28_to_2022-12-26_20250718_144731.json",
+            "record_count": 8502,
+            "response_size": 1611413,
+            "data_type": "demand",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-10-28",
+            "end_date": "2022-12-26"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0006_demand_8regions_2022-12-27",
+            "file_path": "data/raw/eia/eia/2022/eia_demand_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-12-27_to_2022-12-31_20250718_144728.json",
+            "record_count": 582,
+            "response_size": 110372,
+            "data_type": "demand",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-12-27",
+            "end_date": "2022-12-31"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0007_generation_8regions_2022-01-01",
+            "file_path": "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-01-01_to_2022-03-01_20250718_144759.json",
+            "record_count": 62348,
+            "response_size": 12085840,
+            "data_type": "generation",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-01-01",
+            "end_date": "2022-03-01"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0008_generation_8regions_2022-03-02",
+            "file_path": "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-03-02_to_2022-04-30_20250718_144757.json",
+            "record_count": 62348,
+            "response_size": 12082574,
+            "data_type": "generation",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-03-02",
+            "end_date": "2022-04-30"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0009_generation_8regions_2022-05-01",
+            "file_path": "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-05-01_to_2022-06-29_20250718_144759.json",
+            "record_count": 62348,
+            "response_size": 12084487,
+            "data_type": "generation",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-05-01",
+            "end_date": "2022-06-29"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0010_generation_8regions_2022-06-30",
+            "file_path": "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-06-30_to_2022-08-28_20250718_144759.json",
+            "record_count": 61155,
+            "response_size": 11873294,
+            "data_type": "generation",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-06-30",
+            "end_date": "2022-08-28"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0011_generation_8regions_2022-08-29",
+            "file_path": "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-08-29_to_2022-10-27_20250718_144756.json",
+            "record_count": 60916,
+            "response_size": 11825699,
+            "data_type": "generation",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-08-29",
+            "end_date": "2022-10-27"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0012_generation_8regions_2022-10-28",
+            "file_path": "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-10-28_to_2022-12-26_20250718_144800.json",
+            "record_count": 60955,
+            "response_size": 11835326,
+            "data_type": "generation",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-10-28",
+            "end_date": "2022-12-26"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0013_generation_8regions_2022-12-27",
+            "file_path": "data/raw/eia/eia/2022/eia_generation_PACW_ERCO_NYIS_ISNE_PJM_MISO_SPP_CARO_2022-12-27_to_2022-12-31_20250718_144729.json",
+            "record_count": 4171,
+            "response_size": 810357,
+            "data_type": "generation",
+            "regions": [
+              "PACW",
+              "ERCO",
+              "NYIS",
+              "ISNE",
+              "PJM",
+              "MISO",
+              "SPP",
+              "CARO"
+            ],
+            "start_date": "2022-12-27",
+            "end_date": "2022-12-31"
+          }
+        ],
+        "failed_results": []
+      },
+      "errors": []
+    },
+    "eia_transform_year_optimized": {
+      "step_id": "eia_transform_year_optimized",
+      "success": true,
+      "metrics": {
+        "duration_seconds": 5.3436479568481445,
+        "start_time": "2025-07-18 14:48:01.096147",
+        "end_time": "2025-07-18 14:48:06.439794",
+        "memory_usage_mb": null,
+        "records_processed": 1716034,
+        "bytes_processed": 8846413,
+        "api_calls_made": 0,
+        "files_created": 1
+      },
+      "output_paths": [
+        "data/interim/2022_optimized/eia_20250718_144801_0db6a795.parquet"
+      ],
+      "metadata": {
+        "records_processed": 1716034,
+        "bytes_processed": 8846413,
+        "files_created": 1,
+        "output_paths": [
+          "data/interim/2022_optimized/eia_20250718_144801_0db6a795.parquet"
+        ],
+        "source": "eia",
+        "input_files_found": 56,
+        "input_files_processed": 56,
+        "input_files_failed": 0,
+        "total_input_records": 1716906,
+        "total_output_records": 1716034,
+        "processing_errors": [],
+        "output_file": "data/interim/2022_optimized/eia_20250718_144801_0db6a795.parquet",
+        "compression_ratio": 1.0005081484399494,
+        "data_quality_score": 0.9994921096437429
+      },
+      "errors": []
+    }
+  },
+  "execution_summary": {
+    "completed_step_ids": [
+      "eia_extract_year_optimized",
+      "eia_transform_year_optimized"
+    ],
+    "failed_step_ids": [],
+    "step_execution_order": []
+  }
+}

@@ -74,7 +74,7 @@ class EIAClient:
 
         # Set default length if not specified
         if 'length' not in request_params:
-            request_params['length'] = 5000
+            request_params['length'] = 2500
 
         # Construct full URL
         url = f"{self.base_url}{endpoint}"
@@ -100,7 +100,7 @@ class EIAClient:
     def make_paginated_request(self, endpoint: str, params: Dict, max_records: int = 100000) -> Dict:
         all_data = []
         offset = 0
-        page_size = 5000
+        page_size = 2500
 
         # Add pagination parameters
         paginated_params = params.copy()

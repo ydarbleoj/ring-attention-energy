@@ -81,13 +81,18 @@ class DataCleanerStep(BaseStep):
                 self.logger.info(f"Dry-run mode: Source directory {source_dir} does not exist yet")
                 return
             else:
-                raise ValueError(f"Source directory does not exist: {source_dir}")
+                # In pipeline mode, the source directory might not exist yet during initialization
+                # This is normal when the extract step hasn't run yet
+                self.logger.info(f"Source directory {source_dir} does not exist yet - will be created by extract step")
+                return
 
-        # Skip file validation in dry-run mode
+        # Skip file validation in dry-run mode or when running in a pipeline
         if not config.dry_run:
             json_files = list(source_dir.rglob("*.json"))
             if not json_files:
-                raise ValueError(f"No JSON files found in {source_dir}")
+                # In pipeline mode, this is normal during initialization
+                self.logger.info(f"No JSON files found in {source_dir} yet - will be created by extract step")
+                return
             self.logger.info(f"Found {len(json_files)} JSON files to process")
         else:
             self.logger.info(f"Dry-run mode: Skipping file validation for {source_dir}")

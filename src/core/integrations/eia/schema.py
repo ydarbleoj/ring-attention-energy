@@ -148,6 +148,71 @@ class GenerationRecord(BaseModel):
         return float(self.value)
 
 
+class PriceRecord(BaseModel):
+    """
+    Single price data point from EIA region-sub-ba-data endpoint
+
+    Example LMP (Locational Marginal Price) record:
+    {
+        "period": "2023-01-01T00",
+        "parent": "PACW",
+        "parent-name": "PacifiCorp West",
+        "subba": "PACW-ID",
+        "subba-name": "PacifiCorp West - Idaho",
+        "type": "LMP",
+        "type-name": "Locational Marginal Price",
+        "value": "45.23",
+        "value-units": "dollars per megawatthour"
+    }
+    """
+    model_config = ConfigDict(str_strip_whitespace=True, populate_by_name=True)
+
+    period: str = Field(..., description="Timestamp in EIA format")
+    parent: str = Field(..., description="Parent region/utility code")
+    parent_name: str = Field(..., alias="parent-name", description="Full parent region name")
+    subba: Optional[str] = Field(None, description="Sub-balancing authority code")
+    subba_name: Optional[str] = Field(None, alias="subba-name", description="Sub-balancing authority name")
+    type: Literal["LMP"] = Field(..., description="Price type - LMP for Locational Marginal Price")
+    type_name: str = Field(..., alias="type-name", description="Human readable price type")
+    value: str = Field(..., description="Price value as string")
+    value_units: str = Field(..., alias="value-units", description="Units (dollars per megawatthour)")
+
+    @field_validator("period")
+    @classmethod
+    def validate_period(cls, v: str) -> str:
+        """Validate EIA timestamp format"""
+        try:
+            datetime.strptime(v, "%Y-%m-%dT%H")
+        except ValueError:
+            raise ValueError(f"Invalid EIA timestamp format: {v}")
+        return v
+
+    @field_validator("value")
+    @classmethod
+    def validate_value(cls, v: str) -> str:
+        """Ensure value can be converted to float"""
+        try:
+            float(v)
+        except ValueError:
+            raise ValueError(f"Value cannot be converted to float: {v}")
+        return v
+
+    @property
+    def timestamp(self) -> pd.Timestamp:
+        """Convert EIA period to pandas timestamp"""
+        return pd.to_datetime(self.period)
+
+    @property
+    def price_per_mwh(self) -> float:
+        """Get price value as float in $/MWh"""
+        return float(self.value)
+
+    @property
+    def region(self) -> str:
+        """Get the primary region code"""
+        return self.parent
+
+
 class EIAResponseData(BaseModel):
     """
     Main data container from EIA API responses
@@ -203,6 +268,20 @@ class EIAResponseData(BaseModel):
                     print(f"Warning: Failed to parse generation record: {e}")
                     continue
         return generation_records
+
+    def parse_price_records(self) -> List[PriceRecord]:
+        """Parse data array into validated PriceRecord objects"""
+        price_records = []
+        for record in self.data:
+            if record.get("type") == "LMP":
+                try:
+                    price_record = PriceRecord.model_validate(record)
+                    price_records.append(price_record)
+                except Exception as e:
+                    # Log warning but don't fail entire batch
+                    print(f"Warning: Failed to parse price record: {e}")
+                    continue
+        return price_records
 
 
 class EIAResponse(BaseModel):
@@ -532,6 +611,27 @@ class EIAEndpoints:
                 'offset': '0'
             },
             description="Electricity generation data by fuel type and region"
+        ),
+
+        'price': EIAEndpoint(
+            path="/electricity/rto/region-sub-ba-data/data/",
+            required_params={
+                'frequency': 'hourly',
+                'data[0]': 'value',
+                'facets[type][]': 'LMP',  # Locational Marginal Price
+                'start': 'YYYY-MM-DD',
+                'end': 'YYYY-MM-DD',
+                'sort[0][column]': 'period',
+                'sort[0][direction]': 'asc'
+            },
+            optional_params={
+                'facets[parent][]': 'region_code',  # Single region (note: parent instead of respondent)
+                'facets[parent][0]': 'region_code_1',  # Multi-region format
+                'facets[parent][1]': 'region_code_2',  # Multi-region format
+                'length': '5000',
+                'offset': '0'
+            },
+            description="Electricity wholesale prices (LMP - Locational Marginal Price) by region"
         )
     }
 
@@ -596,6 +696,36 @@ class EIAEndpoints:
         return params
 
     @classmethod
+    def get_price_params(cls, regions: List[str], start_date: str, end_date: str) -> Dict[str, str]:
+        """
+        Build parameters for price data request (LMP - Locational Marginal Price).
+
+        Args:
+            regions: List of region codes
+            start_date: Start date in YYYY-MM-DD format
+            end_date: End date in YYYY-MM-DD format
+
+        Returns:
+            Dictionary of API parameters
+        """
+        endpoint = cls.ENDPOINTS['price']
+        params = endpoint.required_params.copy()
+
+        # Update with actual values
+        params['start'] = start_date
+        params['end'] = end_date
+
+        # Handle single vs multiple regions (note: parent instead of respondent for price)
+        if len(regions) == 1:
+            params['facets[parent][]'] = regions[0]
+        else:
+            # Multi-region format
+            for i, region in enumerate(regions):
+                params[f'facets[parent][{i}]'] = region
+
+        return params
+
+    @classmethod
     def get_endpoint_path(cls, data_type: str) -> str:
         """Get the API endpoint path for a data type."""
         if data_type not in cls.ENDPOINTS:
@@ -647,8 +777,8 @@ class EIAExtractConfig(ExtractStepConfig):
 
     # Data storage configuration
     raw_data_path: str = Field(
-        default="data/raw/eia",
-        description="Path for storing raw JSON files"
+        default="data/raw",
+        description="Path for storing raw JSON files (RawDataLoader will add /eia/ subdirectory)"
     )
 
     @field_validator("rate_limit_delay")
@@ -673,7 +803,7 @@ class EIAExtractConfig(ExtractStepConfig):
     @field_validator("data_types")
     @classmethod
     def validate_data_types(cls, v):
-        valid_types = {'demand', 'generation'}
+        valid_types = {'demand', 'generation', 'price'}
         if not all(dt in valid_types for dt in v):
             raise ValueError(f"data_types must be subset of {valid_types}")
         return v

@@ -2,21 +2,21 @@
   "total_operations": 1,
   "successful_operations": 1,
   "failed_operations": 0,
-  "start_time": "2025-08-13T16:51:25.477836",
-  "end_time": "2025-08-13T16:51:25.477944",
+  "start_time": "2025-07-18T15:27:17.645522",
+  "end_time": "2025-07-18T15:29:52.179752",
   "operation_latencies": [
-    0.0
+    154.53323578834534
   ],
-  "total_records_processed": 0,
-  "total_bytes_processed": 0,
-  "files_created": 0,
-  "api_calls_made": 0,
+  "total_records_processed": 256875,
+  "total_bytes_processed": 50096555,
+  "files_created": 14,
+  "api_calls_made": 14,
   "peak_memory_mb": null,
   "avg_cpu_percent": null,
   "disk_io_read_mb": null,
   "disk_io_write_mb": null,
   "error_messages": [],
   "retry_attempts": 0,
-  "operation_name": "ApiExtractStep.eia_extract",
+  "operation_name": "ApiExtractStep.eia_extract_2025",
   "benchmark_version": "1.0"
 }
