@@ -1,0 +1,60 @@
+{
+  "pipeline_name": "EIA Year Pipeline 2024 Optimized (90d)",
+  "pipeline_id": "eia_year_optimized_2024_90d_142818",
+  "success": true,
+  "duration_seconds": 0.003227,
+  "total_steps": 2,
+  "completed_steps": 2,
+  "failed_steps": 0,
+  "total_records_processed": 0,
+  "total_bytes_processed": 0,
+  "total_files_created": 0,
+  "step_results": {
+    "eia_extract_year_optimized": {
+      "step_id": "eia_extract_year_optimized",
+      "success": true,
+      "metrics": {
+        "duration_seconds": 0.0,
+        "start_time": "2025-07-18 14:28:18.509701",
+        "end_time": "2025-07-18 14:28:18.509701",
+        "memory_usage_mb": null,
+        "records_processed": 0,
+        "bytes_processed": 0,
+        "api_calls_made": 0,
+        "files_created": 0
+      },
+      "output_paths": [],
+      "metadata": {
+        "dry_run": true
+      },
+      "errors": []
+    },
+    "eia_transform_year_optimized": {
+      "step_id": "eia_transform_year_optimized",
+      "success": true,
+      "metrics": {
+        "duration_seconds": 0.0,
+        "start_time": "2025-07-18 14:28:18.511580",
+        "end_time": "2025-07-18 14:28:18.511580",
+        "memory_usage_mb": null,
+        "records_processed": 0,
+        "bytes_processed": 0,
+        "api_calls_made": 0,
+        "files_created": 0
+      },
+      "output_paths": [],
+      "metadata": {
+        "dry_run": true
+      },
+      "errors": []
+    }
+  },
+  "execution_summary": {
+    "completed_step_ids": [
+      "eia_extract_year_optimized",
+      "eia_transform_year_optimized"
+    ],
+    "failed_step_ids": [],
+    "step_execution_order": []
+  }
+}

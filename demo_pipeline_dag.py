@@ -173,7 +173,7 @@ async def run_extract_transform_pipeline(year: int, region: str, dry_run: bool =
                 logger.info(f"   {step_id.upper()}:")
                 logger.info(f"     Duration: {step_metrics['duration_seconds']:.2f}s")
                 logger.info(f"     Records: {step_metrics['records_processed']:,}")
-                logger.info(f"     Throughput: {step_metrics['records_processed']/step_metrics['duration_seconds']:.1f} RPS")
+                logger.info(f"     Throughput: {step_metrics['records_processed']/step_metrics['duration_seconds']:.1f} RPS" if step_metrics['duration_seconds'] > 0 else "     Throughput: 0.0 RPS (dry-run)")
                 logger.info(f"     Files: {step_metrics['files_created']}")
 
                 # Show output paths

@@ -125,7 +125,7 @@ class BaseStep(ABC):
         start_time = datetime.now()
         start_timestamp = time.time()
 
-        self.logger.info(f"Starting step: {self.config.step_name}")
+        # self.logger.info(f"Starting step: {self.config.step_name}")
 
         if self.config.dry_run:
             self.logger.info("DRY RUN: Validating inputs only")
@@ -174,10 +174,10 @@ class BaseStep(ABC):
                 metadata=step_results
             )
 
-            self.logger.info(
-                f"Step completed successfully: {metrics.records_processed:,} records, "
-                f"{metrics.files_created} files, {duration:.1f}s"
-            )
+            # self.logger.info(
+            #     f"Step completed successfully: {metrics.records_processed:,} records, "
+            #     f"{metrics.files_created} files, {duration:.1f}s"
+            # )
 
             return output
 

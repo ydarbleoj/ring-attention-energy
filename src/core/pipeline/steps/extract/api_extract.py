@@ -83,7 +83,7 @@ class ApiExtractStep(BaseStep):
         self.failed_requests = 0
         self.request_latencies = []
 
-        self.logger.info(f"Initialized ApiExtractStep for source: {config.source}")
+        # self.logger.info(f"Initialized ApiExtractStep for source: {config.source}")
 
     def _load_source_config(self):
         """Load source-specific configuration."""
@@ -100,11 +100,11 @@ class ApiExtractStep(BaseStep):
                 data_types=self.config.data_types,
                 api_key=self.config.api_key or "",
                 raw_data_path=self.config.raw_data_path or "data/raw/eia",
-                # Use optimized EIA settings
-                rate_limit_delay=0.0,
-                max_concurrent_batches=50,
-                batch_size_days=7,
-                max_regions_per_request=8
+                # Use configuration from parent, not hardcoded values
+                rate_limit_delay=getattr(self.config, 'rate_limit_delay', 0.0),
+                max_concurrent_batches=getattr(self.config, 'max_concurrent_batches', 50),
+                batch_size_days=getattr(self.config, 'batch_size_days', 7),
+                max_regions_per_request=getattr(self.config, 'max_regions_per_request', 8)
             )
             return source_config
 
@@ -183,7 +183,7 @@ class ApiExtractStep(BaseStep):
             batches.append((current_date.isoformat(), batch_end.isoformat()))
             current_date = batch_end + timedelta(days=1)
 
-        self.logger.info(f"Generated {len(batches)} date batches of {batch_size_days} days each")
+        # self.logger.info(f"Generated {len(batches)} date batches of {batch_size_days} days each")
         return batches
 
     def _create_batch_requests(self) -> List[BatchRequest]:
@@ -214,7 +214,7 @@ class ApiExtractStep(BaseStep):
                     ))
                     request_id += 1
 
-        self.logger.info(f"Created {len(requests)} batch requests")
+        # self.logger.info(f"Created {len(requests)} batch requests")
         return requests
 
     async def _execute_api_request(self, batch: BatchRequest) -> Dict[str, Any]:
@@ -339,7 +339,7 @@ class ApiExtractStep(BaseStep):
 
         # Execute requests with source-specific concurrency
         max_concurrent = self.source_config.max_concurrent_batches
-        self.logger.info(f"Starting {len(batch_requests)} batch requests with max concurrency: {max_concurrent}")
+        # self.logger.info(f"Starting {len(batch_requests)} batch requests with max concurrency: {max_concurrent}")
 
         results = await asyncio.gather(*[
             process_batch(batch) for batch in batch_requests
