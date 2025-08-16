@@ -69,6 +69,37 @@ class EIAGenerationService:
         return self.client.make_paginated_request(endpoint_path, params)
 
 
+class EIAPriceService:
+    """Service for retail electricity price data operations."""
+
+    def __init__(self, client: EIAClient):
+        """Initialize with EIA client."""
+        self.client = client
+
+    def get_raw_price_data(
+        self,
+        states: List[str],
+        start_date: str,
+        end_date: str
+    ) -> Dict:
+        """
+        Get raw retail price data for multiple states.
+
+        Args:
+            states: List of state codes (e.g., ['OR', 'WA'])
+            start_date: Start date in YYYY-MM format (monthly data)
+            end_date: End date in YYYY-MM format (monthly data)
+
+        Returns:
+            Raw JSON response from EIA API
+        """
+        params = EIAEndpoints.get_price_params(states, start_date, end_date)
+        endpoint_path = EIAEndpoints.get_endpoint_path('price')
+
+        # Make API request
+        return self.client.make_paginated_request(endpoint_path, params)
+
+
 class EIADataService:
     """
     Combined service that provides access to both demand and generation services.
@@ -90,6 +121,7 @@ class EIADataService:
         # Create specialized services
         self.demand = EIADemandService(self.client)
         self.generation = EIAGenerationService(self.client)
+        self.price = EIAPriceService(self.client)
 
     def get_raw_data(
         self,
@@ -99,13 +131,13 @@ class EIADataService:
         end_date: str
     ) -> Dict:
         """
-        Get raw data for any data type and regions.
+        Get raw data for any data type and regions/states.
 
         Args:
-            data_type: Either 'demand' or 'generation'
-            regions: List of region codes
-            start_date: Start date in YYYY-MM-DD format
-            end_date: End date in YYYY-MM-DD format
+            data_type: Either 'demand', 'generation', or 'price'
+            regions: List of region codes (for demand/generation) or state codes (for price)
+            start_date: Start date in YYYY-MM-DD format (hourly) or YYYY-MM format (monthly)
+            end_date: End date in YYYY-MM-DD format (hourly) or YYYY-MM format (monthly)
 
         Returns:
             Raw JSON response from EIA API
@@ -114,5 +146,13 @@ class EIADataService:
             return self.demand.get_raw_demand_data(regions, start_date, end_date)
         elif data_type == 'generation':
             return self.generation.get_raw_generation_data(regions, start_date, end_date)
+        elif data_type == 'price':
+            # For price data, we need to convert regions to states and format dates properly
+            # Convert PACW -> OR, etc. For now, assume OR for all regions
+            states = ["OR"] if regions else ["OR"]  # Default to Oregon
+            # Convert daily dates to monthly for price API
+            start_month = start_date[:7]  # YYYY-MM-DD -> YYYY-MM
+            end_month = end_date[:7]      # YYYY-MM-DD -> YYYY-MM
+            return self.price.get_raw_price_data(states, start_month, end_month)
         else:
-            raise ValueError(f"Unknown data type: {data_type}. Use 'demand' or 'generation'")
+            raise ValueError(f"Unknown data type: {data_type}. Use 'demand', 'generation', or 'price'")

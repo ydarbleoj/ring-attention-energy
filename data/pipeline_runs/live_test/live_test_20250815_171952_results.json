@@ -1,0 +1,158 @@
+{
+  "pipeline_name": "Live API Test with Price Data",
+  "pipeline_id": "live_test_20250815_171952",
+  "success": true,
+  "duration_seconds": 0.842448,
+  "total_steps": 2,
+  "completed_steps": 2,
+  "failed_steps": 0,
+  "total_records_processed": 599,
+  "total_bytes_processed": 60275,
+  "total_files_created": 4,
+  "step_results": {
+    "live_extract_test": {
+      "step_id": "live_extract_test",
+      "success": true,
+      "metrics": {
+        "duration_seconds": 0.8045518398284912,
+        "start_time": "2025-08-15 17:19:52.375979",
+        "end_time": "2025-08-15 17:19:53.180530",
+        "memory_usage_mb": null,
+        "records_processed": 300,
+        "bytes_processed": 53220,
+        "api_calls_made": 3,
+        "files_created": 3
+      },
+      "output_paths": [
+        "data/raw/eia/2024/eia_demand_PACW_2024-01-01_to_2024-01-03_20250815_171953.json",
+        "data/raw/eia/2024/eia_generation_PACW_2024-01-01_to_2024-01-03_20250815_171953.json",
+        "data/raw/eia/2024/eia_price_PACW_2024-01-01_to_2024-01-03_20250815_171952.json"
+      ],
+      "metadata": {
+        "success": true,
+        "source": "eia",
+        "total_requests": 3,
+        "successful_requests": 3,
+        "failed_requests": 0,
+        "records_processed": 300,
+        "bytes_processed": 53220,
+        "api_calls_made": 3,
+        "files_created": 3,
+        "output_paths": [
+          "data/raw/eia/2024/eia_demand_PACW_2024-01-01_to_2024-01-03_20250815_171953.json",
+          "data/raw/eia/2024/eia_generation_PACW_2024-01-01_to_2024-01-03_20250815_171953.json",
+          "data/raw/eia/2024/eia_price_PACW_2024-01-01_to_2024-01-03_20250815_171952.json"
+        ],
+        "duration_seconds": 0.804210901260376,
+        "records_per_second": 373.0364752950175,
+        "requests_per_second": 3.730364752950175,
+        "rps": 3.730364752950175,
+        "latency_ms_avg": 617.8437868754069,
+        "latency_ms_min": 278.839111328125,
+        "latency_ms_max": 801.7191886901855,
+        "throughput_records_sec": 373.0364752950175,
+        "data_types_processed": [
+          "demand",
+          "generation",
+          "price"
+        ],
+        "regions_processed": [
+          "PACW"
+        ],
+        "source_config": {
+          "rate_limit_delay": 0.0,
+          "batch_size_days": 30,
+          "max_concurrent_batches": 10,
+          "max_regions_per_request": 5
+        },
+        "successful_results": [
+          {
+            "success": true,
+            "batch_id": "batch_0000_demand_1regions_2024-01-01",
+            "file_path": "data/raw/eia/2024/eia_demand_PACW_2024-01-01_to_2024-01-03_20250815_171953.json",
+            "record_count": 49,
+            "response_size": 8563,
+            "data_type": "demand",
+            "regions": [
+              "PACW"
+            ],
+            "start_date": "2024-01-01",
+            "end_date": "2024-01-03"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0001_generation_1regions_2024-01-01",
+            "file_path": "data/raw/eia/2024/eia_generation_PACW_2024-01-01_to_2024-01-03_20250815_171953.json",
+            "record_count": 245,
+            "response_size": 43563,
+            "data_type": "generation",
+            "regions": [
+              "PACW"
+            ],
+            "start_date": "2024-01-01",
+            "end_date": "2024-01-03"
+          },
+          {
+            "success": true,
+            "batch_id": "batch_0002_price_1regions_2024-01-01",
+            "file_path": "data/raw/eia/2024/eia_price_PACW_2024-01-01_to_2024-01-03_20250815_171952.json",
+            "record_count": 6,
+            "response_size": 1094,
+            "data_type": "price",
+            "regions": [
+              "PACW"
+            ],
+            "start_date": "2024-01-01",
+            "end_date": "2024-01-03"
+          }
+        ],
+        "failed_results": []
+      },
+      "errors": []
+    },
+    "live_transform_test": {
+      "step_id": "live_transform_test",
+      "success": true,
+      "metrics": {
+        "duration_seconds": 0.036344051361083984,
+        "start_time": "2025-08-15 17:19:53.181217",
+        "end_time": "2025-08-15 17:19:53.217559",
+        "memory_usage_mb": null,
+        "records_processed": 299,
+        "bytes_processed": 7055,
+        "api_calls_made": 0,
+        "files_created": 1
+      },
+      "output_paths": [
+        "data/interim/eia_20250815_171953_7b27c2d8.parquet"
+      ],
+      "metadata": {
+        "records_processed": 299,
+        "bytes_processed": 7055,
+        "files_created": 1,
+        "output_paths": [
+          "data/interim/eia_20250815_171953_7b27c2d8.parquet"
+        ],
+        "source": "eia",
+        "input_files_found": 3,
+        "input_files_processed": 3,
+        "input_files_failed": 0,
+        "total_input_records": 300,
+        "total_output_records": 299,
+        "processing_errors": [],
+        "output_file": "data/interim/eia_20250815_171953_7b27c2d8.parquet",
+        "compression_ratio": 1.0033444816053512,
+        "data_quality_score": 0.9966666666666667
+      },
+      "errors": []
+    }
+  },
+  "execution_summary": {
+    "completed_step_ids": [
+      "live_transform_test",
+      "live_extract_test"
+    ],
+    "failed_step_ids": [],
+    "step_execution_order": []
+  }
+}

@@ -27,6 +27,7 @@ from src.core.integrations.eia.schema import (
     EIAResponseData,
     DemandRecord,
     GenerationRecord,
+    PriceRecord,
     EIAErrorResponse,
     validate_eia_response,
     extract_oregon_renewable_summary,
@@ -166,6 +167,111 @@ class TestGenerationRecord:
         assert record.generation_mwh == 0.0
 
 
+class TestPriceRecord:
+    """Test PriceRecord validation and properties"""
+
+    def test_valid_price_record(self):
+        """Test parsing a valid retail price record"""
+        record_data = {
+            "period": "2024-01",
+            "stateid": "OR",
+            "stateDescription": "Oregon",
+            "sectorid": "RES",
+            "sectorName": "residential",
+            "price": "11.23",
+            "price-units": "cents per kilowatthour"
+        }
+
+        record = PriceRecord.model_validate(record_data)
+
+        assert record.period == "2024-01"
+        assert record.stateid == "OR"
+        assert record.stateDescription == "Oregon"
+        assert record.sectorid == "RES"
+        assert record.sectorName == "residential"
+        assert record.price == "11.23"
+        assert record.price_cents_per_kwh == 11.23
+        assert record.price_dollars_per_mwh == 112.3  # 11.23 * 10
+        assert record.region == "OR"
+        assert isinstance(record.timestamp, pd.Timestamp)
+        assert record.timestamp == pd.Timestamp("2024-01-01")
+
+    def test_different_sectors(self):
+        """Test price records for different sectors"""
+        sectors = [
+            ("RES", "residential"),
+            ("COM", "commercial"),
+            ("IND", "industrial"),
+            ("TRA", "transportation"),
+            ("ALL", "all sectors")
+        ]
+
+        for sector_id, sector_name in sectors:
+            record_data = {
+                "period": "2024-01",
+                "stateid": "OR",
+                "stateDescription": "Oregon",
+                "sectorid": sector_id,
+                "sectorName": sector_name,
+                "price": "12.50",
+                "price-units": "cents per kilowatthour"
+            }
+
+            record = PriceRecord.model_validate(record_data)
+            assert record.sectorid == sector_id
+            assert record.sectorName == sector_name
+            assert record.price_cents_per_kwh == 12.50
+
+    def test_price_range_validation(self):
+        """Test price records with various realistic price values"""
+        test_prices = [
+            "8.50",      # Low residential rate
+            "12.25",     # Average residential rate
+            "16.75",     # High residential rate
+            "7.20",      # Industrial rate
+            "14.90"      # Commercial rate
+        ]
+
+        for price_value in test_prices:
+            record_data = {
+                "period": "2024-01",
+                "stateid": "OR",
+                "stateDescription": "Oregon",
+                "sectorid": "RES",
+                "sectorName": "residential",
+                "price": price_value,
+                "price-units": "cents per kilowatthour"
+            }
+
+            record = PriceRecord.model_validate(record_data)
+            assert record.price_cents_per_kwh == float(price_value)
+            assert record.price_dollars_per_mwh == float(price_value) * 10.0
+
+    def test_period_validation(self):
+        """Test that invalid period formats are rejected"""
+        invalid_periods = [
+            "2024",           # Missing month
+            "2024-1",         # Single digit month
+            "24-01",          # Two digit year
+            "2024-13",        # Invalid month
+            "2024-01-01"      # Too specific (daily)
+        ]
+
+        for invalid_period in invalid_periods:
+            record_data = {
+                "period": invalid_period,
+                "stateid": "OR",
+                "stateDescription": "Oregon",
+                "sectorid": "RES",
+                "sectorName": "residential",
+                "price": "11.23",
+                "price-units": "cents per kilowatthour"
+            }
+
+            with pytest.raises(ValueError, match="Invalid period format"):
+                PriceRecord.model_validate(record_data)
+
+
 class TestEIAResponseData:
     """Test EIAResponseData parsing and record extraction"""
 
@@ -249,6 +355,49 @@ class TestEIAResponseData:
         assert all(isinstance(r, GenerationRecord) for r in generation_records)
         assert generation_records[0].fueltype == "SUN"
         assert generation_records[1].fueltype == "WND"
+
+    @pytest.fixture
+    def sample_price_response_data(self) -> Dict[str, Any]:
+        """Sample response data structure for retail price endpoint"""
+        return {
+            "total": "6",
+            "dateFormat": "YYYY-MM",
+            "frequency": "monthly",
+            "data": [
+                {
+                    "period": "2024-01",
+                    "stateid": "OR",
+                    "stateDescription": "Oregon",
+                    "sectorid": "RES",
+                    "sectorName": "residential",
+                    "price": "11.23",
+                    "price-units": "cents per kilowatthour"
+                },
+                {
+                    "period": "2024-01",
+                    "stateid": "OR",
+                    "stateDescription": "Oregon",
+                    "sectorid": "COM",
+                    "sectorName": "commercial",
+                    "price": "9.87",
+                    "price-units": "cents per kilowatthour"
+                }
+            ]
+        }
+
+    def test_price_response_parsing(self, sample_price_response_data):
+        """Test parsing retail price response data"""
+        response_data = EIAResponseData.model_validate(sample_price_response_data)
+
+        price_records = response_data.parse_price_records()
+        assert len(price_records) == 2
+        assert all(isinstance(r, PriceRecord) for r in price_records)
+        assert price_records[0].price_cents_per_kwh == 11.23
+        assert price_records[1].price_cents_per_kwh == 9.87
+        assert price_records[0].region == "OR"
+        assert price_records[1].region == "OR"
+        assert price_records[0].sectorName == "residential"
+        assert price_records[1].sectorName == "commercial"
 
 
 class TestEIAResponse:

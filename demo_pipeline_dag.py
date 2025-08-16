@@ -66,7 +66,7 @@ def create_extract_step(year: int, region: str, api_key: str, dry_run: bool = Fa
         start_date=start_date,
         end_date=end_date,
         regions=[region],
-        data_types=["demand", "generation"],
+        data_types=["demand", "generation", "price"],
         api_key=api_key,
         dry_run=dry_run
     )

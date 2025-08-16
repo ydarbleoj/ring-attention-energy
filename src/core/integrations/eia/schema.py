@@ -150,67 +150,70 @@ class GenerationRecord(BaseModel):
 
 class PriceRecord(BaseModel):
     """
-    Single price data point from EIA region-sub-ba-data endpoint
+    Single price data point from EIA retail-sales/data endpoint
 
-    Example LMP (Locational Marginal Price) record:
+    Example retail electricity price record:
     {
-        "period": "2023-01-01T00",
-        "parent": "PACW",
-        "parent-name": "PacifiCorp West",
-        "subba": "PACW-ID",
-        "subba-name": "PacifiCorp West - Idaho",
-        "type": "LMP",
-        "type-name": "Locational Marginal Price",
-        "value": "45.23",
-        "value-units": "dollars per megawatthour"
+        "period": "2024-01",
+        "stateid": "OR",
+        "stateDescription": "Oregon",
+        "sectorid": "RES",
+        "sectorName": "residential",
+        "price": "11.23",
+        "price-units": "cents per kilowatthour"
     }
     """
     model_config = ConfigDict(str_strip_whitespace=True, populate_by_name=True)
 
-    period: str = Field(..., description="Timestamp in EIA format")
-    parent: str = Field(..., description="Parent region/utility code")
-    parent_name: str = Field(..., alias="parent-name", description="Full parent region name")
-    subba: Optional[str] = Field(None, description="Sub-balancing authority code")
-    subba_name: Optional[str] = Field(None, alias="subba-name", description="Sub-balancing authority name")
-    type: Literal["LMP"] = Field(..., description="Price type - LMP for Locational Marginal Price")
-    type_name: str = Field(..., alias="type-name", description="Human readable price type")
-    value: str = Field(..., description="Price value as string")
-    value_units: str = Field(..., alias="value-units", description="Units (dollars per megawatthour)")
+    period: str = Field(..., description="Period in YYYY-MM format")
+    stateid: str = Field(..., description="State abbreviation code")
+    stateDescription: str = Field(..., description="Full state name")
+    sectorid: str = Field(..., description="Sector code (RES, COM, IND, etc.)")
+    sectorName: str = Field(..., description="Sector name (residential, commercial, etc.)")
+    price: str = Field(..., description="Average price as string")
+    price_units: str = Field(..., alias="price-units", description="Units (cents per kilowatthour)")
 
     @field_validator("period")
     @classmethod
     def validate_period(cls, v: str) -> str:
-        """Validate EIA timestamp format"""
+        """Validate period format (YYYY-MM)"""
         try:
-            datetime.strptime(v, "%Y-%m-%dT%H")
+            # Monthly format: 2024-01
+            datetime.strptime(v, "%Y-%m")
         except ValueError:
-            raise ValueError(f"Invalid EIA timestamp format: {v}")
+            raise ValueError(f"Invalid period format, expected YYYY-MM: {v}")
         return v
 
-    @field_validator("value")
+    @field_validator("price")
     @classmethod
-    def validate_value(cls, v: str) -> str:
-        """Ensure value can be converted to float"""
+    def validate_price(cls, v: str) -> str:
+        """Ensure price can be converted to float"""
         try:
             float(v)
         except ValueError:
-            raise ValueError(f"Value cannot be converted to float: {v}")
+            raise ValueError(f"Price cannot be converted to float: {v}")
         return v
 
     @property
     def timestamp(self) -> pd.Timestamp:
-        """Convert EIA period to pandas timestamp"""
-        return pd.to_datetime(self.period)
+        """Convert period to pandas timestamp (first day of month)"""
+        return pd.to_datetime(f"{self.period}-01")
 
     @property
-    def price_per_mwh(self) -> float:
-        """Get price value as float in $/MWh"""
-        return float(self.value)
+    def price_cents_per_kwh(self) -> float:
+        """Get price value as float in cents/kWh"""
+        return float(self.price)
+
+    @property
+    def price_dollars_per_mwh(self) -> float:
+        """Get price value converted to $/MWh for consistency with other data"""
+        # Convert cents/kWh to dollars/MWh: multiply by 10
+        return float(self.price) * 10.0
 
     @property
     def region(self) -> str:
-        """Get the primary region code"""
-        return self.parent
+        """Get the state as region identifier"""
+        return self.stateid
 
 
 class EIAResponseData(BaseModel):
@@ -270,10 +273,11 @@ class EIAResponseData(BaseModel):
         return generation_records
 
     def parse_price_records(self) -> List[PriceRecord]:
-        """Parse data array into validated PriceRecord objects"""
+        """Parse data array into validated PriceRecord objects (retail price data)"""
         price_records = []
         for record in self.data:
-            if record.get("type") == "LMP":
+            # Check if this looks like retail price data
+            if "stateid" in record and "sectorid" in record and "price" in record:
                 try:
                     price_record = PriceRecord.model_validate(record)
                     price_records.append(price_record)
@@ -614,24 +618,24 @@ class EIAEndpoints:
         ),
 
         'price': EIAEndpoint(
-            path="/electricity/rto/region-sub-ba-data/data/",
+            path="/electricity/retail-sales/data/",
             required_params={
-                'frequency': 'hourly',
-                'data[0]': 'value',
-                'facets[type][]': 'LMP',  # Locational Marginal Price
-                'start': 'YYYY-MM-DD',
-                'end': 'YYYY-MM-DD',
+                'frequency': 'monthly',
+                'data[0]': 'price',
+                'start': 'YYYY-MM',
+                'end': 'YYYY-MM',
                 'sort[0][column]': 'period',
                 'sort[0][direction]': 'asc'
             },
             optional_params={
-                'facets[parent][]': 'region_code',  # Single region (note: parent instead of respondent)
-                'facets[parent][0]': 'region_code_1',  # Multi-region format
-                'facets[parent][1]': 'region_code_2',  # Multi-region format
+                'facets[stateid][]': 'state_code',  # Single state
+                'facets[stateid][0]': 'state_code_1',  # Multi-state format
+                'facets[stateid][1]': 'state_code_2',  # Multi-state format
+                'facets[sectorid][]': 'ALL',  # All sectors by default
                 'length': '5000',
                 'offset': '0'
             },
-            description="Electricity wholesale prices (LMP - Locational Marginal Price) by region"
+            description="Retail electricity prices by state and sector"
         )
     }
 
@@ -696,14 +700,14 @@ class EIAEndpoints:
         return params
 
     @classmethod
-    def get_price_params(cls, regions: List[str], start_date: str, end_date: str) -> Dict[str, str]:
+    def get_price_params(cls, states: List[str], start_date: str, end_date: str) -> Dict[str, str]:
         """
-        Build parameters for price data request (LMP - Locational Marginal Price).
+        Build parameters for retail price data request.
 
         Args:
-            regions: List of region codes
-            start_date: Start date in YYYY-MM-DD format
-            end_date: End date in YYYY-MM-DD format
+            states: List of state codes (e.g., ['OR', 'CA', 'WA'])
+            start_date: Start date in YYYY-MM format (monthly data)
+            end_date: End date in YYYY-MM format (monthly data)
 
         Returns:
             Dictionary of API parameters
@@ -715,13 +719,13 @@ class EIAEndpoints:
         params['start'] = start_date
         params['end'] = end_date
 
-        # Handle single vs multiple regions (note: parent instead of respondent for price)
-        if len(regions) == 1:
-            params['facets[parent][]'] = regions[0]
+        # Handle single vs multiple states
+        if len(states) == 1:
+            params['facets[stateid][]'] = states[0]
         else:
-            # Multi-region format
-            for i, region in enumerate(regions):
-                params[f'facets[parent][{i}]'] = region
+            # Multi-state format
+            for i, state in enumerate(states):
+                params[f'facets[stateid][{i}]'] = state
 
         return params
 

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-Historical Data Loader: 2012-2025
+Historical Data Loader: 2012-2025 with Price Data Integration
 
 Loads complete historical EIA data from 2012 to present across all regions.
+Now includes price data (LMP) alongside demand and generation data.
 Processes year by year to manage API limits and create organized data chunks.
 
 Usage:
@@ -10,8 +11,9 @@ Usage:
 
 Performance expectations based on single year test:
 - Per year: ~375k records in ~29 seconds (12,881 RPS)
-- 13 years: ~4.9M records in ~6.3 minutes
-- Storage: ~500MB raw JSON + ~200MB Parquet per year
+- With price data: ~450k+ records per year (increased volume)
+- 13 years: ~5.9M+ records in ~7-8 minutes
+- Storage: ~600MB raw JSON + ~250MB Parquet per year
 """
 
 import os
@@ -21,6 +23,10 @@ import logging
 from pathlib import Path
 from datetime import datetime, timedelta
 import time
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Add src to Python path
 script_dir = Path(__file__).parent
@@ -63,7 +69,7 @@ def create_extract_step_for_year(year: int, api_key: str) -> ApiExtractStep:
         start_date=start_date,
         end_date=end_date,
         regions=all_regions,
-        data_types=["demand", "generation"],
+        data_types=["demand", "generation"],  # TODO: Add "price" when EIA endpoint is fixed
         api_key=api_key,
         dry_run=False
     )

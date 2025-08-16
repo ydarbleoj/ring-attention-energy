@@ -1,0 +1,22 @@
+{
+  "total_operations": 1,
+  "successful_operations": 1,
+  "failed_operations": 0,
+  "start_time": "2025-08-15T17:19:53.181183",
+  "end_time": "2025-08-15T17:19:53.217608",
+  "operation_latencies": [
+    0.036344051361083984
+  ],
+  "total_records_processed": 299,
+  "total_bytes_processed": 7055,
+  "files_created": 1,
+  "api_calls_made": 0,
+  "peak_memory_mb": null,
+  "avg_cpu_percent": null,
+  "disk_io_read_mb": null,
+  "disk_io_write_mb": null,
+  "error_messages": [],
+  "retry_attempts": 0,
+  "operation_name": "DataCleanerStep.live_transform_test",
+  "benchmark_version": "1.0"
+}

@@ -1,0 +1,22 @@
+{
+  "total_operations": 1,
+  "successful_operations": 1,
+  "failed_operations": 0,
+  "start_time": "2025-08-15T17:19:52.375948",
+  "end_time": "2025-08-15T17:19:53.180572",
+  "operation_latencies": [
+    0.8045518398284912
+  ],
+  "total_records_processed": 300,
+  "total_bytes_processed": 53220,
+  "files_created": 3,
+  "api_calls_made": 3,
+  "peak_memory_mb": null,
+  "avg_cpu_percent": null,
+  "disk_io_read_mb": null,
+  "disk_io_write_mb": null,
+  "error_messages": [],
+  "retry_attempts": 0,
+  "operation_name": "ApiExtractStep.live_extract_test",
+  "benchmark_version": "1.0"
+}
