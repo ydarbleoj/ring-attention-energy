@@ -1,132 +1,99 @@
-# Ring Attention Energy Pipeline
+# Hamiltonian Neural Networks for Energy Systems
 
-**High-Performance Energy Data Pipeline + Ring Attention Research Platform**
+A physics-informed machine learning framework for modeling power grid dynamics using Hamiltonian mechanics and symplectic integration.
 
-This project builds a production-grade energy data ingestion pipeline capable of **4,000+ RPS** and implements Ring Attention mechanisms for analyzing multi-year energy datasets. The system combines optimized data engineering with cutting-edge ML research.
+## Overview
 
-## 🎯 Project Goals
+This project applies Hamiltonian mechanics to energy system modeling, treating power grids as conservative dynamical systems. By representing grid states in phase space (energy storage and power flows), we enforce physical constraints like energy conservation and respect transmission limits automatically.
 
-**Primary Objective**: Build a fast, reliable pipeline for energy data ingestion and implement Ring Attention with Reinforcement Learning for energy analysis and ring attention research.
+## Core Components
 
-**Key Outcomes**:
+### Hamiltonian Mechanics Module (`src/core/hamiltonian/`)
 
-- ✅ **High-Speed Data Pipeline**: 4,051 RPS sustained throughput
-- 🔬 **Ring Attention Research**: Memory-efficient attention for long sequences
-- 📊 **Energy Analysis**: ML models for grid forecasting and optimization
-- 🚀 **Production Ready**: Complete 2019-2025 ingestion in 5.1 minutes
+Physics foundation implementing:
 
-## 📋 Current Status
+- Phase space representation (q: stored energy, p: power flows)
+- Symplectic integrators (Leapfrog, Yoshida, Adaptive)
+- Constraint enforcement via Lagrange multipliers
+- Energy conservation guarantees
 
-### ✅ Phase 1 Complete: Data Pipeline (July 2025)
+**Key benefit**: Long-term stability in predictions by preserving geometric structure of phase space.
 
-- **Performance**: 4,051 RPS achieved (12.5x baseline improvement)
-- **Coverage**: Complete 2019-2025 historical data (1.2M+ records)
-- **Reliability**: 100% success rate across all test phases
-- **Infrastructure**: Production-ready ingestion system
+### Data Pipeline (`src/core/pipeline/`)
 
-### 🔬 Phase 2: Ring Attention Implementation
+Production-ready data collection achieving 326 records/second:
 
-- Memory-efficient attention mechanism for energy sequences
-- Multi-device distributed processing
-- Long-sequence energy forecasting capabilities
+- EIA integration (optimized, validated)
+- CAISO integration (pending API parameter fix)
+- Synthetic data generation for testing
+- Parallel chunk processing with orchestration
 
-### 🧠 Phase 3: RL Integration
+**Performance**: 60-day optimal batch size, 100% reliability on benchmarks.
 
-- Reinforcement learning for energy optimization
-- Grid stability and demand response modeling
-- Ring attention + RL hybrid architectures
+### Planned: Hamiltonian Neural Network
 
-## 🚀 Quick Start
+Integration of learned Hamiltonians with symplectic structure:
 
-### Prerequisites
+- Neural network learns H(q, p) from historical data
+- Automatic differentiation for Hamilton's equations
+- Physical constraints preserved during training
+- Interpretable energy functions
 
-```bash
-python 3.12+
-pip install -r requirements.txt
-```
+## Technical Approach
 
-### Run Full Historical Extraction
-
-```bash
-# Test mode (January 2024 only - ~30 seconds)
-python scripts/run_full_extraction_monitored.py --test
-
-# Full production ingestion (2019-2025 - ~5 minutes)
-python scripts/run_full_extraction_monitored.py
-```
-
-### Expected Output
+**Phase Space Formulation**:
 
 ```
-🚀 HISTORICAL DATA EXTRACTION
-==================================================
-📅 Period: 2019-01-01 to 2025-12-31
-⏱️  Estimated time: 6-8 minutes
-🔧 Mode: Full Production
+State: (q, p, t)
+  q = energy stored at nodes (batteries, reservoirs)
+  p = power flows (transmission lines, generation)
 
-✅ SUCCESS!
-📁 Files created: 548
-📊 Records: 1,248,900
-⏱️  Duration: 308.2s (5.1 min)
-🚀 Average RPS: 4,051.9
+Dynamics: Hamilton's equations
+  dq/dt = ∂H/∂p
+  dp/dt = -∂H/∂q
 ```
 
-## 🏗️ Architecture
+**Symplectic Integration**:
+Preserves phase space volume and bounds energy error over long trajectories, critical for multi-day forecasting.
 
-### Data Pipeline
+## Current Status
 
-```
-EIA API → ThreadPoolExecutor → Raw JSON → Processing → Ring Attention
-  ↓              ↓                ↓          ↓            ↓
-5 regions    Optimized HTTP    548 files   Time series  Memory-efficient
-Multi-year   Connection pools  ~150MB      Segmentation  Long sequences
-```
+**Completed**:
 
-### Ring Attention Engine
+- Hamiltonian mechanics core module with multiple integrator options
+- EIA data pipeline (production-ready, benchmarked)
+- Orchestrator for parallel data collection
+- Comprehensive test suite (100% coverage on core modules)
 
-- **Memory Scaling**: O(n) vs O(n²) for standard attention
-- **Distributed Processing**: KV state rotation across devices
-- **Energy Applications**: Multi-year sequence modeling
-- **MLX Integration**: Apple Silicon optimization
+**In Progress**:
 
-## 📊 Performance Benchmarks
+- CAISO API parameter corrections
+- MLX integration for neural network training
+- Feature engineering pipeline
 
-### Data Pipeline Performance
+**Next Steps**:
 
-- **Throughput**: 4,051 RPS sustained (548 files in 5.1 minutes)
-- **Coverage**: 1.2M+ records across 7 years (2019-2025)
-- **Reliability**: 100% success rate, production-ready
-- **API Compliance**: Well within EIA rate limits (5,000 req/hour)
+- Train Hamiltonian Neural Network on historical grid data
+- Validate against physical baselines
+- Scale to multi-year datasets (2000-2024)
 
-### System Capabilities
+## Architecture Decisions
 
-- **Regions**: PACW, ERCO, CAL, TEX, MISO (5 major US grids)
-- **Data Types**: Demand, generation, renewable mix
-- **Storage**: Organized JSON files (~150MB total)
-- **Processing**: Real-time + historical batch processing
+1. **Symplectic Integration**: Guarantees energy conservation, unlike standard RK4/Euler methods
+2. **Async Pipeline**: Efficient I/O for large-scale data collection
+3. **Modular Design**: Separate collectors for each data source
+4. **Type Safety**: Comprehensive type hints throughout
 
-## 🔧 Technical Stack
+## Background
 
-### Data Infrastructure
+**Motivation**: LLMs and traditional neural networks for energy systems lack physical constraints, leading to unphysical predictions. Hamiltonian mechanics provides the mathematical structure to ensure models respect conservation laws.
 
-- **API Clients**: EIA, CAISO with optimized HTTP connection pooling
-- **Concurrency**: ThreadPoolExecutor with 5 workers
-- **Storage**: Raw JSON + processed time series data
-- **Monitoring**: Real-time progress and performance metrics
+## References
 
-### ML/AI Components
+- Greydanus et al. "Hamiltonian Neural Networks" (NeurIPS 2019)
+- Cranmer et al. "Lagrangian Neural Networks" (ICLR 2020)
+- Zhong et al. "Symplectic ODE-Net" (NeurIPS 2020)
 
-- **Ring Attention**: Memory-efficient transformer architecture
-- **MLX Framework**: Apple Silicon-optimized compute
-- **Time Series**: Preprocessing, segmentation, normalization
-- **Distributed**: Multi-device coordination and KV state rotation
+## License
 
-## 📚 Documentation
-
-- **[Ingestion Benchmarks](docs/extraction_benchmark_documentation.md)**: Complete performance journey and optimization details
-- **[Data Architecture](docs/data_architecture_plan.md)**: Pipeline design and API optimization strategies
-- **[MLX Integration](docs/mlx_integration_summary.md)**: Ring attention implementation details
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details.
+MIT
